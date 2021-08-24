@@ -27,7 +27,7 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
+  cupertino_icons: 
   flutter_bootstrap:
   package_info_plus:
   flutter_svg:
@@ -36,6 +36,17 @@ dependencies:
   image_cropper:
   image_picker:
   accordion:
+  flutter_switch:
+  rflutter_alert:
+  hexcolor:
+  crop_your_image:
+  flutter_typeahead:
+  searchfield:
+  flutter_provider:
+  provider:
+  sizer:
+  flutter_picker:
+    git: git://github.com/yangyxd/flutter_picker.git
 
 dev_dependencies:
   flutter_test:

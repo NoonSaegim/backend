@@ -3,14 +3,15 @@ import 'package:flutter_bootstrap/flutter_bootstrap.dart';
 import '../common/drawer.dart';
 import '../common/noon_appbar.dart';
 import '../vo/wordData.dart';
+import 'package:sizer/sizer.dart';
 
-class DemoPage extends StatefulWidget {
+class Recently extends StatefulWidget {
   @override
-  _DemoPageState createState() => _DemoPageState();
+  _RecentlyState createState() => _RecentlyState();
 }
 
-class _DemoPageState extends State<DemoPage> {
-
+class _RecentlyState extends State<Recently> {
+  int _cacheable = 3;
   final List<String> _columns = ['날짜', '영어 단어', '의미'];
 
   @override
@@ -25,9 +26,29 @@ class _DemoPageState extends State<DemoPage> {
     List<DataColumn> dataColumn = [];
     for(var i in _columns) {
       if(i == '날짜') {
-        dataColumn.add(DataColumn(label: Text(i, style: TextStyle(color: Colors.white)), tooltip: i, /*onSort: _dataColumnSort*/));
+        dataColumn.add(
+            DataColumn(
+              label: Text(
+                  i, style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14.sp,
+                      ), textAlign: TextAlign.center,
+                  ),
+                  tooltip: i,
+                  //onSort: _dataColumnSort
+            )
+        );
       } else {
-        dataColumn.add(DataColumn(label: Text(i, style: TextStyle(color: Colors.white)), tooltip: i));
+        dataColumn.add(
+            DataColumn(
+                label: Text(
+                    i, style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                        ), textAlign: TextAlign.center,
+                    ), tooltip: i
+            )
+        );
       }
     }
     return dataColumn;
@@ -48,7 +69,18 @@ class _DemoPageState extends State<DemoPage> {
       List<DataCell> cells = [];
       for(var j=0; j < dummyData[i]!.length; j++) {
         var dataCells = dummyData[i];
-        cells.add(DataCell(Text(dataCells![j])));
+        cells.add(
+            DataCell(
+                Text(
+                    dataCells![j],
+                    style: TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12.5.sp,
+                    ),
+                    textAlign: TextAlign.center,
+                )
+            )
+        );
       }
       dataRow.add(DataRow(cells: cells));
     }
@@ -68,8 +100,14 @@ class _DemoPageState extends State<DemoPage> {
             children: <Widget>[
               Container(
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(top: 30, bottom: 15, left: 15),
-                child: Text("※ 최근 3일 동안 조회된 단어만 확인하실 수 있습니다.", style: TextStyle(color: Colors.black54)),
+                margin: EdgeInsets.only(top: 22.sp, bottom: 11.sp, left: 11.sp),
+                child: Text(
+                    "※ 최근 $_cacheable일 동안 조회된 단어만 확인하실 수 있습니다.",
+                    style: TextStyle(
+                        color: Colors.black54,
+                        fontSize: 11.0.sp,
+                    )
+                ),
               ),
               Container(
                 child: DataTable(

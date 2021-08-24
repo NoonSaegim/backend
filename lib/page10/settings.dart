@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import '../../common/drawer.dart';
 import '../../common/noon_appbar.dart';
 import 'package:flutter_switch/flutter_switch.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 import 'dart:math' as math;
-
+import '../common/alert.dart';
+import 'alarm.dart';
+import 'feedback.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -16,42 +17,32 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
+  //멤버 필드 : 알람 여부, 캐시 일수 ..
   bool _alarmStatus = false;
-  String _cacheSave = '3일';
+  final List _cacheable = List.generate(5, (index) => '${index+1} 일');
+  int _cacheSave = 3;
 
-  _setVocabularyAlarm(context) {
-    Alert(
-      context: context,
-      title: '단어장 알림 추가',
-      content:Column(
-        children: <Widget>[
-          //TypeAheadField(suggestionsCallback: suggestionsCallback, itemBuilder: itemBuilder, onSuggestionSelected: onSuggestionSelected)
-          TextField(
-            decoration: InputDecoration(
-              icon: Icon(Icons.notes),
-              labelText: 'note name',
-            ),
-          ),
-
-        ],
+  _showCacheablePeriodPicker(BuildContext context) {
+    Picker(
+      adapter: PickerDataAdapter<String>(
+          pickerdata: _cacheable
       ),
-      buttons: [
-        DialogButton(
-            child: Text('OK', style: TextStyle(color: Colors.white, fontSize: 20)),
-            onPressed: () => {print('알람 등록')}
-        ),
-        // DialogButton(
-        //     child: Text('CANCEL', style: TextStyle(color: Colors.white, fontSize: 20)),
-        //     onPressed: () =>
-        // ),
-      ]
-    ).show();
+      hideHeader: true,
+      title: Text('캐시 기간 설정',textAlign: TextAlign.center,),
+      onConfirm: (Picker picker, List value) {
+        print(value[0]);
+        setState(() {
+          _cacheSave = value[0] + 1;
+        });
+        print(picker.getSelectedValues());
+      }
+    ).showDialog(context);
   }
 
  _renderAddAlarmNextButtonByStatus(context) {
     if(_alarmStatus) {
       return IconButton(
-        onPressed: () => _setVocabularyAlarm(context),
+        onPressed: () => alarm.setVocabularyAlarm(context),
         tooltip: 'next-active',
         icon: Transform(
           alignment: Alignment.center,
@@ -61,8 +52,8 @@ class _SettingsState extends State<Settings> {
       );
     } else {
       return IconButton(
-        onPressed: () => print('아무반응 없음'),
-        tooltip: 'next-active',
+        onPressed: () => alert.onError(context, "알림이 비활성화 상태입니다."),
+        tooltip: 'next',
         icon: Transform(
           alignment: Alignment.center,
           transform: Matrix4.rotationY(math.pi),
@@ -75,7 +66,7 @@ class _SettingsState extends State<Settings> {
   _renderSettingAlarmNextButtonByStatus(context) {
     if(_alarmStatus) {
       return IconButton(
-        onPressed: () => print('팝업 창 뜸'),
+        onPressed: () => alarm.manageAlarmSettings(context),
         tooltip: 'next-active',
         icon: Transform(
           alignment: Alignment.center,
@@ -85,8 +76,8 @@ class _SettingsState extends State<Settings> {
       );
     } else {
       return IconButton(
-        onPressed: () => print('아무반응 없음'),
-        tooltip: 'next-active',
+        onPressed: () => alert.onError(context, "알림이 비활성화 상태입니다."),
+        tooltip: 'next',
         icon: Transform(
           alignment: Alignment.center,
           transform: Matrix4.rotationY(math.pi),
@@ -145,7 +136,7 @@ class _SettingsState extends State<Settings> {
                                       '나의 단어장 알림 활성화',
                                       style: TextStyle(
                                           color: Colors.black54,
-                                          fontSize: 14,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -180,7 +171,7 @@ class _SettingsState extends State<Settings> {
                                       '단어장 알림 추가',
                                       style: TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 14,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -209,7 +200,7 @@ class _SettingsState extends State<Settings> {
                                       '단어장 알림 설정',
                                       style: TextStyle(
                                         color: Colors.black54,
-                                        fontSize: 14,
+                                        fontSize: 15,
                                         fontWeight: FontWeight.w500,
                                       ),
                                     ),
@@ -262,23 +253,23 @@ class _SettingsState extends State<Settings> {
                                   '최근 조회한 단어 캐시 기간 설정',
                                   style: TextStyle(
                                     color: Colors.black54,
-                                    fontSize: 14,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Row(
                                   children: <Widget>[
                                     Text(
-                                      '$_cacheSave',
+                                      '$_cacheSave 일',
                                       style: TextStyle(
-                                        color: Colors.lightBlueAccent,
-                                        fontSize: 13,
+                                        color: Colors.lightBlue,
+                                        fontSize: 13.8,
                                         fontWeight: FontWeight.w500,
                                       ),
                                       textAlign: TextAlign.right,
                                     ),
                                     IconButton(
-                                      onPressed: () => print('캐시기간 설정 팝업'),
+                                      onPressed: () => _showCacheablePeriodPicker(context),
                                       tooltip: 'next-active',
                                       icon: Transform(
                                         alignment: Alignment.center,
@@ -331,15 +322,15 @@ class _SettingsState extends State<Settings> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
                               Text(
-                                '피드백 남기기',
+                                '피드백',
                                 style: TextStyle(
                                   color: Colors.black54,
-                                  fontSize: 14,
+                                  fontSize: 15,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
                               IconButton(
-                                onPressed: () => print('캐시기간 설정 팝업'),
+                                onPressed: () => feedback.showFeedBackDiaglog(context),
                                 tooltip: 'next-active',
                                 icon: Transform(
                                   alignment: Alignment.center,

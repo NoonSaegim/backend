@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
-import 'package:rflutter_alert/rflutter_alert.dart';
+import '../common/alert.dart';
+import 'package:sizer/sizer.dart';
 
 class Accordion extends StatefulWidget {
   final String title;
@@ -18,36 +19,6 @@ class _AccordionState extends State<Accordion> {
 
   bool _showContent = false;
   int _listCount = 15;
-
-  _onDeleteButtonPressed(context) {
-    Alert(
-      context: context,
-      type: AlertType.warning,
-      title: "Delete ${this.title}",
-      desc: "${this.title}을 삭제하시겠습니까?",
-      buttons: [
-        DialogButton(
-          child: Text(
-            "OK",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          onPressed: () => Navigator.pop(context),
-          color: Colors.cyan,
-        ),
-        DialogButton(
-          child: Text(
-            "CANCEL",
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          onPressed: () => Navigator.pop(context),
-          gradient: LinearGradient(colors: [
-            Color.fromRGBO(116, 116, 191, 1.0),
-            Color.fromRGBO(52, 138, 199, 1.0),
-          ]),
-        )
-      ],
-    ).show();
-  }
 
   _renderToggleButton() {
     if(_showContent) {
@@ -87,7 +58,8 @@ class _AccordionState extends State<Accordion> {
               'mango',
               textAlign: TextAlign.right,
               style: TextStyle(
-                  color: Colors.black54
+                  color: Colors.black54,
+                  fontSize: 13.5.sp,
               )
           ),
           IconButton(
@@ -107,7 +79,8 @@ class _AccordionState extends State<Accordion> {
               '망고',
               textAlign: TextAlign.right,
               style: TextStyle(
-                  color: Colors.black54
+                  color: Colors.black54,
+                  fontSize: 12.0.sp,
               )
           ),
         ],
@@ -129,18 +102,24 @@ class _AccordionState extends State<Accordion> {
         ],
       ),
       child: Card(
-        margin: EdgeInsets.all(0.4),
+        margin: EdgeInsets.all(0.3),
         child: Padding(
-            padding: EdgeInsets.only(left: 15.0),
+            padding: EdgeInsets.only(left: 10.0.sp),
             child: Column(
                 children: <Widget>[
                   Container(
                     height: (MediaQuery.of(context).size.height -
                         AppBar().preferredSize.height -
-                        MediaQuery.of(context).padding.top) * 0.095,
+                        MediaQuery.of(context).padding.top) * 0.09,
                     width: MediaQuery.of(context).size.width,
                     child: ListTile(
-                      title: Text(widget.title, style: TextStyle(color: Colors.black54)),
+                      title: Text(
+                          widget.title,
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontSize: 14.0.sp,
+                          )
+                      ),
                       trailing: IconButton(
                           onPressed: () => setState(() => _showContent = !_showContent),
                           icon: _renderToggleButton(),
@@ -160,19 +139,19 @@ class _AccordionState extends State<Accordion> {
                               height: (MediaQuery.of(context).size.height -
                                   AppBar().preferredSize.height -
                                   MediaQuery.of(context).padding.top) * 0.05,
-                              padding: EdgeInsets.only(top: 16.0, right: 16.0),
+                              padding: EdgeInsets.only(right: 14.0.sp),
                               alignment: Alignment.centerRight,
                               child: Text(
                                   '2021-08-22',
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
-                                      fontSize:13,
+                                      fontSize:10.sp,
                                       color: Colors.black54
                                   )
                               ),
                             ),
                             Container(
-                              padding: EdgeInsets.only(right:15.0),
+                              padding: EdgeInsets.only(right:10.0.sp),
                               height: (MediaQuery.of(context).size.height -
                                   AppBar().preferredSize.height -
                                   MediaQuery.of(context).padding.top) * 0.35,
@@ -193,7 +172,7 @@ class _AccordionState extends State<Accordion> {
                                       ),
                                     ),
                                     Container(
-                                      padding: EdgeInsets.only(left: 5.0, right: 5.0),
+                                      padding: EdgeInsets.only(left: 3.0.sp, right: 3.0.sp),
                                       child: VerticalDivider(color: Colors.grey.withOpacity(0.9), thickness: 0.7),
                                     ),
                                     Expanded(
@@ -220,8 +199,9 @@ class _AccordionState extends State<Accordion> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      onPressed: () => print('request pdf Download'),
+                                      onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', () { }),
                                       tooltip: 'PDF',
+                                      //iconSize: 18.0.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/pdf.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -230,7 +210,7 @@ class _AccordionState extends State<Accordion> {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => print('request mp3 Download'),
+                                      onPressed: () => alert.onInform(context, 'MP3 파일로 변환하시겠습니까?', () { }),
                                       tooltip: 'MP3',
                                       icon: SvgPicture.asset(
                                         'imgs/mp3.svg',
@@ -240,7 +220,7 @@ class _AccordionState extends State<Accordion> {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => _onDeleteButtonPressed(context),
+                                      onPressed: () => alert.onWarning(context,'${this.title}을 삭제하시겠습니까?',(){}),
                                       tooltip: 'DELETE',
                                       icon: SvgPicture.asset(
                                         'imgs/delete.svg',

@@ -1,34 +1,10 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import '../common/noon_appbar.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../common/drawer.dart';
-import '../cropper.dart';
-
-Future<void> main() async {
-  // Ensure that plugin services are initialized so that `availableCameras()`
-  // can be called before `runApp()`
-  WidgetsFlutterBinding.ensureInitialized();
-
-  // 디바이스에서 이용가능한 카메라 목록을 받아옵니다.
-  final cameras = await availableCameras();
-
-  // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
-  final firstCamera = cameras.first;
-
-  runApp(
-    MaterialApp(
-      theme: ThemeData.dark(),
-      home: TakePictureScreen(
-        // Pass the appropriate camera to the TakePictureScreen widget.
-        camera: firstCamera,
-      ),
-    ),
-  );
-}
+import 'package:flutter_svg/flutter_svg.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -71,25 +47,13 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-        ),
-        centerTitle: true,
-        elevation: 0.0,
-        leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                icon: Icon(Icons.menu),
-                color: Colors.lightBlue,
-                tooltip: 'Menu',
-                onPressed: () => Scaffold.of(context).openDrawer(),
-              );
-            }
-        ),
-      ),
+      backgroundColor: Colors.white24,
+      drawer: SideBar(),
+      appBar: TransparentAppBar(),
       // 카메라 프리뷰를 보여주기 전에 컨트롤러 초기화를 기다려야 합니다. 컨트롤러 초기화가
       // 완료될 때까지 FutureBuilder를 사용하여 로딩 스피너를 보여주세요.
       body: FutureBuilder<void>(
@@ -106,13 +70,14 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
       bottomNavigationBar: Container(
         color:Colors.white,
-        height: 80,
+        height: (MediaQuery.of(context).size.height -
+            AppBar().preferredSize.height -
+            MediaQuery.of(context).padding.top) * 0.16,
         child : IconButton(
           onPressed: () async {
             //사진찍기
             try {
               await initializeControllerFuture;
-
               // Attempt to take a picture and get the file `image`
               // where it was saved.
               final image = await Camcontroller.takePicture();
