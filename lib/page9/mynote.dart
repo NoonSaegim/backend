@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../common/drawer.dart';
 import '../common/noon_appbar.dart';
 import './accordion.dart';
+import 'package:sizer/sizer.dart';
 
 class MyNote extends StatefulWidget {
   const MyNote({Key? key}) : super(key: key);
@@ -24,6 +25,7 @@ class _MyNoteState extends State<MyNote> {
           child : Column(
                     children:
                       <Widget>[
+                        SizedBox(height: 8.sp,),
                         Container(
                           padding: EdgeInsets.only(
                               top: (MediaQuery.of(context).size.height -
@@ -32,7 +34,7 @@ class _MyNoteState extends State<MyNote> {
                           ),
                           height: (MediaQuery.of(context).size.height -
                               AppBar().preferredSize.height -
-                              MediaQuery.of(context).padding.top) * 0.9,
+                              MediaQuery.of(context).padding.top) - 8.sp,
                           width: MediaQuery.of(context).size.width,
                           child: ListView.builder(
                               scrollDirection: Axis.vertical,

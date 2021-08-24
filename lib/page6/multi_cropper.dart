@@ -7,35 +7,34 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 import 'package:flutter/services.dart' show rootBundle;
 
-class SingleCropper extends StatefulWidget {
-  const SingleCropper({Key? key}) : super(key: key);
+class MultiCropper extends StatefulWidget {
+  const MultiCropper({Key? key}) : super(key: key);
 
   @override
-  _SingleCropperState createState() => _SingleCropperState();
+  _MultiCropperState createState() => _MultiCropperState();
 }
 
-class _SingleCropperState extends State<SingleCropper> {
+class _MultiCropperState extends State<MultiCropper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: new SideBar(),
-        body: Stack(children: <Widget>[
-          Container(
-            color: Colors.black12,
-            height: (MediaQuery.of(context).size.height -
-                AppBar().preferredSize.height -
-                MediaQuery.of(context).padding.top) * 0.75,// Your screen background color
-            margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
-          ),
-          Center(
-            child: Cropper(),
-          ),
-          TransparentAppBar(),
-        ]),
+      drawer: new SideBar(),
+      body: Stack(children: <Widget>[
+        Container(
+          color: Colors.black12,
+          height: (MediaQuery.of(context).size.height -
+              AppBar().preferredSize.height -
+              MediaQuery.of(context).padding.top) * 0.6,// Your screen background color
+          margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
+        ),
+        Center(
+          child: Cropper(),
+        ),
+        TransparentAppBar(),
+      ]),
     );
   }
 }
-
 
 class Cropper extends StatefulWidget {
   @override
@@ -44,6 +43,9 @@ class Cropper extends StatefulWidget {
 
 class _CropperState extends State<Cropper> {
   static const _images = const [
+    'imgs/apple-logo.png',
+    'imgs/main.jpg',
+    'imgs/horse.jpg',
     'imgs/apple-logo.png',
     'imgs/main.jpg',
   ];
@@ -98,26 +100,12 @@ class _CropperState extends State<Cropper> {
           visible: !_loadingImage && !_isCropping,
           child: Column(
             children: [
-              if (_imageDataList.length >= 4)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      _buildSumbnail(_imageDataList[0]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[1]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[2]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[3]),
-                    ],
-                  ),
-                ),
+
               //Expanded(
               Container(
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
-                    MediaQuery.of(context).padding.top) * 0.75,
+                    MediaQuery.of(context).padding.top) * 0.6,
                 child: Visibility(
                   visible: _croppedData == null,
                   child: Stack(
@@ -134,10 +122,10 @@ class _CropperState extends State<Cropper> {
                           },
                           withCircleUi: _isCircleUi,
                           onStatusChanged: (CropStatus status) => {
-                              // CropStatus.nothing: print('Crop has no image data'),
-                              // CropStatus.loading: print('Crop is now loading given image'),
-                              // CropStatus.ready: print('crop is ready'),
-                              // CropStatus.cropping: print('Crop is now cropping image'),
+                            // CropStatus.nothing: print('Crop has no image data'),
+                            // CropStatus.loading: print('Crop is now loading given image'),
+                            // CropStatus.ready: print('crop is ready'),
+                            // CropStatus.cropping: print('Crop is now cropping image'),
                           },
                           initialSize: 0.5,
                           maskColor: _isSumbnail ? Colors.white : null,
@@ -219,7 +207,33 @@ class _CropperState extends State<Cropper> {
                     ],
                   ),
                 ),
-              const SizedBox(height: 10,),
+              if (_imageDataList.length >= 2)
+                Container(
+                  height: (MediaQuery.of(context).size.height -
+                      AppBar().preferredSize.height -
+                      MediaQuery.of(context).padding.top) * 0.2,
+                  width: MediaQuery.of(context).size.width,
+                  padding: const EdgeInsets.only(top:16),
+                  child: FutureBuilder(
+                    future: _loadAllImages(),
+                    builder: (BuildContext context,AsyncSnapshot listData) {
+                      if(listData == null) {
+                        return const CircularProgressIndicator();
+                      } else {
+                        return ListView.builder(
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: _images.length,
+                            itemBuilder: (BuildContext context, int index)
+                            => Card(
+                              child: _buildSumbnail(_imageDataList[index]),
+                            )
+                        );
+                      }
+                    }
+                  )
+                ),
+              //const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
@@ -246,7 +260,6 @@ class _CropperState extends State<Cropper> {
                         ),
                       )
                   ),
-                  //Spacer(),
                   Expanded(
                       child: Container(
                         padding: EdgeInsets.only(right: 20, left: 20),
@@ -256,10 +269,10 @@ class _CropperState extends State<Cropper> {
                         child:IconButton(
                           onPressed: (){
                             setState(() {
-                            _isCropping = true;
+                              _isCropping = true;
                             });
                             _isCircleUi
-                            ? _cropController.cropCircle()
+                                ? _cropController.cropCircle()
                                 : _cropController.crop();
                           },
                           tooltip: 'Submit',
@@ -282,14 +295,14 @@ class _CropperState extends State<Cropper> {
                     child: Container(
                       padding: EdgeInsets.only(left: 30),
                       child: Text(
-                          '다시 찍기',
-                          style: TextStyle(
-                            //color: Colors.white,
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 1
-                              ..color = Colors.lightBlueAccent,
-                          ),
+                        '다시 찍기',
+                        style: TextStyle(
+                          //color: Colors.white,
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 1
+                            ..color = Colors.lightBlueAccent,
+                        ),
                       ),
                     ),
                   ),
@@ -299,14 +312,14 @@ class _CropperState extends State<Cropper> {
                     child: Container(
                       padding: EdgeInsets.only(right: 30),
                       child: Text(
-                          '제출 하기',
-                          style: TextStyle(
+                        '제출 하기',
+                        style: TextStyle(
                           //color: Colors.white,
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 1
-                              ..color = Colors.lightBlueAccent,
-                         ),
+                          foreground: Paint()
+                            ..style = PaintingStyle.stroke
+                            ..strokeWidth = 1
+                            ..color = Colors.lightBlueAccent,
+                        ),
                       ),
                     ),
                   ),
@@ -317,26 +330,25 @@ class _CropperState extends State<Cropper> {
           replacement: const CircularProgressIndicator(),
         ),
       ),
-
-
     );
   }
 
-  Expanded _buildSumbnail(Uint8List data) {
+  dynamic _buildSumbnail(Uint8List data) {
     final index = _imageDataList.indexOf(data);
-    return Expanded(
-      child: InkWell(
+    return InkWell(
         onTap: () {
           _croppedData = null;
           currentImage = index;
         },
         child: Container(
-          height: 100,
+          height: (MediaQuery.of(context).size.height -
+              AppBar().preferredSize.height -
+              MediaQuery.of(context).padding.top) * 0.2,
           decoration: BoxDecoration(
             border: index == _currentImage
                 ? Border.all(
-              width: 8,
-              color: Colors.blue,
+              width: 5,
+              color: Colors.lightBlueAccent,
             )
                 : null,
           ),
@@ -345,7 +357,6 @@ class _CropperState extends State<Cropper> {
             fit: BoxFit.cover,
           ),
         ),
-      ),
-    );
+      );
   }
 }

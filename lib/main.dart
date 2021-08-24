@@ -1,8 +1,13 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'page5/image_picker.dart';
-import 'page8/word_list.dart';
-import 'settings.dart';
+import 'page8/recently_searched_list.dart';
+import 'page10/settings.dart';
+import 'page9/mynote.dart';
 import 'page7/multi_images_process.dart';
+import 'page1/home.dart';
+import 'package:sizer/sizer.dart';
+import 'page2/open_camera.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -16,14 +21,20 @@ class FirstRoute extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      initialRoute: '/pick',
-      routes: {
-        '/main': (context) => DemoPage(),
-        '/pick': (context) => Gallery(),
-        '/settings': (context) => Settings(),
-        '/multi' : (context) => MultiImagesProcess(),
-      },
+    return Sizer(
+        builder: (context, orientation, deviceType) {
+          return MaterialApp(
+            initialRoute: '/main',
+            routes: {
+              '/main': (context) => Home(),
+              '/pick': (context) => Gallery(),
+              '/mynote': (context) => MyNote(),
+              '/recently': (context) => Recently(),
+              '/settings': (context) => Settings(),
+              '/multi' : (context) => MultiImagesProcess(),
+            },
+          );
+        }
     );
   }
 }

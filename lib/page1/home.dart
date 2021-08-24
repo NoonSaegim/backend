@@ -3,10 +3,33 @@ import 'package:flutter_svg/svg.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:image_picker/image_picker.dart';
+import '../page2/open_camera.dart';
+import 'package:camera/camera.dart';
+import 'package:sizer/sizer.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
+
+  Future<void> _openCamera(BuildContext context) async {
+
+    WidgetsFlutterBinding.ensureInitialized();
+
+    // 디바이스에서 이용가능한 카메라 목록을 받아옵니다.
+    final cameras = await availableCameras();
+    // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
+    final firstCamera = cameras.first;
+
+    Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
+    // runApp(
+    //   MaterialApp(
+    //     theme: ThemeData.dark(),
+    //     home: TakePictureScreen(
+    //       // Pass the appropriate camera to the TakePictureScreen widget.
+    //       camera: firstCamera,
+    //     ),
+    //   ),
+    // );
+  }
   
   @override
   Widget build(BuildContext context) {
@@ -35,7 +58,7 @@ class Home extends StatelessWidget {
               margin: EdgeInsets.only(
                 top:(MediaQuery.of(context).size.height -
                       AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.04,),
+                      MediaQuery.of(context).padding.top) * 0.035,),
               alignment: Alignment.center,
               child: GestureDetector(
                 behavior:HitTestBehavior.translucent,
@@ -44,7 +67,7 @@ class Home extends StatelessWidget {
                   width: MediaQuery.of(context).size.width * 0.34,
                   height: (MediaQuery.of(context).size.height -
                       AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.14,
+                      MediaQuery.of(context).padding.top) * 0.13,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -68,7 +91,7 @@ class Home extends StatelessWidget {
                       '사진 가져오기',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 14,
+                        fontSize: 12.2.sp,
                         fontWeight: FontWeight.w200,
                       ),
                     ),
@@ -77,7 +100,7 @@ class Home extends StatelessWidget {
               ),
             ),
             Container(
-              padding: EdgeInsets.only(right: 7, left: 7),
+              padding: EdgeInsets.only(right: 6.8.sp, left: 6.8.sp),
               margin: EdgeInsets.only(
                 top:(MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
@@ -92,7 +115,7 @@ class Home extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.34,
                       height: (MediaQuery.of(context).size.height -
                           AppBar().preferredSize.height -
-                          MediaQuery.of(context).padding.top) * 0.14,
+                          MediaQuery.of(context).padding.top) * 0.13,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -116,7 +139,7 @@ class Home extends StatelessWidget {
                           '최근 조회한 단어',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12.2.sp,
                             fontWeight: FontWeight.w200,
                           ),
                         ),
@@ -130,7 +153,7 @@ class Home extends StatelessWidget {
                       width: MediaQuery.of(context).size.width * 0.34,
                       height: (MediaQuery.of(context).size.height -
                           AppBar().preferredSize.height -
-                          MediaQuery.of(context).padding.top) * 0.14,
+                          MediaQuery.of(context).padding.top) * 0.13,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -154,7 +177,7 @@ class Home extends StatelessWidget {
                           '나의 단어장',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 14,
+                            fontSize: 12.2.sp,
                             fontWeight: FontWeight.w200,
                           ),
                         ),
@@ -174,7 +197,7 @@ class Home extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   //padding: EdgeInsets.only(bottom: ),
                   child: IconButton(
-                    onPressed: () => {print('open camera')},
+                    onPressed: () => _openCamera(context),
                     tooltip: 'camera',
                     icon: SvgPicture.asset(
                       'imgs/diaphragm.svg',
