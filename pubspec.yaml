@@ -54,7 +54,14 @@ dependencies:
   mobx:
   shared_preferences:
   permission_handler:
+  intl:
   sizer:
+  weekday_selector:
+  flutter_email_sender:
+  android_alarm_manager_plus:
+    git:
+      url: https://github.com/jja08111/plus_plugins.git
+      path: packages/android_alarm_manager_plus
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
 

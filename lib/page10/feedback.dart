@@ -1,23 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
-import '../common/alert.dart';
+import '../common/popup.dart';
+import 'package:sizer/sizer.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 
 class FeedBack {
 
   showFeedBackDiaglog(BuildContext context) {
+
+    String _body = '';
+    String _from = '';
+
+    Future<void> _sendEmail() async {
+      final Email email = Email(
+          body: _body,
+          subject: 'Feedback from user $_from',
+          recipients: ['ekdldksp123@sanhait.co.kr'],
+      );
+
+      String platformResponse;
+
+      try {
+        await FlutterEmailSender.send(email);
+        platformResponse = 'success';
+
+      } catch (error) {
+        platformResponse = error.toString();
+      }
+
+      if (platformResponse == 'success') {
+        alert.onSuccess(context, "성공적으로 전송되었습니다!");
+      } else {
+        alert.onError(context, platformResponse);
+      }
+    }
+
     showDialog(
         context: context,
         builder: (BuildContext context) {
+
           return AlertDialog(
             scrollable: true,
             title: Text('피드백 보내기', textAlign: TextAlign.center,),
-            titlePadding: EdgeInsets.only(top: 25.0),
+            titlePadding: EdgeInsets.only(top: 22.5.sp),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextField(
+                  //controller: _bodyController,
                   keyboardType: TextInputType.text,
-                  maxLines:5,
+                  onChanged: (value) => _body = value,
+                  maxLines: 3,
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.message_outlined, color: Colors.lightBlue),
                     labelText: '메세지',
@@ -25,6 +58,8 @@ class FeedBack {
                   ),
                 ),
                 TextField(
+                  //controller: _contactController,
+                  onChanged: (value) => _from = value,
                   decoration: InputDecoration(
                       prefixIcon: Icon(Icons.email_outlined, color: Colors.lightBlue),
                       labelText: '이메일',
@@ -41,27 +76,27 @@ class FeedBack {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: <Widget>[
                     ButtonTheme(
-                      height: 25.0,
                       child: DialogButton(
                         width: MediaQuery.of(context).size.width * 0.25,
+                        height: 35.0.sp,
                         color: Colors.lightBlue,
-                        child: Text('SEND', style: TextStyle(color: Colors.white, fontSize: 16)),
-                        onPressed: () => alert.onSuccess(context, "성공적으로 전송되었습니다!"),
+                        child: Text('SEND', style: TextStyle(color: Colors.white, fontSize: 12.5.sp)),
+                        onPressed: () => _sendEmail(),
                       ),
                     ),
                     ButtonTheme(
-                        height: 25.0,
                         child: DialogButton(
                           width: MediaQuery.of(context).size.width * 0.25,
+                          height: 35.0.sp,
                           color: Colors.lightBlue,
-                          child: Text('CANCEL', style: TextStyle(color: Colors.white, fontSize: 16)),
+                          child: Text('CANCEL', style: TextStyle(color: Colors.white, fontSize: 12.5.sp)),
                           onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                         )
                     )
                   ],
                 ),
               ),
-              SizedBox(height: 6.0,),
+              SizedBox(height: 3.0.sp,),
             ],
           );
         }
@@ -70,3 +105,4 @@ class FeedBack {
 }
 
 FeedBack feedback = new FeedBack();
+
