@@ -6,8 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
 import '../vo/word.dart';
-import '../common/popup.dart';
 import '../tts/dynamic_speaker.dart';
+import '../common/dialog.dart';
 
 class SingleImageProcess extends StatefulWidget {
   const SingleImageProcess({Key? key}) : super(key: key);
@@ -18,15 +18,30 @@ class SingleImageProcess extends StatefulWidget {
 
 class _SingleImageProcessState extends State<SingleImageProcess> {
 
+  //이렇게 Word 가 List 에 담겨서 데이터가 넘어오면 됩니다.
   final List<String> _columns = ['No', '영어 단어', '의미'];
-  List<Word> _dataList = List.generate(15, (index) =>
-    new Word(seq: index, word: 'embedded', meaning: '내장된', isSelected: false),
+
+  List<Word> a = List.generate(3, (index) =>
+    new Word(seq: index, word: 'apple', meaning: '사과', isSelected: false),
+  );
+  List<Word> b = List.generate(3, (index) =>
+    new Word(seq: index + 3, word: 'stock', meaning: '주식', isSelected: false),
+  );
+  List<Word> c = List.generate(3, (index) =>
+    new Word(seq: index + 6, word: 'reduce', meaning: '줄이다', isSelected: false),
+  );
+  List<Word> d = List.generate(3, (index) =>
+    new Word(seq: index + 9, word: 'multiple', meaning: '다수의', isSelected: false),
+  );
+  List<Word> e = List.generate(3, (index) =>
+    new Word(seq: index + 12, word: 'embedded', meaning: '내장된', isSelected: false),
   );
 
-
+  List<Word> _dataList = [];
   @override
   initState() {
     super.initState();
+    _dataList = [...a,...b, ...c,...d,...e];
   }
 
   @override
@@ -123,7 +138,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
                     MediaQuery.of(context).padding.top) * 0.10,
-                child: Speaker(),
+                child: Speaker(dataList: [..._dataList],),
               ),
               Container(
                 height: (MediaQuery.of(context).size.height -
@@ -156,7 +171,9 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                        onPressed: () => print('go back'),
+                        /*-> 뒤로 가기*/
+                        onPressed: () => Navigator.of(context).pop(),
+                        //전 화면이랑 이어지지 않아서 아직 뒤로가기 안됨..!!!
                         tooltip: 'Back',
                         iconSize: 38.sp,
                         icon: Transform(
@@ -171,7 +188,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                         )
                     ),
                     IconButton(
-                        onPressed: () => alert.onInform(context, '나의 단어장에 저장하시겠습니까?', () { }),
+                        onPressed: () => onSaveButtonPressed(context),
                         tooltip: 'Save',
                         iconSize: 38.sp,
                         icon: SvgPicture.asset(

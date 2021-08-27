@@ -56,7 +56,7 @@ dependencies:
   permission_handler:
   intl:
   sizer:
-  redis_dart:
+  hive:
   flutter_tts:
   audio_service:
   audio_session:

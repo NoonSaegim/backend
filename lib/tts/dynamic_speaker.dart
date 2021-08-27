@@ -1,31 +1,23 @@
 import 'dart:io' show Platform;
+import 'dart:convert';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'text_player.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../common/popup.dart';
+import '../vo/word.dart';
 
 void _textToSpeechEntrypoint() async {
   AudioServiceBackground.run(() => TextPlayer());
 }
 
-_checkAudioServiceState(BuildContext context) {
-  AudioService.playbackStateStream.listen((PlaybackState state) {
-    switch (state.processingState) {
-      case AudioProcessingState.error: alert.onError(context, 'Error occured on Audio Service');
-        return;
-    }
-  });
-}
-
 class Speaker extends StatelessWidget {
-  const Speaker({Key? key}) : super(key: key);
+  final List<Word> dataList;
+  const Speaker({Key? key, required this.dataList}) : super(key: key);
 
-  void _callAudioService(Map<String, dynamic> params, BuildContext context) {
+  void _callAudioService(Map<String, dynamic> params) {
     AudioService.connect();
-    _checkAudioServiceState(context);
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,
       androidNotificationChannelName: 'Audio Service Demo',
@@ -35,11 +27,19 @@ class Speaker extends StatelessWidget {
     );
   }
 
-  Widget _renderSpecker(BuildContext context) {
-    Map<String, dynamic> params = new Map();
+  dynamic _listOfObjToMap(List<Word> listObj) {
+    Map<String, String> merge = new Map();
+    listObj.sort((x,y) => x.seq.compareTo(y.seq)); //map convert 전 sort
+    listObj.forEach((e) {
+      merge.addAll(e.toMap());
+    });
+    return merge;
+  }
 
+  Widget _renderSpecker(context) {
+    Map<String, dynamic> _params = _listOfObjToMap(dataList.where((e) => e.isSelected).toList());
     return IconButton(
-      onPressed: () => _callAudioService(params, context),
+      onPressed: () =>_callAudioService(_params),
       tooltip: 'Audio',
       iconSize: 32.sp,
       icon: SvgPicture.asset(
@@ -53,6 +53,7 @@ class Speaker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       child: StreamBuilder<bool>(
         stream: AudioService.runningStream,

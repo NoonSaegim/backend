@@ -13,6 +13,7 @@ import 'package:sizer/sizer.dart';
 import 'page4/single_image_process.dart';
 import 'package:audio_service/audio_service.dart';
 import 'setting/cache.dart';
+import 'setting/text_list.dart';
 
 void main() {
   runApp(
@@ -21,6 +22,7 @@ void main() {
           ChangeNotifierProvider(create: (_) => new CacheablePeriod()),
           ChangeNotifierProvider(create: (_) =>  new AlarmList()),
           ChangeNotifierProvider(create: (_) => new AlarmSetting()),
+          ChangeNotifierProvider(create: (_) => new WordList()),
         ],
       child: FirstRoute(),
     )

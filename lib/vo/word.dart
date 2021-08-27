@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:intl/intl.dart';
+
 class Word {
   Word({
     required this.seq,
@@ -10,4 +13,8 @@ class Word {
   String word;
   String meaning;
   bool isSelected;
+
+  Map<String,String> toMap() => {
+    '$seq': word,
+  };
 }
