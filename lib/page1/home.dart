@@ -20,15 +20,6 @@ class Home extends StatelessWidget {
     final firstCamera = cameras.first;
 
     Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
-    // runApp(
-    //   MaterialApp(
-    //     theme: ThemeData.dark(),
-    //     home: TakePictureScreen(
-    //       // Pass the appropriate camera to the TakePictureScreen widget.
-    //       camera: firstCamera,
-    //     ),
-    //   ),
-    // );
   }
   
   @override

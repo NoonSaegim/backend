@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
-import '../common/alert.dart';
+import '../common/popup.dart';
 import 'package:sizer/sizer.dart';
 
 class Accordion extends StatefulWidget {

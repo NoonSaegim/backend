@@ -1,12 +1,12 @@
-class Data {
-  Data({
-    required this.date,
+class Word {
+  Word({
+    required this.seq,
     required this.word,
     required this.meaning,
     required this.isSelected,
   });
-  
-  DateTime date;
+
+  int seq;
   String word;
   String meaning;
   bool isSelected;

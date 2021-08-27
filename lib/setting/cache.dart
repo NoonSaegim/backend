@@ -5,7 +5,7 @@ class CacheablePeriod with ChangeNotifier {
 
   int get cache => _cacheable;
 
-  set cacheable(int period) {
+  void setCacheable(int period) {
     _cacheable = period;
     notifyListeners();
   }
