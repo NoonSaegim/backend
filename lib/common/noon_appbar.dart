@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   const AppBar1({Key? key}) : super(key: key);
@@ -8,9 +7,8 @@ class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
         title: Container(
-          padding: EdgeInsets.only(top: 5.0),
           child: Image.asset("imgs/appbar.jpg"),
-          height: AppBar().preferredSize.height * 1.25,
+          height: AppBar().preferredSize.height * 0.95,
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -18,8 +16,7 @@ class AppBar1 extends StatelessWidget with PreferredSizeWidget{
         leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: Icon(Icons.menu,),
-                iconSize: AppBar().preferredSize.height * 0.58,
+                icon: Icon(Icons.menu),
                 color: Colors.lightBlue,
                 tooltip: 'Menu',
                 onPressed: () => Scaffold.of(context).openDrawer(),
@@ -42,9 +39,8 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       title: Container(
-        padding: EdgeInsets.only(top: 5.0),
         child: Image.asset("imgs/appbar.jpg"),
-        height: AppBar().preferredSize.height * 1.25,
+        height: AppBar().preferredSize.height * 0.95,
       ),
       backgroundColor: Colors.white,
       centerTitle: true,
@@ -53,7 +49,6 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
           builder: (BuildContext context) {
             return IconButton(
               icon: Icon(Icons.menu),
-              iconSize: AppBar().preferredSize.height * 0.58,
               color: Colors.lightBlue,
               tooltip: 'Menu',
               onPressed: () => Scaffold.of(context).openDrawer(),
@@ -64,10 +59,10 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
         Builder(
             builder: (BuildContext context) {
               return IconButton(
-                icon: Icon(Icons.search_rounded),
+                icon: Icon(Icons.search_outlined),
                 color: Colors.lightBlue,
                 tooltip: 'Search',
-                iconSize: AppBar().preferredSize.height * 0.94,
+                iconSize: AppBar().preferredSize.height * 0.7,
                 onPressed: () => showSearch(context: context, delegate: Search(list)),
               );
             }
@@ -80,6 +75,38 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }
+
+class TransparentAppBar extends StatelessWidget with PreferredSizeWidget{
+  const TransparentAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+        top: 0.0,
+        left: 0.0,
+        right: 0.0,
+
+        child: AppBar(
+          leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  icon: Icon(Icons.menu),
+                  color: Colors.lightBlueAccent,
+                  tooltip: 'Menu',
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                );
+              }
+          ),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+        )
+    );
+  }
+  @override
+  // TODO: implement preferredSize
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
 
 class Search extends SearchDelegate {
   @override
@@ -140,36 +167,4 @@ class Search extends SearchDelegate {
     );
   }
 
-}
-
-class TransparentAppBar extends StatelessWidget with PreferredSizeWidget{
-  const TransparentAppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Positioned(
-        top: 0.0,
-        left: 0.0,
-        right: 0.0,
-
-        child: AppBar(
-          leading: Builder(
-              builder: (BuildContext context) {
-                return IconButton(
-                  icon: Icon(Icons.menu),
-                  color: Colors.lightBlueAccent,
-                  iconSize: AppBar().preferredSize.height * 0.58,
-                  tooltip: 'Menu',
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                );
-              }
-          ),
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-        )
-    );
-  }
-  @override
-  // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
 }

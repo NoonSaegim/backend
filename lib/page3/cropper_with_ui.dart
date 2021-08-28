@@ -1,14 +1,19 @@
 import 'dart:typed_data';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
+import 'package:frontend/page3/cropper.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:flutter/services.dart' show rootBundle;
+import '../page2/openCamera.dart';
+import 'package:camera/camera.dart';
 
 class SingleCropper extends StatefulWidget {
-  const SingleCropper({Key? key}) : super(key: key);
+  final String imagePath;
+  const SingleCropper({Key? key, required this.imagePath}) : super(key: key);
 
   @override
   _SingleCropperState createState() => _SingleCropperState();
@@ -17,6 +22,7 @@ class SingleCropper extends StatefulWidget {
 class _SingleCropperState extends State<SingleCropper> {
   @override
   Widget build(BuildContext context) {
+    print(widget.imagePath);
     return Scaffold(
         drawer: new SideBar(),
         body: Stack(children: <Widget>[
@@ -28,7 +34,7 @@ class _SingleCropperState extends State<SingleCropper> {
             margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
           ),
           Center(
-            child: Cropper(),
+            child: Cropper(widget.imagePath),
           ),
           TransparentAppBar(),
         ]),
@@ -36,16 +42,17 @@ class _SingleCropperState extends State<SingleCropper> {
   }
 }
 
-
 class Cropper extends StatefulWidget {
+  Cropper(imagePath);
+
   @override
   _CropperState createState() => _CropperState();
 }
 
 class _CropperState extends State<Cropper> {
-  static const _images = const [
-    'imgs/apple-logo.png',
-    'imgs/main.jpg',
+  String pickture = 'imgs/하하.jpg';
+  static var _images = const [
+    'imgs/하하.jpg'
   ];
 
   final _cropController = CropController();
@@ -230,7 +237,7 @@ class _CropperState extends State<Cropper> {
                             AppBar().preferredSize.height -
                             MediaQuery.of(context).padding.top) * 0.15,
                         child: IconButton(
-                            onPressed: () => print('다시 찍기 to camera'),
+                            onPressed: () => camera(),
                             tooltip: 'retake',
                             icon: Transform(
                               alignment: Alignment.center,

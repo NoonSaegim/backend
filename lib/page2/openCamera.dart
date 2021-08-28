@@ -1,10 +1,37 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import '../common/noon_appbar.dart';
-import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../common/drawer.dart';
+import '../cropper.dart';
+import '../page3/cropper_with_ui.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+
+Future<void> camera() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 디바이스에서 이용가능한 카메라 목록을 받아옵니다.
+  final cameras = await availableCameras();
+
+  // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
+  final firstCamera = cameras.first;
+
+  runApp(
+    MaterialApp(
+      theme: ThemeData.dark(),
+      home: TakePictureScreen(
+        // Pass the appropriate camera to the TakePictureScreen widget.
+        camera: firstCamera,
+      ),
+    ),
+  );
+}
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -47,13 +74,25 @@ class TakePictureScreenState extends State<TakePictureScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white24,
-      drawer: SideBar(),
-      appBar: TransparentAppBar(),
+      appBar: AppBar(
+        title: Container(
+        ),
+        centerTitle: true,
+        elevation: 0.0,
+        leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                icon: Icon(Icons.menu),
+                color: Colors.lightBlue,
+                tooltip: 'Menu',
+                onPressed: () => Scaffold.of(context).openDrawer(),
+              );
+            }
+        ),
+      ),
       // 카메라 프리뷰를 보여주기 전에 컨트롤러 초기화를 기다려야 합니다. 컨트롤러 초기화가
       // 완료될 때까지 FutureBuilder를 사용하여 로딩 스피너를 보여주세요.
       body: FutureBuilder<void>(
@@ -70,28 +109,35 @@ class TakePictureScreenState extends State<TakePictureScreen> {
       ),
       bottomNavigationBar: Container(
         color:Colors.white,
-        height: (MediaQuery.of(context).size.height -
-            AppBar().preferredSize.height -
-            MediaQuery.of(context).padding.top) * 0.16,
+        height: 80,
         child : IconButton(
           onPressed: () async {
             //사진찍기
             try {
+              // Ensure that the camera is initialized.
               await initializeControllerFuture;
-              // Attempt to take a picture and get the file `image`
-              // where it was saved.
-              final image = await Camcontroller.takePicture();
+
+              // Construct the path where the image should be saved using the
+              // pattern package.
+              final path = join(
+                // Store the picture in the temp directory.
+                // Find the temp directory using the `path_provider` plugin.
+                (await getTemporaryDirectory()).path,
+                '${DateTime.now()}.png',
+              );
+
+              // Attempt to take a picture and log where it's been saved.
+              await Camcontroller.takePicture(path);
+
               // If the picture was taken, display it on a new screen.
-              await Navigator.of(context).push(
+              Navigator.push(
+                context,
                 MaterialPageRoute(
-                  builder: (context) => DisplayPictureScreen(
-                    // Pass the automatically generated path to
-                    // the DisplayPictureScreen widget.
-                    imagePath: image.path,
-                  ),
+                  builder: (context) => DisplayPictureScreen(imagePath: path),
                 ),
               );
             } catch (e) {
+              // If an error occurs, log the error to the console.
               print(e);
             }
           },
