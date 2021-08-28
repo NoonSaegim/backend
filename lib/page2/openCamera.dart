@@ -51,6 +51,33 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController Camcontroller;
   late Future<void> initializeControllerFuture;
 
+  void _takeAPick(context) async {
+    //사진찍기
+    try {
+      await initializeControllerFuture;
+
+      final path = join(
+        (await getApplicationDocumentsDirectory()).path, '/camera');
+      Directory saveDirectory = new Directory(path).create(recursive: true)
+      .then((Directory directory) => print(directory.path)) as Directory;
+      //final String saveDirectory = '$appDirectory/camer';
+      print('---------------------저장할 장소는 -------------------- ${saveDirectory.path}');
+      // 현재 이미지 저장 경로 : data/user/0/com.noonsaegim.frontend/cache/CAP1584805045622777634.jpg
+      final XFile image = await Camcontroller.takePicture();
+      image.saveTo(saveDirectory.path).then((value) => '----------------save image success--------------');
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayPictureScreen(imagePath: image.path),
+        ),
+      );
+    } catch (e) {
+      // If an error occurs, log the error to the console.
+      print(e);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -111,36 +138,7 @@ class TakePictureScreenState extends State<TakePictureScreen> {
         color:Colors.white,
         height: 80,
         child : IconButton(
-          onPressed: () async {
-            //사진찍기
-            try {
-              // Ensure that the camera is initialized.
-              await initializeControllerFuture;
-
-              // Construct the path where the image should be saved using the
-              // pattern package.
-              final path = join(
-                // Store the picture in the temp directory.
-                // Find the temp directory using the `path_provider` plugin.
-                (await getTemporaryDirectory()).path,
-                '${DateTime.now()}.png',
-              );
-
-              // Attempt to take a picture and log where it's been saved.
-              await Camcontroller.takePicture(path);
-
-              // If the picture was taken, display it on a new screen.
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => DisplayPictureScreen(imagePath: path),
-                ),
-              );
-            } catch (e) {
-              // If an error occurs, log the error to the console.
-              print(e);
-            }
-          },
+          onPressed: () => _takeAPick(context),
           tooltip: 'Audio',
           icon: SvgPicture.asset(
             'imgs/diaphragm.svg',

@@ -40,6 +40,9 @@ dependencies:
   crop_your_image:
   path_provider:
   path:
+  flutter_switch:
+  rflutter_alert:
+  flutter_typeahead:
 
 dev_dependencies:
   flutter_test:
@@ -59,6 +62,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - imgs/
+    - camera/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
