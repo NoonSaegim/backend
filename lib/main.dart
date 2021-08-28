@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:noonsaegim/setting/alert_list.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
+import 'package:noonsaegim/setting/alert_list.dart';
 import 'setting/alert_list.dart';
 import 'package:provider/provider.dart';
 import 'page5/image_picker.dart';

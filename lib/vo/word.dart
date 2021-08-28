@@ -10,4 +10,5 @@ class Word {
   String word;
   String meaning;
   bool isSelected;
+
 }
