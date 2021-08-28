@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
 import '../vo/word.dart';
+import '../common/dialog.dart';
 import '../common/popup.dart';
 import '../tts/dynamic_speaker.dart';
 
@@ -19,26 +19,36 @@ class SingleImageProcess extends StatefulWidget {
 class _SingleImageProcessState extends State<SingleImageProcess> {
 
   final List<String> _columns = ['No', '영어 단어', '의미'];
-  List<Word> _dataList = List.generate(15, (index) =>
-    new Word(seq: index, word: 'embedded', meaning: '내장된', isSelected: false),
+
+  List<Word> a = List.generate(3, (index) =>
+  new Word(seq: index, word: 'apple', meaning: '사과', isSelected: false),
+  );
+  List<Word> b = List.generate(3, (index) =>
+  new Word(seq: index + 3, word: 'stock', meaning: '주식', isSelected: false),
+  );
+  List<Word> c = List.generate(3, (index) =>
+  new Word(seq: index + 6, word: 'reduce', meaning: '줄이다', isSelected: false),
+  );
+  List<Word> d = List.generate(3, (index) =>
+  new Word(seq: index + 9, word: 'multiple', meaning: '다수의', isSelected: false),
+  );
+  List<Word> e = List.generate(3, (index) =>
+  new Word(seq: index + 12, word: 'embedded', meaning: '내장된', isSelected: false),
   );
 
-
+  List<Word> _dataList = [];
   @override
   initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    _dataList = [...a,...b, ...c,...d,...e];
   }
 
   List<DataColumn> _getColumns() {
     List<DataColumn> dataColumn = [];
     for(var i in _columns) {
-      dataColumn.add(DataColumn(
-          label: Text(
+      dataColumn.add(
+          DataColumn(
+            label: Text(
               i, style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -92,6 +102,9 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
     return dataRow;
   }
 
+  void _checkDataAndCallDBProcess() => _dataList.where((e) => e.isSelected).toList().isNotEmpty
+      ? onSaveButtonPressed(context, _dataList) : alert.onWarning(context, '선택된 단어가 없습니다!', (){});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -119,7 +132,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
               ),
               Container(
                 alignment: Alignment.centerRight,
-                margin: EdgeInsets.only(right: 10),
+                margin: EdgeInsets.only(right: 8.sp),
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
                     MediaQuery.of(context).padding.top) * 0.10,
@@ -147,7 +160,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                 ),
               ),
               Container(
-                padding: EdgeInsets.only(right: 20, left: 20),
+                padding: EdgeInsets.only(right: 15.sp, left: 15.sp),
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
                     MediaQuery.of(context).padding.top) * 0.11,
@@ -156,7 +169,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                        onPressed: () => print('go back'),
+                        onPressed: () => Navigator.of(context).pop(), //아직 화면이 안이어져서 뒤로가기 안됨.
                         tooltip: 'Back',
                         iconSize: 38.sp,
                         icon: Transform(
@@ -171,7 +184,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                         )
                     ),
                     IconButton(
-                        onPressed: () => alert.onInform(context, '나의 단어장에 저장하시겠습니까?', () { }),
+                        onPressed: () => _checkDataAndCallDBProcess(),
                         tooltip: 'Save',
                         iconSize: 38.sp,
                         icon: SvgPicture.asset(

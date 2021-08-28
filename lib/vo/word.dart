@@ -10,4 +10,9 @@ class Word {
   String word;
   String meaning;
   bool isSelected;
+
+  Map<String, String> toJson() => {
+    'word': word,
+    'meaning': meaning,
+  };
 }

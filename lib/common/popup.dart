@@ -19,7 +19,9 @@ class Popup {
               fontSize: 15.sp,
             ),
           ),
-          onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+          onPressed: () => {
+            Navigator.of(context, rootNavigator: true).pop(),
+          },
           width: MediaQuery.of(context).size.width * 0.3,
           height: 35.0.sp,
         )
@@ -66,8 +68,8 @@ class Popup {
             ),
           ),
           onPressed: () => {
+            Navigator.of(context, rootNavigator: true).pop(),
             callback(),
-            //Navigator.of(context, rootNavigator: true).pop()
           },
           width: MediaQuery.of(context).size.width * 0.3,
           height: 35.0.sp,

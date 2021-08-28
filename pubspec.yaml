@@ -49,6 +49,7 @@ dependencies:
   crop_your_image:
   flutter_typeahead:
   searchfield:
+  path_provider:
   flutter_provider:
   provider:
   mobx:
@@ -56,7 +57,8 @@ dependencies:
   permission_handler:
   intl:
   sizer:
-  redis_dart:
+  hive:
+  hive_flutter:
   flutter_tts:
   audio_service:
   audio_session:
@@ -72,6 +74,11 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator:
+  build_runner:
+  source_gen:
+  analyzer:
+  json_serializable:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

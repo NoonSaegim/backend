@@ -6,7 +6,10 @@ import 'text_player.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../common/popup.dart';
+import 'package:provider/provider.dart';
+import '../setting/bool_resize_speaker.dart';
 
+// 맨 위에 있어야 함.
 void _textToSpeechEntrypoint() async {
   AudioServiceBackground.run(() => TextPlayer());
 }
@@ -36,12 +39,13 @@ class Speaker extends StatelessWidget {
   }
 
   Widget _renderSpecker(BuildContext context) {
+    final bool isMini = context.select((Resize resize) => resize.minimize);
     Map<String, dynamic> params = new Map();
 
     return IconButton(
       onPressed: () => _callAudioService(params, context),
       tooltip: 'Audio',
-      iconSize: 32.sp,
+      iconSize: isMini ? 25.sp : 32.sp,
       icon: SvgPicture.asset(
         'imgs/audio.svg',
         placeholderBuilder: (BuildContext context) => Container(
@@ -77,8 +81,8 @@ class Speaker extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (playing) pauseButton() else playButton(),
-                        stopButton(),
+                        if (playing) pauseButton(context) else playButton(context),
+                        stopButton(context),
                       ],
                     );
                   },
@@ -93,20 +97,20 @@ class Speaker extends StatelessWidget {
 }
 
 
-IconButton playButton() => IconButton(
+IconButton playButton(BuildContext context) => IconButton(
   icon: Icon(Icons.play_arrow, color: Colors.black45),
-  iconSize: 32.sp,
+  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
   onPressed: AudioService.play,
 );
 
-IconButton pauseButton() => IconButton(
+IconButton pauseButton(BuildContext context) => IconButton(
   icon: Icon(Icons.pause, color: Colors.black45),
-  iconSize: 32.sp,
+  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
   onPressed: AudioService.pause,
 );
 
-IconButton stopButton() => IconButton(
+IconButton stopButton(BuildContext context) => IconButton(
   icon: Icon(Icons.stop, color: Colors.black45),
-  iconSize: 32.sp,
+  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
   onPressed: AudioService.stop,
 );
