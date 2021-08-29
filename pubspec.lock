@@ -45,6 +45,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.2.0"
+  asn1lib:
+    dependency: transitive
+    description:
+      name: asn1lib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   async:
     dependency: transitive
     description:
@@ -213,6 +220,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.1+4"
+  cross_local_storage:
+    dependency: transitive
+    description:
+      name: cross_local_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   crypto:
     dependency: transitive
     description:
@@ -234,6 +248,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.3"
+  encrypt:
+    dependency: transitive
+    description:
+      name: encrypt
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.1"
+  encrypted_shared_preferences:
+    dependency: transitive
+    description:
+      name: encrypted_shared_preferences
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -267,13 +295,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_bootstrap:
-    dependency: "direct main"
-    description:
-      name: flutter_bootstrap
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_cache_manager:
     dependency: transitive
     description:
@@ -332,13 +353,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
-  flutter_provider:
-    dependency: "direct main"
-    description:
-      name: flutter_provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -517,6 +531,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  json_cache:
+    dependency: "direct main"
+    description:
+      name: json_cache
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.3.4"
   json_serializable:
     dependency: "direct dev"
     description:
@@ -524,6 +545,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.4"
+  localstorage:
+    dependency: transitive
+    description:
+      name: localstorage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0+1"
   logging:
     dependency: transitive
     description:
@@ -552,13 +580,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
-  mobx:
-    dependency: "direct main"
+  mutex:
+    dependency: transitive
     description:
-      name: mobx
+      name: mutex
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.4"
+    version: "3.0.0"
   nested:
     dependency: transitive
     description:
@@ -713,6 +741,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
+  pointycastle:
+    dependency: transitive
+    description:
+      name: pointycastle
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.3.2"
   pool:
     dependency: transitive
     description:
@@ -907,6 +942,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.0"
+  streaming_shared_preferences:
+    dependency: "direct main"
+    description:
+      name: streaming_shared_preferences
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   string_scanner:
     dependency: transitive
     description:
@@ -957,7 +999,7 @@ packages:
     source: hosted
     version: "2.0.4"
   uuid:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: uuid
       url: "https://pub.dartlang.org"

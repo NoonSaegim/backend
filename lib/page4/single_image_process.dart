@@ -41,6 +41,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
   initState() {
     super.initState();
     _dataList = [...a,...b, ...c,...d,...e];
+
   }
 
   List<DataColumn> _getColumns() {

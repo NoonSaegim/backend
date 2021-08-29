@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:noonsaegim/setting/alert_setting.dart';
 import '../../common/drawer.dart';
 import '../../common/noon_appbar.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -9,9 +8,8 @@ import '../common/popup.dart';
 import 'alert.dart';
 import 'feedback.dart';
 import 'package:sizer/sizer.dart';
-import 'package:provider/provider.dart';
-import '../setting/cache.dart';
-import 'package:sizer/sizer.dart';
+import '../cache/cache_module.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -22,20 +20,26 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
+  @override
+  void initState() {
+    super.initState();
+
+  }
+
   //멤버 필드 : 알람 여부, 캐시 일수 ..
   bool _alarmStatus = false;
   final List _cacheable = List.generate(5, (index) => '${index+1} 일');
 
-  _showCacheablePeriodPicker(BuildContext context) {
+  _showCacheablePeriodPicker() {
     Picker(
       adapter: PickerDataAdapter<String>(
           pickerdata: _cacheable
       ),
       hideHeader: true,
       title: Text('캐시 기간 설정',textAlign: TextAlign.center,),
-      onConfirm: (Picker picker, List value) {
-        Provider.of<CacheablePeriod>(context,listen:false).setCacheable(value[0] + 1);
-        print(picker.getSelectedValues());
+      onConfirm: (Picker picker, List value) async {
+        await StreamingSharedPreferences.instance
+          .then((StreamingSharedPreferences pref) => pref.setInt('cacheableDays', value[0] + 1));
       }
     ).showDialog(context);
   }
@@ -260,17 +264,31 @@ class _SettingsState extends State<Settings> {
                                 ),
                                 Row(
                                   children: <Widget>[
-                                    Text(
-                                      '${context.watch<CacheablePeriod>().cache} 일',
-                                      style: TextStyle(
-                                        color: Colors.lightBlue,
-                                        fontSize: 10.8.sp,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                      textAlign: TextAlign.right,
+                                    FutureBuilder(
+                                      future: fetchCacheableDays(),
+                                      builder: (context, snapshot) {
+                                        if(snapshot.hasData) {
+                                          return PreferenceBuilder<int>(
+                                              preference: snapshot.data as Preference<int>,
+                                              builder: (context, days) {
+                                                return Text(
+                                                  '$days 일',
+                                                  style: TextStyle(
+                                                    color: Colors.lightBlue,
+                                                    fontSize: 10.8.sp,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  textAlign: TextAlign.right,
+                                                );
+                                              }
+                                          );
+                                        } else {
+                                          return CircularProgressIndicator();
+                                        }
+                                      },
                                     ),
                                     IconButton(
-                                      onPressed: () => _showCacheablePeriodPicker(context),
+                                      onPressed: () => _showCacheablePeriodPicker(),
                                       tooltip: 'next-active',
                                       icon: Transform(
                                         alignment: Alignment.center,

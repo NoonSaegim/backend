@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:hexcolor/hexcolor.dart';

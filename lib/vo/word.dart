@@ -11,7 +11,7 @@ class Word {
   String meaning;
   bool isSelected;
 
-  Map<String, String> toJson() => {
+  Map<String, String> toSimpleJson() => {
     'word': word,
     'meaning': meaning,
   };

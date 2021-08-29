@@ -17,3 +17,4 @@ void deleteVoca(BuildContext context, int position) {
   final box = Hive.box<Voca>('voca');
   box.deleteAt(position).then((value) => Navigator.pushNamed(context, '/mynote'));
 }
+

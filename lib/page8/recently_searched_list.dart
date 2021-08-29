@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bootstrap/flutter_bootstrap.dart';
 import '../common/drawer.dart';
 import '../common/noon_appbar.dart';
-import '../vo/word.dart';
 import 'package:sizer/sizer.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import '../cache/cache_module.dart';
 
 class Recently extends StatefulWidget {
   @override
@@ -11,16 +11,8 @@ class Recently extends StatefulWidget {
 }
 
 class _RecentlyState extends State<Recently> {
-  int _cacheable = 3;
-  final List<String> _columns = ['날짜', '영어 단어', '의미'];
 
-  @override
-  void initState() {
-    super.initState();
-    bootstrapGridParameters(
-      gutterSize: 30,
-    );
-  }
+  final List<String> _columns = ['날짜', '영어 단어', '의미'];
 
   List<DataColumn> _getColumns() {
     List<DataColumn> dataColumn = [];
@@ -96,18 +88,31 @@ class _RecentlyState extends State<Recently> {
       body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(
-
             children: <Widget>[
               Container(
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(top: 22.sp, bottom: 11.sp, left: 11.sp),
-                child: Text(
-                    "※ 최근 $_cacheable일 동안 조회된 단어만 확인하실 수 있습니다.",
-                    style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 11.0.sp,
-                    )
-                ),
+                child: FutureBuilder(
+                  future: fetchCacheableDays(),
+                  builder: (context, snapshot) {
+                    if(snapshot.hasData) {
+                      return PreferenceBuilder<int>(
+                          preference: snapshot.data as Preference<int>,
+                          builder: (context, days) {
+                            return Text(
+                                '※ 최근 $days 일 동안 조회된 단어만 확인하실 수 있습니다.',
+                                style: TextStyle(
+                                  color: Colors.black54,
+                                  fontSize: 12.0.sp,
+                                )
+                            );
+                          }
+                      );
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  },
+                )
               ),
               Container(
                 child: DataTable(

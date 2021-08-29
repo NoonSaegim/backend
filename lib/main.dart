@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:noonsaegim/database/dao/voca.dart';
 import 'package:noonsaegim/setting/alert_list.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
@@ -14,24 +15,25 @@ import 'page1/home.dart';
 import 'package:sizer/sizer.dart';
 import 'page4/single_image_process.dart';
 import 'package:audio_service/audio_service.dart';
-import 'setting/cache.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'dart:io';
 import 'database/dao/voca.dart';
 import 'setting/bool_resize_speaker.dart';
+import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 void main() async{
 
+  //hive database setting
   WidgetsFlutterBinding.ensureInitialized();
   Directory directory = await pathProvider.getApplicationDocumentsDirectory();
   await Hive.initFlutter(directory.path);
   Hive.registerAdapter(VocabularyAdapter());
+
   runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => new CacheablePeriod()),
           ChangeNotifierProvider(create: (_) =>  new AlarmList()),
           ChangeNotifierProvider(create: (_) => new AlarmSetting()),
           ChangeNotifierProvider(create: (_) => new Resize()),
@@ -39,6 +41,12 @@ void main() async{
       child: FirstRoute(),
     )
   );
+
+  //반응형 pref 설정
+  final pref = await StreamingSharedPreferences.instance;
+  pref.setStringList('cacheKeys', []);  //캐시 키 리스트 default
+  pref.setInt('cacheableDays', 1);  //캐시 저장 기간 default
+  pref.setInt('cacheCount', 0); //캐시 개수 default
 }
 
 class FirstRoute extends StatelessWidget {
@@ -49,7 +57,7 @@ class FirstRoute extends StatelessWidget {
     return Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp(
-              initialRoute: '/mynote',
+              initialRoute: '/recently',
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),
