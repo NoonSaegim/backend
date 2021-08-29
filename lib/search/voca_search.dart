@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:search_page/search_page.dart';
-import '../database/dao/voca.dart';
+import '../database/dto/voca.dart';
 import 'package:sizer/sizer.dart';
 import '../setting/note_argument.dart';
 import '../database/hive_module.dart';

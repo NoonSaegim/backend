@@ -4,7 +4,7 @@ import 'package:noonsaegim/database/hive_module.dart';
 import 'dart:math' as math;
 import '../common/popup.dart';
 import 'package:sizer/sizer.dart';
-import '../database/dao/voca.dart';
+import '../database/dto/voca.dart';
 import '../tts/dynamic_speaker.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'dao/voca.dart';
+import 'dto/voca.dart';
 
 Future<void> addVoca(String title, List<Map<String, String>> wordList) async {
   var box = await Hive.openBox<Voca>('voca');
