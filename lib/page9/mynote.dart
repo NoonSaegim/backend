@@ -21,7 +21,7 @@ class _MyNoteState extends State<MyNote> {
 
   @override
   Widget build(BuildContext context) {
-    Provider.of<Resize>(context, listen: false).setMini(true);
+
 
     return Scaffold(
         backgroundColor: Colors.white,

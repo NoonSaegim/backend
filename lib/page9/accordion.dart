@@ -9,7 +9,6 @@ import '../tts/dynamic_speaker.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import '../setting/note_argument.dart';
 
 class Accordion extends StatefulWidget {
   final Voca voca;

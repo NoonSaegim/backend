@@ -60,7 +60,10 @@ class FirstRoute extends StatelessWidget {
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),
-                '/mynote': (context) => AudioServiceWidget(child: MyNote()),
+                '/mynote': (context) {
+                  Provider.of<Resize>(context, listen: false).setMini(true);
+                  return AudioServiceWidget(child: MyNote());
+                },
                 '/recently': (context) => Recently(),
                 '/settings': (context) => Settings(),
                 '/multi' : (context) => AudioServiceWidget(child: MultiImagesProcess()),

@@ -5,9 +5,6 @@ import '../database/dao/voca.dart';
 import 'package:sizer/sizer.dart';
 import '../setting/note_argument.dart';
 import '../database/hive_module.dart';
-// Widget fetchSearchPage() {
-//
-// }
 
 Future<SearchPage<Voca>> vocaSearch(BuildContext context) async {
 
@@ -87,7 +84,6 @@ Future<SearchPage<Voca>> vocaSearch(BuildContext context) async {
 String convertToString(List<Map<String, String>> wordList) {
   Map<String, String> merge = new Map();
   for (var value in wordList) {
-    value.removeWhere((key, value) => key == 'meaning');
     merge.addAll(value);
   }
   return merge.values.map((e) => e).join(', ');
