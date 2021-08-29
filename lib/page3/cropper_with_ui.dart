@@ -28,7 +28,7 @@ class _SingleCropperState extends State<SingleCropper> {
             margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
           ),
           Center(
-            child: Cropper(),
+            child: Cropper(''),
           ),
           TransparentAppBar(),
         ]),
@@ -38,11 +38,16 @@ class _SingleCropperState extends State<SingleCropper> {
 
 
 class Cropper extends StatefulWidget {
+  final String imagePath;
+  Cropper(this.imagePath);
   @override
-  _CropperState createState() => _CropperState();
+  _CropperState createState() => _CropperState(this.imagePath);
 }
 
 class _CropperState extends State<Cropper> {
+  final String imagePath;
+  _CropperState(this.imagePath);
+
   static const _images = const [
     'imgs/apple-logo.png',
     'imgs/main.jpg',

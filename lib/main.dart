@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:noonsaegim/database/dao/voca.dart';
 import 'package:noonsaegim/setting/alert_list.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
@@ -57,7 +56,7 @@ class FirstRoute extends StatelessWidget {
     return Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp(
-              initialRoute: '/recently',
+              initialRoute: '/mynote',
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),

@@ -38,14 +38,13 @@ class Speaker extends StatelessWidget {
     );
   }
 
-  Widget _renderSpecker(BuildContext context) {
-    final bool isMini = context.select((Resize resize) => resize.minimize);
+  Widget _renderSpecker(int size, context) {
     Map<String, dynamic> params = new Map();
 
     return IconButton(
       onPressed: () => _callAudioService(params, context),
       tooltip: 'Audio',
-      iconSize: isMini ? 25.sp : 32.sp,
+      iconSize: size.sp,
       icon: SvgPicture.asset(
         'imgs/audio.svg',
         placeholderBuilder: (BuildContext context) => Container(
@@ -57,6 +56,7 @@ class Speaker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int size = context.select((Resize resize) => resize.minimize) ? 25 : 32;
     return Container(
       child: StreamBuilder<bool>(
         stream: AudioService.runningStream,
@@ -70,7 +70,7 @@ class Speaker extends StatelessWidget {
             children: [
               if (!running) ...[
                 // UI to show when we're not running, i.e. a menu.
-                if (kIsWeb || !Platform.isMacOS) _renderSpecker(context),
+                if (kIsWeb || !Platform.isMacOS) _renderSpecker(size, context),
               ] else ...[
                 StreamBuilder<bool>(
                   stream: AudioService.playbackStateStream
@@ -81,8 +81,8 @@ class Speaker extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (playing) pauseButton(context) else playButton(context),
-                        stopButton(context),
+                        if (playing) pauseButton(size) else playButton(size),
+                        stopButton(size),
                       ],
                     );
                   },
@@ -97,20 +97,20 @@ class Speaker extends StatelessWidget {
 }
 
 
-IconButton playButton(BuildContext context) => IconButton(
+IconButton playButton(int size) => IconButton(
   icon: Icon(Icons.play_arrow, color: Colors.black45),
-  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
+  iconSize: size.sp,
   onPressed: AudioService.play,
 );
 
-IconButton pauseButton(BuildContext context) => IconButton(
+IconButton pauseButton(int size) => IconButton(
   icon: Icon(Icons.pause, color: Colors.black45),
-  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
+  iconSize: size.sp,
   onPressed: AudioService.pause,
 );
 
-IconButton stopButton(BuildContext context) => IconButton(
+IconButton stopButton(int size) => IconButton(
   icon: Icon(Icons.stop, color: Colors.black45),
-  iconSize: context.select((Resize resize) => resize.minimize) ? 25.sp : 32.sp,
+  iconSize: size.sp,
   onPressed: AudioService.stop,
 );

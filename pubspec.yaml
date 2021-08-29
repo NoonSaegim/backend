@@ -55,6 +55,7 @@ dependencies:
   hive:
   hive_flutter:
   json_cache:
+  search_page:
   flutter_tts:
   audio_service:
   audio_session:

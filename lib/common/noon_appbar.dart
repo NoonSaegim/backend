@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../search/voca_search.dart';
 
 class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   const AppBar1({Key? key}) : super(key: key);
@@ -66,9 +67,11 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
               return IconButton(
                 icon: Icon(Icons.search_rounded),
                 color: Colors.lightBlue,
-                tooltip: 'Search',
+                tooltip: 'Search Vocabulary Note',
                 iconSize: AppBar().preferredSize.height * 0.94,
-                onPressed: () => showSearch(context: context, delegate: Search(list)),
+                onPressed: () async {
+                  showSearch(context: context, delegate: await vocaSearch(context));
+                }
               );
             }
         ),

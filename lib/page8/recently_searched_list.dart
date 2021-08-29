@@ -84,7 +84,7 @@ class _RecentlyState extends State<Recently> {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: new SideBar(),
-      appBar: new AppBar2(),
+      appBar: new AppBar1(),
       body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Column(

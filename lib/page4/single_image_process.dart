@@ -37,11 +37,11 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
   );
 
   List<Word> _dataList = [];
+
   @override
   initState() {
     super.initState();
     _dataList = [...a,...b, ...c,...d,...e];
-
   }
 
   List<DataColumn> _getColumns() {

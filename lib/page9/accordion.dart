@@ -9,26 +9,35 @@ import '../tts/dynamic_speaker.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import '../setting/note_argument.dart';
 
 class Accordion extends StatefulWidget {
   final Voca voca;
   final int seq;
-  Accordion(this.voca, this.seq);
+  final int showSeq;
+
+  Accordion(this.voca, this.seq, this.showSeq);
 
   @override
-  _AccordionState createState() => _AccordionState(this.voca, this.seq);
+  _AccordionState createState() => _AccordionState(this.voca, this.seq, this.showSeq);
 }
 
 class _AccordionState extends State<Accordion> {
   final Voca voca;
   final int seq;
-  _AccordionState(this.voca, this.seq);
+  final int showSeq;
+
+  _AccordionState(this.voca, this.seq, this.showSeq);
+
   bool _showContent = false;
 
   @override
   void initState() {
     super.initState();
     initializeDateFormatting();
+    setState(() {
+      _showContent = (seq == showSeq);
+    });
   }
 
   _renderToggleButton() {
@@ -88,6 +97,7 @@ class _AccordionState extends State<Accordion> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(

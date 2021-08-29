@@ -7,6 +7,7 @@ import '../database/hive_module.dart';
 import '../common/popup.dart';
 import 'package:provider/provider.dart';
 import '../setting/bool_resize_speaker.dart';
+import '../setting/note_argument.dart';
 
 class MyNote extends StatefulWidget {
   const MyNote({Key? key}) : super(key: key);
@@ -16,6 +17,7 @@ class MyNote extends StatefulWidget {
 }
 
 class _MyNoteState extends State<MyNote> {
+  int _showSeq = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,12 @@ class _MyNoteState extends State<MyNote> {
                           shrinkWrap: true,
                           itemCount: snapshot.data.length,
                           itemBuilder: (BuildContext context, int index) {
-                            return Accordion(snapshot.data[index], index);
+                            if(ModalRoute.of(context)!.settings.arguments != null) {
+                              final args = ModalRoute.of(context)!.settings.arguments as NoteArgument;
+                              return Accordion(snapshot.data[index], index, args.seq);
+                            } else {
+                              return Accordion(snapshot.data[index], index, _showSeq);
+                            }
                           }
                       ),
                     )
