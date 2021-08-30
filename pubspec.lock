@@ -290,20 +290,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
-  file_picker:
-    dependency: "direct main"
-    description:
-      name: file_picker
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
-  file_saver:
-    dependency: "direct main"
-    description:
-      name: file_saver
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.10"
   fixnum:
     dependency: transitive
     description:
@@ -1040,20 +1026,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.0"
-  syncfusion_flutter_core:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "19.2.57"
-  syncfusion_flutter_pdf:
-    dependency: "direct main"
-    description:
-      name: syncfusion_flutter_pdf
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "19.2.57-beta"
   synchronized:
     dependency: transitive
     description:
