@@ -29,6 +29,7 @@ class Speaker extends StatelessWidget {
   void _callAudioService(Map<String, dynamic> params, BuildContext context) {
     AudioService.connect();
     _checkAudioServiceState(context);
+
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,
       androidNotificationChannelName: 'Audio Service Demo',
@@ -38,7 +39,7 @@ class Speaker extends StatelessWidget {
     );
   }
 
-  Widget _renderSpecker(int size, context) {
+  Widget _renderSpecker(context) {
     Map<String, dynamic> params = new Map();
 
     return IconButton(
@@ -46,7 +47,7 @@ class Speaker extends StatelessWidget {
         _callAudioService(params, context);
       },
       tooltip: 'Audio',
-      iconSize: size.sp,
+      iconSize: 32.sp,
       icon: SvgPicture.asset(
         'imgs/audio.svg',
         placeholderBuilder: (BuildContext context) => Container(
@@ -58,7 +59,7 @@ class Speaker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int size = context.select((Resize resize) => resize.minimize) ? 25 : 32;
+
     return Container(
       child: StreamBuilder<bool>(
         stream: AudioService.runningStream,
@@ -72,7 +73,7 @@ class Speaker extends StatelessWidget {
             children: [
               if (!running) ...[
                 // UI to show when we're not running, i.e. a menu.
-                if (kIsWeb || !Platform.isMacOS) _renderSpecker(size, context),
+                if (kIsWeb || !Platform.isMacOS) _renderSpecker(context),
               ] else ...[
                 StreamBuilder<bool>(
                   stream: AudioService.playbackStateStream
@@ -83,8 +84,8 @@ class Speaker extends StatelessWidget {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        if (playing) pauseButton(size) else playButton(size),
-                        stopButton(size),
+                        if (playing) pauseButton() else playButton(),
+                        stopButton(),
                       ],
                     );
                   },
@@ -99,20 +100,20 @@ class Speaker extends StatelessWidget {
 }
 
 
-IconButton playButton(int size) => IconButton(
+IconButton playButton() => IconButton(
   icon: Icon(Icons.play_arrow, color: Colors.black45),
-  iconSize: size.sp,
+  iconSize: 32.sp,
   onPressed: AudioService.play,
 );
 
-IconButton pauseButton(int size) => IconButton(
+IconButton pauseButton() => IconButton(
   icon: Icon(Icons.pause, color: Colors.black45),
-  iconSize: size.sp,
+  iconSize: 32.sp,
   onPressed: AudioService.pause,
 );
 
-IconButton stopButton(int size) => IconButton(
+IconButton stopButton() => IconButton(
   icon: Icon(Icons.stop, color: Colors.black45),
-  iconSize: size.sp,
+  iconSize: 32.sp,
   onPressed: AudioService.stop,
 );

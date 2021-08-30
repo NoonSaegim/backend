@@ -381,6 +381,9 @@ color bright_foreground_material_dark
 color bright_foreground_material_light
 color button_material_dark
 color button_material_light
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
 color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
@@ -534,6 +537,8 @@ dimen abc_text_size_subhead_material
 dimen abc_text_size_subtitle_material_toolbar
 dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
+dimen activity_horizontal_margin
+dimen activity_vertical_margin
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -689,6 +694,12 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable ic_pause
+drawable ic_play_arrow
+drawable ic_skip_next_off
+drawable ic_skip_next_on
+drawable ic_skip_prev_off
+drawable ic_skip_prev_on
 drawable launch_background
 drawable media_session_service_notification_ic_music_note
 drawable media_session_service_notification_ic_pause
@@ -795,6 +806,7 @@ id async
 id beginning
 id blocking
 id bottom
+id button
 id buttonPanel
 id cancel_action
 id center
@@ -867,6 +879,7 @@ id off
 id on
 id parentPanel
 id parent_matrix
+id progress
 id progress_circular
 id progress_horizontal
 id radio
@@ -1002,6 +1015,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_main
 layout custom_dialog
 layout notification_action
 layout notification_action_tombstone
@@ -1031,6 +1045,7 @@ layout ucrop_layout_scale_wheel
 layout ucrop_view
 menu ucrop_menu_activity
 mipmap ic_launcher
+raw warner_tautz_off_broadway
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
@@ -1058,6 +1073,7 @@ string abc_searchview_description_voice
 string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
+string app_name
 string default_notification_channel_name
 string pause_button_content_description
 string play_button_content_description
@@ -1078,6 +1094,7 @@ style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
 style Animation_AppCompat_DropDownUp
 style Animation_AppCompat_Tooltip
+style AppTheme
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog
