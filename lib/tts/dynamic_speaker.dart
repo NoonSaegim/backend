@@ -42,7 +42,9 @@ class Speaker extends StatelessWidget {
     Map<String, dynamic> params = new Map();
 
     return IconButton(
-      onPressed: () => _callAudioService(params, context),
+      onPressed: () {
+        _callAudioService(params, context);
+      },
       tooltip: 'Audio',
       iconSize: size.sp,
       icon: SvgPicture.asset(

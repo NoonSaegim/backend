@@ -20,10 +20,10 @@ import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'dart:io';
 import 'database/dto/voca.dart';
 import 'setting/bool_resize_speaker.dart';
+import 'setting/permission.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
 
 void main() async{
-
   //hive database setting
   WidgetsFlutterBinding.ensureInitialized();
   Directory directory = await pathProvider.getApplicationDocumentsDirectory();
@@ -40,6 +40,9 @@ void main() async{
       child: FirstRoute(),
     )
   );
+
+  //파일 쓰기 권한 요청
+  // await requestPermission(); //이거 주석 풀면 스피커 자동으로 재생됨...ㅋㅋㅋㅋㅋ
 
   //반응형 pref 설정
   final pref = await StreamingSharedPreferences.instance;
@@ -60,10 +63,7 @@ class FirstRoute extends StatelessWidget {
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),
-                '/mynote': (context) {
-                  Provider.of<Resize>(context, listen: false).setMini(true);
-                  return AudioServiceWidget(child: MyNote());
-                },
+                '/mynote': (context) => AudioServiceWidget(child: MyNote()),
                 '/recently': (context) => Recently(),
                 '/settings': (context) => Settings(),
                 '/multi' : (context) => AudioServiceWidget(child: MultiImagesProcess()),

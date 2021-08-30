@@ -9,6 +9,7 @@ import '../tts/dynamic_speaker.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'pdf.dart';
 
 class Accordion extends StatefulWidget {
   final Voca voca;
@@ -114,11 +115,10 @@ class _AccordionState extends State<Accordion> {
         child: Padding(
             padding: EdgeInsets.only(left: 10.0.sp),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(top: 3.0.sp),
                     height: (MediaQuery.of(context).size.height -
                         AppBar().preferredSize.height -
                         MediaQuery.of(context).padding.top) * 0.09,
@@ -193,7 +193,7 @@ class _AccordionState extends State<Accordion> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', () { }),
+                                      onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', () => createPdf(voca)),
                                       tooltip: 'PDF',
                                       iconSize: 32.sp,
                                       icon: SvgPicture.asset(

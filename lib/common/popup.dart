@@ -94,7 +94,10 @@ class Popup {
                 fontSize: 15.sp,
             ),
           ),
-          onPressed: () => callback(),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            callback();
+          },
           color: Colors.cyan,
         ),
         DialogButton(

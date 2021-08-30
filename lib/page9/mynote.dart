@@ -20,8 +20,15 @@ class _MyNoteState extends State<MyNote> {
   int _showSeq = 0;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      Provider.of<Resize>(context, listen: false).setMini(true);
+    });
+  }
 
+  @override
+  Widget build(BuildContext context) {
 
     return Scaffold(
         backgroundColor: Colors.white,

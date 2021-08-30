@@ -4,11 +4,15 @@ import 'dart:ui';
 import 'package:sizer/sizer.dart';
 import '../vo/word.dart';
 import '../database/hive_module.dart';
-
+import 'popup.dart';
 void onSaveButtonPressed(BuildContext context, List<Word> dataList) {
   String _title = '';
 
   void _onSave() async {
+    if(_title == '') {
+      alert.onWarning(context, '단어장 제목을 작성해주세요!', (){});
+      return;
+    }
     List<Word> selectedList = dataList.where((e) => e.isSelected).toList();
     selectedList.sort((x,y) => x.seq.compareTo(y.seq));
     List<Map<String,String>> dataToInsert = selectedList.map((e) => e.toSimpleJson()).toList();
