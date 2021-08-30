@@ -65,14 +65,14 @@ class Album {
 
 //void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+class MyVision extends StatefulWidget {
+  MyVision({Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class _MyAppState extends State<MyVision> {
   late Future<Album> futureAlbum;
 
   @override

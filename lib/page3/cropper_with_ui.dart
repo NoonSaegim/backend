@@ -10,6 +10,7 @@ import 'dart:math' as math;
 import 'package:flutter/services.dart' show rootBundle;
 import '../page2/openCamera.dart';
 import 'package:camera/camera.dart';
+import '../vision.dart';
 
 class SingleCropper extends StatefulWidget {
   final String imagePath;
@@ -50,9 +51,9 @@ class Cropper extends StatefulWidget {
 }
 
 class _CropperState extends State<Cropper> {
-  String pickture = 'imgs/하하.jpg';
+  String pickture = 'imgs/horse.jpg';
   static var _images = const [
-    'imgs/하하.jpg'
+    'imgs/horse.jpg'
   ];
 
   final _cropController = CropController();
@@ -146,7 +147,7 @@ class _CropperState extends State<Cropper> {
                               // CropStatus.ready: print('crop is ready'),
                               // CropStatus.cropping: print('Crop is now cropping image'),
                           },
-                          initialSize: 0.5,
+                          initialSize: 1.0,
                           maskColor: _isSumbnail ? Colors.white : null,
                           cornerDotBuilder: (size, edgeAlignment) => _isSumbnail
                               ? const SizedBox.shrink()
@@ -172,12 +173,12 @@ class _CropperState extends State<Cropper> {
                   replacement: Center(
                     child: _croppedData == null
                         ? SizedBox.shrink()
-                        : Image.memory(_croppedData!),
+                        //: Image.memory(_croppedData!),
+                        :MyVision(_croppedData!)
                   ),
                 ),
               ),
 
-              if (_croppedData == null)
                 Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
@@ -254,32 +255,41 @@ class _CropperState extends State<Cropper> {
                       )
                   ),
                   //Spacer(),
-                  Expanded(
-                      child: Container(
-                        padding: EdgeInsets.only(right: 20, left: 20),
-                        height:(MediaQuery.of(context).size.height -
-                            AppBar().preferredSize.height -
-                            MediaQuery.of(context).padding.top) * 0.15,
-                        child:IconButton(
-                          onPressed: (){
-                            setState(() {
-                            _isCropping = true;
-                            });
-                            _isCircleUi
-                            ? _cropController.cropCircle()
-                                : _cropController.crop();
-                          },
-                          tooltip: 'Submit',
-                          icon: SvgPicture.asset(
-                            'imgs/redo.svg',
-                            alignment: Alignment.centerRight,
-                            placeholderBuilder: (BuildContext context) => Container(
-                                child: const CircularProgressIndicator()
+
+                  if(_croppedData==null)
+                    Expanded(
+                        child: Container(
+                          padding: EdgeInsets.only(right: 20, left: 20),
+                          height: (MediaQuery
+                              .of(context)
+                              .size
+                              .height -
+                              AppBar().preferredSize.height -
+                              MediaQuery
+                                  .of(context)
+                                  .padding
+                                  .top) * 0.15,
+                          child: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isCropping = true;
+                              });
+                              _isCircleUi
+                                  ? _cropController.cropCircle()
+                                  : _cropController.crop();
+                            },
+                            tooltip: 'Submit',
+                            icon: SvgPicture.asset(
+                              'imgs/redo.svg',
+                              alignment: Alignment.centerRight,
+                              placeholderBuilder: (BuildContext context) =>
+                                  Container(
+                                      child: const CircularProgressIndicator()
+                                  ),
                             ),
                           ),
-                        ),
-                      )
-                  ),
+                        )
+                    ),
                 ],
               ),
               Row(
