@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bootstrap/flutter_bootstrap.dart';
 import '../common/drawer.dart';
 import '../common/noon_appbar.dart';
 import '../vo/word.dart';
@@ -13,14 +12,6 @@ class Recently extends StatefulWidget {
 class _RecentlyState extends State<Recently> {
   int _cacheable = 3;
   final List<String> _columns = ['날짜', '영어 단어', '의미'];
-
-  @override
-  void initState() {
-    super.initState();
-    bootstrapGridParameters(
-      gutterSize: 30,
-    );
-  }
 
   List<DataColumn> _getColumns() {
     List<DataColumn> dataColumn = [];

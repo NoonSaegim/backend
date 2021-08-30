@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -8,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import '../vo/word.dart';
 import '../common/popup.dart';
 import '../tts/dynamic_speaker.dart';
+import '../common/dialog.dart';
 
 class SingleImageProcess extends StatefulWidget {
   const SingleImageProcess({Key? key}) : super(key: key);
@@ -171,7 +171,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                         )
                     ),
                     IconButton(
-                        onPressed: () => alert.onInform(context, '나의 단어장에 저장하시겠습니까?', () { }),
+                        onPressed: () => alert.onInform(context, '나의 단어장에 저장하시겠습니까?', () => onSaveButtonPressed(context, _dataList)),
                         tooltip: 'Save',
                         iconSize: 38.sp,
                         icon: SvgPicture.asset(
