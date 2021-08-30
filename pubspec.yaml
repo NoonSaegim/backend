@@ -30,12 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: 
-  flutter_bootstrap:
+  cupertino_icons:
   package_info_plus:
   flutter_svg:
   http:
@@ -49,14 +44,18 @@ dependencies:
   crop_your_image:
   flutter_typeahead:
   searchfield:
-  flutter_provider:
+  path_provider:
   provider:
-  mobx:
+  streaming_shared_preferences:
   shared_preferences:
   permission_handler:
   intl:
+  uuid:
   sizer:
-  redis_dart:
+  hive:
+  hive_flutter:
+  json_cache:
+  search_page:
   flutter_tts:
   audio_service:
   audio_session:
@@ -68,10 +67,21 @@ dependencies:
       path: packages/android_alarm_manager_plus
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
+  pdf:
+  syncfusion_flutter_pdf:
+  file_saver:
+  open_file:
+  file_picker:
+  flutter_sound:
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  hive_generator:
+  build_runner:
+  source_gen:
+  analyzer:
+  json_serializable:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -83,10 +93,20 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: font/arial.ttf
+        - asset: font/arial-italic.ttf
+          style: italic
+        - asset: font/arial-bold.ttf
+          weight: 600
 
-  # To add assets to your application, add an assets section, like this:
   assets:
     - imgs/
+    - font/arial.ttf
+    - font/arial-italic.ttf
+    - font/arial-bold.ttf
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

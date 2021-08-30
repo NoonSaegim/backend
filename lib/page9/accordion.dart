@@ -1,24 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:noonsaegim/database/hive_module.dart';
 import 'dart:math' as math;
 import '../common/popup.dart';
 import 'package:sizer/sizer.dart';
+import '../database/dto/voca.dart';
+import '../tts/dynamic_speaker.dart';
+import 'package:intl/intl.dart';
+import '../database/hive_module.dart';
+import 'package:intl/date_symbol_data_local.dart';
+import 'pdf.dart';
 
 class Accordion extends StatefulWidget {
-  final String title;
-  final content;
-  Accordion(this.title, this.content);
+  final Voca voca;
+  final int seq;
+  final int showSeq;
+
+  Accordion(this.voca, this.seq, this.showSeq);
 
   @override
-  _AccordionState createState() => _AccordionState(this.title);
+  _AccordionState createState() => _AccordionState(this.voca, this.seq, this.showSeq);
 }
 
 class _AccordionState extends State<Accordion> {
-  final String title;
-  _AccordionState(this.title);
+  final Voca voca;
+  final int seq;
+  final int showSeq;
+
+  _AccordionState(this.voca, this.seq, this.showSeq);
 
   bool _showContent = false;
-  int _listCount = 15;
+
+  @override
+  void initState() {
+    super.initState();
+    initializeDateFormatting();
+    setState(() {
+      _showContent = (seq == showSeq);
+    });
+  }
 
   _renderToggleButton() {
     if(_showContent) {
@@ -50,37 +70,25 @@ class _AccordionState extends State<Accordion> {
     }
   }
 
-  _renderVocabulary() {
+  _renderVocabulary(Map<String,String> row) {
     return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Text(
-              'mango',
+              '${row['word']}',
               textAlign: TextAlign.right,
               style: TextStyle(
                   color: Colors.black54,
-                  fontSize: 13.5.sp,
+                  fontSize: 14.0.sp,
               )
           ),
-          IconButton(
-            onPressed: () => print('request audio api'),
-            tooltip: 'Audio',
-            icon: SvgPicture.asset(
-              'imgs/audio.svg',
-              placeholderBuilder: (BuildContext context) => Container(
-                  child: const CircularProgressIndicator()
-              ),
-              height: (MediaQuery.of(context).size.height -
-                  AppBar().preferredSize.height -
-                  MediaQuery.of(context).padding.top) * 0.05,
-            ),
-          ),
+          Speaker(),
           Text(
-              '망고',
+              '${row['meaning']}',
               textAlign: TextAlign.right,
               style: TextStyle(
                   color: Colors.black54,
-                  fontSize: 12.0.sp,
+                  fontSize: 13.0.sp,
               )
           ),
         ],
@@ -89,6 +97,7 @@ class _AccordionState extends State<Accordion> {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: BoxDecoration(
@@ -102,10 +111,12 @@ class _AccordionState extends State<Accordion> {
         ],
       ),
       child: Card(
-        margin: EdgeInsets.all(0.3),
+        margin: EdgeInsets.all(0.4),
         child: Padding(
             padding: EdgeInsets.only(left: 10.0.sp),
             child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Container(
                     height: (MediaQuery.of(context).size.height -
@@ -114,10 +125,10 @@ class _AccordionState extends State<Accordion> {
                     width: MediaQuery.of(context).size.width,
                     child: ListTile(
                       title: Text(
-                          widget.title,
+                          voca.title,
                           style: TextStyle(
                               color: Colors.black54,
-                              fontSize: 14.0.sp,
+                              fontSize: 15.0.sp,
                           )
                       ),
                       trailing: IconButton(
@@ -142,7 +153,7 @@ class _AccordionState extends State<Accordion> {
                               padding: EdgeInsets.only(right: 14.0.sp),
                               alignment: Alignment.centerRight,
                               child: Text(
-                                  '2021-08-22',
+                                  new DateFormat('yyyy-MM-dd').format(voca.date),
                                   textAlign: TextAlign.right,
                                   style: TextStyle(
                                       fontSize:10.sp,
@@ -156,41 +167,24 @@ class _AccordionState extends State<Accordion> {
                                   AppBar().preferredSize.height -
                                   MediaQuery.of(context).padding.top) * 0.35,
                               width: MediaQuery.of(context).size.width,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              child: Column(
                                   children: <Widget>[
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: MediaQuery.of(context).size.width * 0.42,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: _listCount,
-                                          itemBuilder: (BuildContext context, int index) => _renderVocabulary(),
-                                        ),
+                                    SizedBox(
+                                      height: (MediaQuery.of(context).size.height -
+                                      AppBar().preferredSize.height -
+                                      MediaQuery.of(context).padding.top) * 0.35,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: voca.wordList.length,
+                                        itemBuilder: (BuildContext context, int index) => _renderVocabulary(voca.wordList[index]),
                                       ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.only(left: 3.0.sp, right: 3.0.sp),
-                                      child: VerticalDivider(color: Colors.grey.withOpacity(0.9), thickness: 0.7),
-                                    ),
-                                    Expanded(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: MediaQuery.of(context).size.width * 0.42,
-                                        child: ListView.builder(
-                                          scrollDirection: Axis.vertical,
-                                          shrinkWrap: true,
-                                          itemCount: _listCount,
-                                          itemBuilder: (BuildContext context, int index) => _renderVocabulary(),
-                                        ),
-                                      ),
-                                    ),
+                                    )
                                   ],
                                 )
                               ),
                               Container(
+                                color: Colors.white,
                                 height: (MediaQuery.of(context).size.height -
                                     AppBar().preferredSize.height -
                                     MediaQuery.of(context).padding.top) * 0.1,
@@ -199,9 +193,9 @@ class _AccordionState extends State<Accordion> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
-                                      onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', () { }),
+                                      onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', () => createPdf(voca)),
                                       tooltip: 'PDF',
-                                      //iconSize: 18.0.sp,
+                                      iconSize: 32.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/pdf.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -212,6 +206,7 @@ class _AccordionState extends State<Accordion> {
                                     IconButton(
                                       onPressed: () => alert.onInform(context, 'MP3 파일로 변환하시겠습니까?', () { }),
                                       tooltip: 'MP3',
+                                      iconSize: 32.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/mp3.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -220,8 +215,9 @@ class _AccordionState extends State<Accordion> {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => alert.onWarning(context,'${this.title}을 삭제하시겠습니까?',(){}),
+                                      onPressed: () => alert.onWarning(context,'${voca.title} 을(를) 삭제하시겠습니까?',() => deleteVoca(context, seq)),
                                       tooltip: 'DELETE',
+                                      iconSize: 32.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/delete.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
