@@ -5,8 +5,6 @@ import './accordion.dart';
 import 'package:sizer/sizer.dart';
 import '../database/hive_module.dart';
 import '../common/popup.dart';
-import 'package:provider/provider.dart';
-import '../setting/bool_resize_speaker.dart';
 import '../setting/note_argument.dart';
 
 class MyNote extends StatefulWidget {
@@ -18,14 +16,6 @@ class MyNote extends StatefulWidget {
 
 class _MyNoteState extends State<MyNote> {
   int _showSeq = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      Provider.of<Resize>(context, listen: false).setMini(true);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

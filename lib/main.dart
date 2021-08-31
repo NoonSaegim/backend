@@ -54,7 +54,7 @@ class FirstRoute extends StatelessWidget {
     return Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp(
-              initialRoute: '/mynote',
+              initialRoute: '/single',
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),

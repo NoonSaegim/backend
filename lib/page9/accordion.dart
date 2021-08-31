@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import '../common/popup.dart';
 import 'package:sizer/sizer.dart';
 import '../database/dto/voca.dart';
-import '../tts/dynamic_speaker.dart';
+import '../tts/dynamic_speaker2.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';

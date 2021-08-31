@@ -1,8 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
-import 'dart:io' show Platform;
+import 'dart:core';
 import 'sleeper.dart';
 import 'package:audio_session/audio_session.dart';
 
@@ -16,7 +15,8 @@ class TextPlayer extends BackgroundAudioTask {
   bool get _playing => AudioServiceBackground.state.playing;
 
   @override
-  Future<void> onStart(Map<String, dynamic>? params) async {
+  Future<void> onStart(Map<String,dynamic>? params) async {
+
     final session = await AudioSession.instance;
     await session.configure(AudioSessionConfiguration.speech());
     // Handle audio interruptions.
@@ -46,23 +46,29 @@ class TextPlayer extends BackgroundAudioTask {
     });
     // Start playing.
     await _playPause();
-    for (var i = 1; i <= 10 && !_finished;) {
-      AudioServiceBackground.setMediaItem(mediaItem(i));
-      AudioServiceBackground.androidForceEnableMediaButtons();
-      try {
-        await _tts.speak('$i');
-        i++;
-        await _sleeper.sleep(Duration(milliseconds: 300));
-      } catch (e) {
-        // Speech was interrupted
-      }
-      // If we were just paused
-      if (!_finished && !_playing) {
+    num length = params?.keys.length as num;
+    var keySet = params?.keys.toList();
+
+    if(length > 0 && keySet!.isNotEmpty){
+      for (var i = 0; i < length && !_finished;) {
+        AudioServiceBackground.setMediaItem(mediaItem(i));
+        AudioServiceBackground.androidForceEnableMediaButtons();
         try {
-          // Wait to be unpaused
-          await _sleeper.sleep();
+          String key = keySet[i];
+          await _tts.speak('${params?[key]}');
+          i++;
+          await _sleeper.sleep(Duration(milliseconds: 300));
         } catch (e) {
-          // unpaused
+          // Speech was interrupted
+        }
+        // If we were just paused
+        if (!_finished && !_playing) {
+          try {
+            // Wait to be unpaused
+            await _sleeper.sleep();
+          } catch (e) {
+            // unpaused
+          }
         }
       }
     }
@@ -75,6 +81,7 @@ class TextPlayer extends BackgroundAudioTask {
       onStop();
     }
     _completer.complete();
+    params?.clear();
   }
 
   @override
@@ -95,11 +102,11 @@ class TextPlayer extends BackgroundAudioTask {
     await super.onStop();
   }
 
-  MediaItem mediaItem(int number) => MediaItem(
-      id: 'tts_$number',
-      album: 'Numbers',
-      title: 'Number $number',
-      artist: 'Sample Artist');
+  MediaItem mediaItem(int index) => MediaItem(
+      id: 'tts_$index',
+      album: 'Voca',
+      title: 'TextPlayer $index',
+      artist: 'NoonSaegim');
 
   Future<void> _playPause() async {
     if (_playing) {
@@ -132,6 +139,8 @@ class Tts {
   bool _playing = false;
 
   Tts() {
+    _flutterTts.setLanguage("en-US");
+    _flutterTts.setSpeechRate(0.4);
     _flutterTts.setCompletionHandler(() {
       _speechCompleter?.complete();
     });
@@ -140,7 +149,9 @@ class Tts {
   bool get playing => _playing;
 
   Future<void> speak(String text) async {
+    print(text);
     _playing = true;
+
     if (!_interruptRequested) {
       _speechCompleter = Completer();
       await _flutterTts.speak(text);

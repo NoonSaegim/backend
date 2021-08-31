@@ -115,13 +115,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
-  cupertino_icons:
-    dependency: "direct main"
-    description:
-      name: cupertino_icons
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.3"
   fake_async:
     dependency: transitive
     description:
@@ -207,19 +200,12 @@ packages:
     source: git
     version: "2.0.2"
   flutter_plugin_android_lifecycle:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: flutter_plugin_android_lifecycle
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
-  flutter_provider:
-    dependency: "direct main"
-    description:
-      name: flutter_provider
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   flutter_sound:
     dependency: "direct main"
     description:
@@ -391,13 +377,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
-  mobx:
-    dependency: "direct main"
-    description:
-      name: mobx
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
   nested:
     dependency: transitive
     description:
@@ -573,13 +552,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.0"
-  redis_dart:
-    dependency: "direct main"
-    description:
-      name: redis_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0+4"
   rflutter_alert:
     dependency: "direct main"
     description:

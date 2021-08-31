@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'package:intl/intl.dart';
+
 class Word {
   Word({
     required this.seq,
@@ -11,8 +14,13 @@ class Word {
   String meaning;
   bool isSelected;
 
-  Map<String, String> toSimpleJson() => {
+  Map<String, String> toSimpleJson() =>
+  {
     'word': word,
     'meaning': meaning,
+  };
+
+  Map<String,String> toMap() => {
+    '$seq': word,
   };
 }
