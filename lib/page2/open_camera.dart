@@ -6,6 +6,7 @@ import 'package:noonsaegim/page3/cropper_with_ui.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../setting/image_argument.dart';
 
 // A screen that allows users to take a picture using a given camera.
 class TakePictureScreen extends StatefulWidget {
@@ -78,23 +79,24 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           onPressed: () async {
             //사진찍기
             try {
-              await initializeControllerFuture;
-              // Attempt to take a picture and get the file `image`
-              // where it was saved.
-              final image = await Camcontroller.takePicture();
-              //image.saveTo('/imgs');
-              await Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => SingleCropper(imagePath: image.path),
-                  )
-              );
-              // If the picture was taken, display it on a new screen.
-
+              await initializeControllerFuture
+                  .then((value) async =>
+                  await Camcontroller.takePicture()
+                    .then((XFile image) async => await Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => SingleCropper(),
+                          settings: RouteSettings(
+                            arguments: ImageArgument(imagePath: [image.path]),
+                          )
+                        )
+                      )
+                    )
+                  );
             } catch (e) {
               print(e);
             }
           },
-          tooltip: 'Audio',
+          tooltip: 'Camera',
           icon: SvgPicture.asset(
             'imgs/diaphragm.svg',
             placeholderBuilder: (BuildContext context) => Container(

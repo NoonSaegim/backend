@@ -9,22 +9,17 @@ import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
 import '../common/camera.dart';
 import '../vision.dart';
+import '../setting/image_argument.dart';
+import '../common/popup.dart';
 
-class SingleCropper extends StatefulWidget {
-  final String imagePath;
-  const SingleCropper({Key? key, required this.imagePath}) : super(key: key);
-
-  @override
-  _SingleCropperState createState() => _SingleCropperState(this.imagePath);
-}
-
-class _SingleCropperState extends State<SingleCropper> {
-  final String imagePath;
-  _SingleCropperState(this.imagePath);
+class SingleCropper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    if(ModalRoute.of(context)!.settings.arguments != null) {
+      final args = ModalRoute.of(context)!.settings.arguments as ImageArgument;
+
+      return Scaffold(
         drawer: new SideBar(),
         body: Stack(children: <Widget>[
           Container(
@@ -35,17 +30,20 @@ class _SingleCropperState extends State<SingleCropper> {
             margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
           ),
           Center(
-            child: Cropper(this.imagePath),
+            child: Cropper(imagePath: args.imagePath[0]),
           ),
           TransparentAppBar(),
         ]),
-    );
+      );
+    } else {
+      return alert.onError(context, '사진이 찍히지 않았습니다!');
+    }
   }
 }
 
 class Cropper extends StatefulWidget {
   final String imagePath;
-  Cropper(this.imagePath);
+  Cropper({required this.imagePath});
 
   @override
   _CropperState createState() => _CropperState(this.imagePath);
@@ -58,30 +56,32 @@ class _CropperState extends State<Cropper> {
   final _cropController = CropController();
 
   var _imageData;
-  var _loadingImage = false;
+  bool _loadingImage = false;
   var _imageFile;
   var _image;
-  var _isSumbnail = false;
-  var _isCropping = false;
-  var _isCircleUi = false;
+  bool _isSumbnail = false;
+  bool _isCropping = false;
+  bool _isCircleUi = false;
   Uint8List? _croppedData;
 
   @override
   void initState() {
     super.initState();
+    print('-------------------image path : $imagePath---------------------------');
     _imageFile = File(this.imagePath);
     _image = Image.file(_imageFile);
-    _setImagedata(_imageFile);
+    _setImagedata();
     _cropController.image = _imageData;
   }
 
-  Future<void> _setImagedata(File _imageFile) async {
-    await _imageFile.readAsBytes()
-        .then((value) =>
+  Future<void> _setImagedata() async {
+    await File(this.imagePath).readAsBytes()
+        .then((List<int> bytes) =>
           setState((){
-            _imageData = Uint8List.fromList(value);
+            _imageData = Uint8List.fromList(bytes);
           })
         );
+    print('--------------------image file to Uint8List----------------->$_imageData');
   }
 
   @override

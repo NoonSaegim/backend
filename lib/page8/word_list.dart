@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bootstrap/flutter_bootstrap.dart';
 import '../common/drawer.dart';
 import '../common/noon_appbar.dart';
 import '../vo/wordData.dart';
@@ -12,14 +11,6 @@ class DemoPage extends StatefulWidget {
 class _DemoPageState extends State<DemoPage> {
 
   final List<String> _columns = ['날짜', '영어 단어', '의미'];
-
-  @override
-  void initState() {
-    super.initState();
-    bootstrapGridParameters(
-      gutterSize: 30,
-    );
-  }
 
   List<DataColumn> _getColumns() {
     List<DataColumn> dataColumn = [];
