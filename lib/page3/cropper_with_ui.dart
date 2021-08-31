@@ -1,15 +1,13 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:crop_your_image/crop_your_image.dart';
 import 'package:flutter/material.dart';
-import 'package:frontend/page3/cropper.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
-import 'package:flutter/services.dart' show rootBundle;
-import '../page2/openCamera.dart';
-import 'package:camera/camera.dart';
+import 'package:sizer/sizer.dart';
+import '../common/camera.dart';
 import '../vision.dart';
 
 class SingleCropper extends StatefulWidget {
@@ -17,13 +15,15 @@ class SingleCropper extends StatefulWidget {
   const SingleCropper({Key? key, required this.imagePath}) : super(key: key);
 
   @override
-  _SingleCropperState createState() => _SingleCropperState();
+  _SingleCropperState createState() => _SingleCropperState(this.imagePath);
 }
 
 class _SingleCropperState extends State<SingleCropper> {
+  final String imagePath;
+  _SingleCropperState(this.imagePath);
+
   @override
   Widget build(BuildContext context) {
-    print(widget.imagePath);
     return Scaffold(
         drawer: new SideBar(),
         body: Stack(children: <Widget>[
@@ -35,7 +35,7 @@ class _SingleCropperState extends State<SingleCropper> {
             margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
           ),
           Center(
-            child: Cropper(widget.imagePath),
+            child: Cropper(this.imagePath),
           ),
           TransparentAppBar(),
         ]),
@@ -44,30 +44,23 @@ class _SingleCropperState extends State<SingleCropper> {
 }
 
 class Cropper extends StatefulWidget {
-  Cropper(imagePath);
+  final String imagePath;
+  Cropper(this.imagePath);
 
   @override
-  _CropperState createState() => _CropperState();
+  _CropperState createState() => _CropperState(this.imagePath);
 }
 
 class _CropperState extends State<Cropper> {
-  String pickture = 'imgs/horse.jpg';
-  static var _images = const [
-    'imgs/horse.jpg'
-  ];
+  final String imagePath;
+  _CropperState(this.imagePath);
 
   final _cropController = CropController();
-  final _imageDataList = <Uint8List>[];
 
+  var _imageData;
   var _loadingImage = false;
-  var _currentImage = 0;
-  set currentImage(int value) {
-    setState(() {
-      _currentImage = value;
-    });
-    _cropController.image = _imageDataList[_currentImage];
-  }
-
+  var _imageFile;
+  var _image;
   var _isSumbnail = false;
   var _isCropping = false;
   var _isCircleUi = false;
@@ -75,25 +68,20 @@ class _CropperState extends State<Cropper> {
 
   @override
   void initState() {
-    _loadAllImages();
     super.initState();
+    _imageFile = File(this.imagePath);
+    _image = Image.file(_imageFile);
+    _setImagedata(_imageFile);
+    _cropController.image = _imageData;
   }
 
-  Future<void> _loadAllImages() async {
-    setState(() {
-      _loadingImage = true;
-    });
-    for (final assetName in _images) {
-      _imageDataList.add(await _load(assetName));
-    }
-    setState(() {
-      _loadingImage = false;
-    });
-  }
-
-  Future<Uint8List> _load(String assetName) async {
-    final assetData = await rootBundle.load(assetName);
-    return assetData.buffer.asUint8List();
+  Future<void> _setImagedata(File _imageFile) async {
+    await _imageFile.readAsBytes()
+        .then((value) =>
+          setState((){
+            _imageData = Uint8List.fromList(value);
+          })
+        );
   }
 
   @override
@@ -106,21 +94,6 @@ class _CropperState extends State<Cropper> {
           visible: !_loadingImage && !_isCropping,
           child: Column(
             children: [
-              if (_imageDataList.length >= 4)
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      _buildSumbnail(_imageDataList[0]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[1]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[2]),
-                      const SizedBox(width: 16),
-                      _buildSumbnail(_imageDataList[3]),
-                    ],
-                  ),
-                ),
               //Expanded(
               Container(
                 height: (MediaQuery.of(context).size.height -
@@ -130,10 +103,10 @@ class _CropperState extends State<Cropper> {
                   visible: _croppedData == null,
                   child: Stack(
                     children: [
-                      if (_imageDataList.isNotEmpty)
+                      if (_imageData != null)
                         Crop(
                           controller: _cropController,
-                          image: _imageDataList[_currentImage],
+                          image: _image,
                           onCropped: (croppedData) {
                             setState(() {
                               _croppedData = croppedData;
@@ -178,55 +151,54 @@ class _CropperState extends State<Cropper> {
                   ),
                 ),
               ),
-
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.crop_7_5),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.crop_7_5),
+                          onPressed: () {
+                            _isCircleUi = false;
+                            _cropController.aspectRatio = 16 / 4;
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.crop_16_9),
+                          onPressed: () {
+                            _isCircleUi = false;
+                            _cropController.aspectRatio = 16 / 9;
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.crop_5_4),
+                          onPressed: () {
+                            _isCircleUi = false;
+                            _cropController.aspectRatio = 4 / 3;
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.crop_square),
+                          onPressed: () {
+                            _isCircleUi = false;
+                            _cropController
+                              ..withCircleUi = false
+                              ..aspectRatio = 1;
+                          },
+                        ),
+                        IconButton(
+                            icon: Icon(Icons.circle),
                             onPressed: () {
-                              _isCircleUi = false;
-                              _cropController.aspectRatio = 16 / 4;
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.crop_16_9),
-                            onPressed: () {
-                              _isCircleUi = false;
-                              _cropController.aspectRatio = 16 / 9;
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.crop_5_4),
-                            onPressed: () {
-                              _isCircleUi = false;
-                              _cropController.aspectRatio = 4 / 3;
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.crop_square),
-                            onPressed: () {
-                              _isCircleUi = false;
-                              _cropController
-                                ..withCircleUi = false
-                                ..aspectRatio = 1;
-                            },
-                          ),
-                          IconButton(
-                              icon: Icon(Icons.circle),
-                              onPressed: () {
-                                _isCircleUi = true;
-                                _cropController.withCircleUi = true;
-                              }),
-                        ],
-                      ),
-                    ],
-                  ),
+                              _isCircleUi = true;
+                              _cropController.withCircleUi = true;
+                            }),
+                      ],
+                    ),
+                  ],
                 ),
+              ),
               const SizedBox(height: 10,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -238,7 +210,7 @@ class _CropperState extends State<Cropper> {
                             AppBar().preferredSize.height -
                             MediaQuery.of(context).padding.top) * 0.15,
                         child: IconButton(
-                            onPressed: () => camera(),
+                            onPressed: () => openCamera(context),
                             tooltip: 'retake',
                             icon: Transform(
                               alignment: Alignment.center,
@@ -254,8 +226,6 @@ class _CropperState extends State<Cropper> {
                         ),
                       )
                   ),
-                  //Spacer(),
-
                   if(_croppedData==null)
                     Expanded(
                         child: Container(
@@ -332,35 +302,6 @@ class _CropperState extends State<Cropper> {
             ],
           ),
           replacement: const CircularProgressIndicator(),
-        ),
-      ),
-
-
-    );
-  }
-
-  Expanded _buildSumbnail(Uint8List data) {
-    final index = _imageDataList.indexOf(data);
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          _croppedData = null;
-          currentImage = index;
-        },
-        child: Container(
-          height: 100,
-          decoration: BoxDecoration(
-            border: index == _currentImage
-                ? Border.all(
-              width: 8,
-              color: Colors.blue,
-            )
-                : null,
-          ),
-          child: Image.memory(
-            data,
-            fit: BoxFit.cover,
-          ),
         ),
       ),
     );

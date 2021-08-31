@@ -66,7 +66,7 @@ class Album {
 //void main() => runApp(MyApp());
 
 class MyVision extends StatefulWidget {
-  MyVision({Key? key}) : super(key: key);
+  MyVision(Uint8List uint8list, {Key? key}) : super(key: key);
 
   @override
   _MyAppState createState() => _MyAppState();

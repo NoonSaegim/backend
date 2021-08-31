@@ -1,11 +1,9 @@
-import 'dart:async';
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:frontend/common/drawer.dart';
-import 'package:frontend/common/noon_appbar.dart';
+import '../common/drawer.dart';
+import '../common/noon_appbar.dart';
 import 'package:image_picker/image_picker.dart';
 
 
