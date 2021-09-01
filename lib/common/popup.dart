@@ -67,7 +67,7 @@ class Popup {
           ),
           onPressed: () => {
             callback(),
-            //Navigator.of(context, rootNavigator: true).pop()
+            Navigator.of(context, rootNavigator: true).pop(),
           },
           width: MediaQuery.of(context).size.width * 0.3,
           height: 35.0.sp,
@@ -92,7 +92,10 @@ class Popup {
                 fontSize: 15.sp,
             ),
           ),
-          onPressed: () => callback(),
+          onPressed: () {
+            Navigator.of(context, rootNavigator: true).pop();
+            callback();
+          },
           color: Colors.cyan,
         ),
         DialogButton(

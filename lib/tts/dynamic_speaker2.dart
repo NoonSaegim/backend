@@ -5,36 +5,28 @@ import 'package:flutter/material.dart';
 import 'text_player.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import '../common/popup.dart';
 
 void _textToSpeechEntrypoint() async {
-  AudioServiceBackground.run(() => TextPlayer());
-}
-
-_checkAudioServiceState(BuildContext context) {
-  AudioService.playbackStateStream.listen((PlaybackState state) {
-    switch (state.processingState) {
-      case AudioProcessingState.error: alert.onError(context, 'Error occured on Audio Service');
-        return;
-    }
-  });
+  AudioServiceBackground.run(() => new TextPlayer());
 }
 
 class Speaker extends StatelessWidget {
-  const Speaker({Key? key}) : super(key: key);
+  final String word;
+  const Speaker({Key? key, required this.word}) : super(key: key);
 
   void _callAudioService(Map<String, dynamic> params) {
     AudioService.connect();
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,
-      androidNotificationChannelName: 'Audio Service Demo',
+      androidNotificationChannelName: 'Voca Audio Service',
       androidNotificationColor: 0xFF2196f3,
       androidNotificationIcon: 'mipmap/ic_launcher',
       params: params,
     );
   }
+
   Widget _renderSpecker(BuildContext context) {
-    Map<String, dynamic> params = new Map();
+    Map<String, dynamic> params = { 'word': word };
 
     return IconButton(
       onPressed: () => _callAudioService(params),

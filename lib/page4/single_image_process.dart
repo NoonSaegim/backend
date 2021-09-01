@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,7 +40,11 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
   @override
   initState() {
     super.initState();
-    _dataList = [...a,...b, ...c,...d,...e];
+    Future.delayed(Duration.zero).then((value) =>
+        setState((){
+          _dataList = [...a,...b, ...c,...d,...e];
+        })
+    );
   }
 
   @override
@@ -122,7 +125,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Card(
-                        child: Image.asset('imgs/main.JPG'),
+                        child: Image.asset('imgs/main.jpg'),
                         clipBehavior: Clip.antiAlias
                     ),
                   ],

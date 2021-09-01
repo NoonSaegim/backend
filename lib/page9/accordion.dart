@@ -9,6 +9,7 @@ import '../tts/dynamic_speaker2.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import './mp4/open_records.dart';
 
 class Accordion extends StatefulWidget {
   final Voca voca;
@@ -81,7 +82,7 @@ class _AccordionState extends State<Accordion> {
                   fontSize: 14.0.sp,
               )
           ),
-          Speaker(),
+          Speaker(word:'${row['word']}',),
           Text(
               '${row['meaning']}',
               textAlign: TextAlign.right,
@@ -194,7 +195,7 @@ class _AccordionState extends State<Accordion> {
                                     IconButton(
                                       onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', (){}),
                                       tooltip: 'PDF',
-                                      iconSize: 32.sp,
+                                      iconSize: 34.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/pdf.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -203,11 +204,12 @@ class _AccordionState extends State<Accordion> {
                                       ),
                                     ),
                                     IconButton(
-                                      onPressed: () => alert.onInform(context, 'MP3 파일로 변환하시겠습니까?', () { }),
-                                      tooltip: 'MP3',
-                                      iconSize: 32.sp,
+                                      onPressed: () => alert.onInform(context, 'WAV 파일로 변환하시겠습니까?',
+                                              () => onInitRecords().then((value) => showRecorder(context, voca))),
+                                      tooltip: 'WAV',
+                                      iconSize: 34.sp,
                                       icon: SvgPicture.asset(
-                                        'imgs/mp3.svg',
+                                        'imgs/wav.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
                                             child: const CircularProgressIndicator()
                                         ),
@@ -216,7 +218,7 @@ class _AccordionState extends State<Accordion> {
                                     IconButton(
                                       onPressed: () => alert.onWarning(context,'${voca.title} 을(를) 삭제하시겠습니까?',() => deleteVoca(context, seq)),
                                       tooltip: 'DELETE',
-                                      iconSize: 32.sp,
+                                      iconSize: 34.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/delete.svg',
                                         placeholderBuilder: (BuildContext context) => Container(

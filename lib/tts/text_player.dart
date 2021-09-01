@@ -18,7 +18,7 @@ class TextPlayer extends BackgroundAudioTask {
   Future<void> onStart(Map<String,dynamic>? params) async {
 
     final session = await AudioSession.instance;
-    await session.configure(AudioSessionConfiguration.speech());
+    await session.configure(new AudioSessionConfiguration.speech());
     // Handle audio interruptions.
     session.interruptionEventStream.listen((event) {
       if (event.begin) {

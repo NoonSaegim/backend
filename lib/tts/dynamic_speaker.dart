@@ -6,6 +6,7 @@ import 'text_player.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../vo/word.dart';
+import '../common/popup.dart';
 
 void _textToSpeechEntrypoint() async {
   AudioServiceBackground.run(() => TextPlayer());
@@ -17,9 +18,10 @@ class Speaker extends StatelessWidget {
 
   void _callAudioService(Map<String, dynamic> params) {
     AudioService.connect();
+    print('params = $params');
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,
-      androidNotificationChannelName: 'Audio Service Demo',
+      androidNotificationChannelName: 'Voca Audio Service',
       androidNotificationColor: 0xFF2196f3,
       androidNotificationIcon: 'mipmap/ic_launcher',
       params: params,
@@ -27,6 +29,7 @@ class Speaker extends StatelessWidget {
   }
 
   dynamic _listOfObjToMap(List<Word> listObj) {
+
     Map<String, String> merge = new Map();
     listObj.sort((x,y) => x.seq.compareTo(y.seq)); //map convert 전 sort
     listObj.forEach((e) {
@@ -36,10 +39,18 @@ class Speaker extends StatelessWidget {
   }
 
   Widget _renderSpecker(BuildContext context) {
-    Map<String, dynamic> params = _listOfObjToMap(dataList.where((e) => e.isSelected).toList());
+    List<Word> listObj = dataList.where((e) => e.isSelected).toList();
 
     return IconButton(
-      onPressed: () => _callAudioService(params),
+      onPressed: () {
+        if(listObj.isEmpty) {
+          alert.onWarning(context, '단어를 선택하세요!', () { });
+          return;
+        } else {
+          Map<String, dynamic> params = _listOfObjToMap(listObj);
+          _callAudioService(params);
+        }
+      },
       tooltip: 'Audio',
       iconSize: 32.sp,
       icon: SvgPicture.asset(
