@@ -9,7 +9,8 @@ import '../tts/dynamic_speaker2.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import './mp4/open_records.dart';
+import 'wav/open_records.dart';
+import '../setting/permission.dart';
 
 class Accordion extends StatefulWidget {
   final Voca voca;
@@ -36,7 +37,7 @@ class _AccordionState extends State<Accordion> {
     super.initState();
     initializeDateFormatting();
     setState(() {
-      _showContent = (seq == showSeq);
+      _showContent = (seq == showSeq); //검색해서 클릭한 인덱스의 글이 열리게
     });
   }
 
@@ -188,14 +189,13 @@ class _AccordionState extends State<Accordion> {
                                 height: (MediaQuery.of(context).size.height -
                                     AppBar().preferredSize.height -
                                     MediaQuery.of(context).padding.top) * 0.1,
-                                //alignment: Alignment.centerRight,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     IconButton(
                                       onPressed: () => alert.onInform(context, 'PDF 파일로 변환하시겠습니까?', (){}),
                                       tooltip: 'PDF',
-                                      iconSize: 34.sp,
+                                      iconSize: 38.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/pdf.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -205,9 +205,15 @@ class _AccordionState extends State<Accordion> {
                                     ),
                                     IconButton(
                                       onPressed: () => alert.onInform(context, 'WAV 파일로 변환하시겠습니까?',
-                                              () => onInitRecords().then((value) => showRecorder(context, voca))),
+                                              /// 1. 권한 요청  -> 2. 디렉토리 열기 -> 3. 레코더 오픈
+                                              () => requestPermission(context)
+                                                  .then((value) => onInitRecords()
+                                                    .then((value) => showRecorder(context, voca)
+                                                  )
+                                                )
+                                              ),
                                       tooltip: 'WAV',
-                                      iconSize: 34.sp,
+                                      iconSize: 38.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/wav.svg',
                                         placeholderBuilder: (BuildContext context) => Container(
@@ -218,7 +224,7 @@ class _AccordionState extends State<Accordion> {
                                     IconButton(
                                       onPressed: () => alert.onWarning(context,'${voca.title} 을(를) 삭제하시겠습니까?',() => deleteVoca(context, seq)),
                                       tooltip: 'DELETE',
-                                      iconSize: 34.sp,
+                                      iconSize: 38.sp,
                                       icon: SvgPicture.asset(
                                         'imgs/delete.svg',
                                         placeholderBuilder: (BuildContext context) => Container(

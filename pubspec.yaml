@@ -68,6 +68,8 @@ dependencies:
   share:
   audioplayers:
   percent_indicator:
+  rxdart:
+  multiple_stream_builder:
 
 dev_dependencies:
   flutter_test:

@@ -320,7 +320,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.3+3"
+    version: "0.8.4"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -370,6 +370,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.0"
+  multiple_stream_builder:
+    dependency: "direct main"
+    description:
+      name: multiple_stream_builder
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   nested:
     dependency: transitive
     description:
@@ -553,7 +560,7 @@ packages:
     source: hosted
     version: "2.0.4"
   rxdart:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: rxdart
       url: "https://pub.dartlang.org"
@@ -572,7 +579,7 @@ packages:
       name: searchfield
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.5.2"
+    version: "0.5.4"
   share:
     dependency: "direct main"
     description:
@@ -711,6 +718,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.0"
+  tuple:
+    dependency: transitive
+    description:
+      name: tuple
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
