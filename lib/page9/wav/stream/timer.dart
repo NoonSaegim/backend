@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
 
 class AudioTimer {
@@ -6,9 +7,11 @@ class AudioTimer {
 
   BehaviorSubject<String> _display = BehaviorSubject<String>.seeded("0.0.0.0");
   BehaviorSubject<bool> _isRunning = BehaviorSubject<bool>.seeded(false);
+  BehaviorSubject<Duration> _duration = BehaviorSubject<Duration>.seeded(Duration());
 
   Stream<String> get observable => _display.stream;
   Stream<bool> get isRunning => _isRunning.stream;
+  Stream<Duration> get duration => _duration.stream;
 
   setIsTimerRunning(bool value) => _isRunning.sink.add(value);
   setTimerDisplay(String milliseconds) => _display.sink.add(milliseconds);
@@ -16,6 +19,7 @@ class AudioTimer {
   dispose() {
     _display.close();
     _isRunning.close();
+    _duration.close();
   }
 
   void startTimer() {
@@ -37,6 +41,7 @@ class AudioTimer {
       return;
     }
     if (_timer.isRunning) {
+      _duration.sink.add(Duration(milliseconds: _timer.elapsedMilliseconds));
       _display.sink.add(Duration(milliseconds: _timer.elapsedMilliseconds).toString());
       _startTimer();
     }

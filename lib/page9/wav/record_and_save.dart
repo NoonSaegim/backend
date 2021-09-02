@@ -64,15 +64,18 @@ class _RecorderState extends State<Recorder> {
     print(merge);
     return merge;
   }
+
+
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder4<RecordingStatus, FlutterAudioRecorder, bool, String>(
-      ///사용할 stream 선언 : current, currentStatus, audioRecorder, running
+      ///사용할 stream 선언 : current, currentStatus, audioRecorder, running, timerDisplay,
         streams: Tuple4(currentStatus.stream, audioRecorder.stream, AudioService.runningStream, timer.observable),
         builder: (context, snapshot) {
           if(snapshot.item3.connectionState != ConnectionState.active) {
             return CircularProgressIndicator();
-          } else if(snapshot.item1.hasData && snapshot.item2.hasData && snapshot.item3.hasData && snapshot.item4.hasData) {
+          } else if(snapshot.item1.hasData && snapshot.item2.hasData && snapshot.item3.hasData  && snapshot.item4.hasData) {
 
             final _currentStatus = snapshot.item1.data;
             final _audioRecorder = snapshot.item2.data;
@@ -126,7 +129,7 @@ class _RecorderState extends State<Recorder> {
                               lineWidth: 13.0,
                               percent: 1.0,
                               animation: true,
-                              //animationDuration: _current!.duration?.inMilliseconds as int,
+                              animationDuration: 6000,
                               circularStrokeCap: CircularStrokeCap.round,
                               backgroundColor: Colors.grey,
                               progressColor: Colors.white,
@@ -150,10 +153,11 @@ class _RecorderState extends State<Recorder> {
     switch(status) {
       case RecordingStatus.Initialized: {
         _runningStream.pairwise().listen((e) {
-          _initial();
-          _start();
-          timer.startTimer();
-
+          if(!e.first){
+            _initial();
+            _start();
+            timer.startTimer();
+          }
           if(e.first && !e.last) {
             Fluttertoast.showToast(msg: "Stop Recording , File Saved");
             _stop();
