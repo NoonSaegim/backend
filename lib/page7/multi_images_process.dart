@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:noonsaegim/common/popup.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
+import '../vo/word.dart';
+import 'package:sizer/sizer.dart';
+import '../tts/dynamic_speaker.dart';
+import '../common/dialog.dart';
 
 class MultiImagesProcess extends StatefulWidget {
   const MultiImagesProcess({Key? key}) : super(key: key);
@@ -15,37 +20,87 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
 
   final List<String> _columns = ['No', '영어 단어', '의미'];
 
+  List<Word> a = List.generate(3, (index) =>
+  new Word(seq: index, word: 'apple', meaning: '사과', isSelected: false),
+  );
+  List<Word> b = List.generate(3, (index) =>
+  new Word(seq: index + 3, word: 'stock', meaning: '주식', isSelected: false),
+  );
+  List<Word> c = List.generate(3, (index) =>
+  new Word(seq: index + 6, word: 'reduce', meaning: '줄이다', isSelected: false),
+  );
+  List<Word> d = List.generate(3, (index) =>
+  new Word(seq: index + 9, word: 'multiple', meaning: '다수의', isSelected: false),
+  );
+  List<Word> e = List.generate(3, (index) =>
+  new Word(seq: index + 12, word: 'embedded', meaning: '내장된', isSelected: false),
+  );
+
+  List<Word> _dataList = [];
+  @override
+  initState() {
+    super.initState();
+    Future.delayed(Duration.zero).then((value) =>
+        setState((){
+          _dataList = [...a,...b, ...c,...d,...e];
+        })
+    );
+  }
+
   List<DataColumn> _getColumns() {
     List<DataColumn> dataColumn = [];
     for(var i in _columns) {
-      dataColumn.add(DataColumn(label: Text(i, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))));
+      dataColumn.add(DataColumn(
+          label: Text(
+              i, style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+            fontSize: 14.0.sp,
+          )
+          )
+      )
+      );
     }
     return dataColumn;
   }
 
   List<DataRow> _getRows() {
     List<DataRow> dataRow = [];
-    for(var i=0; i < 15; i++) {
+    for (var value in _dataList) {
       List<DataCell> cells = [];
       for(var j in _columns) {
         if(j == 'No') {
-          cells.add(DataCell(Text('${i+1}', style: TextStyle(color: Colors.black54))));
+          cells.add(DataCell(Text('${value.seq+1}', style: TextStyle(color: Colors.black54,fontSize: 13.sp))));
+        } else if (j == '영어 단어'){
+          cells.add(DataCell(
+              Text(value.word,
+                  style: TextStyle(color: Colors.black54,fontSize: 13.sp)
+              )
+          )
+          );
         } else {
-          cells.add(DataCell(Text('test', style: TextStyle(color: Colors.black54))));
+          cells.add(DataCell(
+              Text(value.meaning,
+                  style: TextStyle(color: Colors.black54,fontSize: 13.sp)
+              )
+          )
+          );
         }
-
       }
-      dataRow.add(DataRow(
-          key:ValueKey(i),
-          selected: false,
-          onSelectChanged: (bool? value) {
-            print(value);
-            setState(() {
-
-            });
-          },
-          cells: cells
-      ));
+      dataRow.add(
+          DataRow(
+              key:ValueKey(value.seq),
+              selected: value.isSelected,
+              onSelectChanged: (bool? selected){
+                if(selected != null) {
+                  setState(() {
+                    value.isSelected = selected;
+                  });
+                }
+              },
+              cells: cells
+          )
+      );
     }
     return dataRow;
   }
@@ -60,7 +115,7 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: 10),
+            padding: EdgeInsets.only(top: 10.sp),
             child: Column(
               children: <Widget>[
                 Expanded(
@@ -70,7 +125,7 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
                       itemCount: 5,
                       itemBuilder: (BuildContext context, int index)
                       => Card(
-                          child: Image.asset('imgs/main.JPG')
+                          child: Image.asset('imgs/main.jpg')
                       ),
                     )
                 ),
@@ -85,33 +140,22 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
             margin: EdgeInsets.only(right: 10),
             height: (MediaQuery.of(context).size.height -
                 AppBar().preferredSize.height -
-                MediaQuery.of(context).padding.top) * 0.09,
-            child: IconButton(
-                onPressed: () => print('request audio api'),
-                tooltip: 'Audio',
-                icon: SvgPicture.asset(
-                  'imgs/audio.svg',
-                  placeholderBuilder: (BuildContext context) => Container(
-                  child: const CircularProgressIndicator()
-                ),
-              ),
-            ),
+                MediaQuery.of(context).padding.top) * 0.10,
+            child: Speaker(dataList: [..._dataList],),
           ),
           Container(
             height: (MediaQuery.of(context).size.height -
                 AppBar().preferredSize.height -
-                MediaQuery.of(context).padding.top) * 0.50,
+                MediaQuery.of(context).padding.top) * 0.48,
             width: MediaQuery.of(context).size.width,
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: DataTable(
                   onSelectAll: (bool? isSelected) {
                     if (isSelected != null) {
-                      // _items.forEach((item) {
-                      //   item.isSelected = isSelected;
-                      // });
-
-                      setState(() {});
+                      setState(() {
+                        _dataList.forEach((element) {element.isSelected = isSelected;});
+                      });
                     }
                   },
                   showCheckboxColumn: true,
@@ -130,8 +174,9 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 IconButton(
-                    onPressed: () => print('go back'),
+                    onPressed: () => Navigator.of(context).pop(),
                     tooltip: 'Back',
+                    iconSize: 38.sp,
                     icon: Transform(
                         alignment: Alignment.center,
                         transform: Matrix4.rotationY(math.pi),
@@ -144,8 +189,15 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
                     )
                 ),
                 IconButton(
-                    onPressed: () => print('나의 단어장에 저장'),
+                    onPressed: () {
+                      if(_dataList.where((e) => e.isSelected).toList().isEmpty) {
+                        alert.onWarning(context, '단어를 1개 이상 선택해주세요!', (){});
+                        return;
+                      }
+                      onSaveButtonPressed(context, _dataList);
+                    },
                     tooltip: 'Save',
+                    iconSize: 38.sp,
                     icon: SvgPicture.asset(
                       'imgs/download.svg',
                       placeholderBuilder: (BuildContext context) => Container(

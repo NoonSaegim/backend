@@ -29,9 +29,9 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.noonsaegim.frontend"
-        minSdkVersion 23
-        targetSdkVersion 30
+        applicationId "com.noonsaegim.app"
+        minSdkVersion 21
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -41,8 +41,19 @@ android {
             // TODO: Add your own signing config for the release build.
             // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.debug
+            minifyEnabled true
             shrinkResources false
         }
+
+//        debug {
+//            ext.alwaysUpdateBuildId = false
+//            signingConfig signingConfigs.debug
+//            spllits.abi.enable = false
+//            spllits.density.enable = false
+//            minifyEnabled true
+//            shrinkResources false
+//            aaptOptions.cruncherEnabled = false
+//        }
     }
 }
 

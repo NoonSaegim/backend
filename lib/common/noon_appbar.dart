@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import '../search/voca_search.dart';
 
 class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   const AppBar1({Key? key}) : super(key: key);
@@ -66,9 +67,10 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
               return IconButton(
                 icon: Icon(Icons.search_rounded),
                 color: Colors.lightBlue,
-                tooltip: 'Search',
                 iconSize: AppBar().preferredSize.height * 0.94,
-                onPressed: () => showSearch(context: context, delegate: Search(list)),
+                onPressed: () async {
+                  showSearch(context: context, delegate: await vocaSearch(context));
+                }
               );
             }
         ),
@@ -79,67 +81,6 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
-}
-
-class Search extends SearchDelegate {
-  @override
-  List<Widget> buildActions(BuildContext context) {
-    return <Widget>[
-      IconButton(
-          onPressed: () => query = "",
-          icon: Icon(Icons.close))
-    ];
-  }
-
-  @override
-  Widget buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () => Navigator.pop(context),
-        icon: Icon(Icons.arrow_back)
-    );
-  }
-
-  String selectedResult = "";
-
-  @override
-  Widget buildResults(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Text(selectedResult),
-      ),
-    );
-  }
-
-  final List<String> listExample;
-  Search(this.listExample);
-
-  List<String> recentList = ["Text 4", "Text 3"];
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    List<String> suggestionList = [];
-    query.isEmpty
-        ? suggestionList = recentList //In the true case
-        : suggestionList.addAll(listExample.where(
-      // In the false case
-          (element) => element.contains(query),
-    ));
-
-    return ListView.builder(
-        itemCount: suggestionList.length,
-        itemBuilder: (context, index) => ListTile(
-          title: Text(
-            suggestionList[index],
-          ),
-          leading: query.isEmpty ? Icon(Icons.access_time) : SizedBox(),
-          onTap: (){
-            selectedResult = suggestionList[index];
-            showResults(context);
-          },
-        ),
-    );
-  }
-
 }
 
 class TransparentAppBar extends StatelessWidget with PreferredSizeWidget{

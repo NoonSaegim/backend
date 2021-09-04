@@ -1,4 +1,4 @@
-com.noonsaegim.frontend
+com.noonsaegim.app
 anim abc_fade_in
 anim abc_fade_out
 anim abc_grow_fade_in_from_bottom
@@ -129,6 +129,7 @@ attr contentInsetRight
 attr contentInsetStart
 attr contentInsetStartWithNavigation
 attr controlBackground
+attr coordinatorLayoutStyle
 attr customNavigationLayout
 attr defaultQueryHint
 attr dialogCornerRadius
@@ -184,8 +185,15 @@ attr indeterminateProgressStyle
 attr initialActivityCount
 attr isLightTheme
 attr itemPadding
+attr keylines
 attr lastBaselineToBottomHeight
 attr layout
+attr layout_anchor
+attr layout_anchorGravity
+attr layout_behavior
+attr layout_dodgeInsetEdges
+attr layout_insetEdge
+attr layout_keyline
 attr lineHeight
 attr listChoiceBackgroundIndicator
 attr listChoiceIndicatorMultipleAnimated
@@ -249,6 +257,7 @@ attr spinnerStyle
 attr splitTrack
 attr srcCompat
 attr state_above_anchor
+attr statusBarBackground
 attr subMenuArrow
 attr submitBackground
 attr subtitle
@@ -372,6 +381,9 @@ color bright_foreground_material_dark
 color bright_foreground_material_light
 color button_material_dark
 color button_material_light
+color colorAccent
+color colorPrimary
+color colorPrimaryDark
 color dim_foreground_disabled_material_dark
 color dim_foreground_disabled_material_light
 color dim_foreground_material_dark
@@ -525,6 +537,8 @@ dimen abc_text_size_subhead_material
 dimen abc_text_size_subtitle_material_toolbar
 dimen abc_text_size_title_material
 dimen abc_text_size_title_material_toolbar
+dimen activity_horizontal_margin
+dimen activity_vertical_margin
 dimen compat_button_inset_horizontal_material
 dimen compat_button_inset_vertical_material
 dimen compat_button_padding_horizontal_material
@@ -680,6 +694,12 @@ drawable btn_radio_off_mtrl
 drawable btn_radio_off_to_on_mtrl_animation
 drawable btn_radio_on_mtrl
 drawable btn_radio_on_to_off_mtrl_animation
+drawable ic_pause
+drawable ic_play_arrow
+drawable ic_skip_next_off
+drawable ic_skip_next_on
+drawable ic_skip_prev_off
+drawable ic_skip_prev_on
 drawable launch_background
 drawable media_session_service_notification_ic_music_note
 drawable media_session_service_notification_ic_pause
@@ -780,17 +800,23 @@ id actions
 id activity_chooser_view_content
 id add
 id alertTitle
+id all
 id always
 id async
 id beginning
 id blocking
 id bottom
+id button
 id buttonPanel
 id cancel_action
+id center
+id center_horizontal
 id center_vertical
 id checkbox
 id checked
 id chronometer
+id clip_horizontal
+id clip_vertical
 id collapseActionView
 id content
 id contentPanel
@@ -807,6 +833,9 @@ id end
 id end_padder
 id expand_activities_button
 id expanded_menu
+id fill
+id fill_horizontal
+id fill_vertical
 id forever
 id fragment_container_view_tag
 id ghost_view
@@ -828,6 +857,7 @@ id italic
 id layout_aspect_ratio
 id layout_rotate_wheel
 id layout_scale_wheel
+id left
 id line1
 id line3
 id listMode
@@ -849,9 +879,11 @@ id off
 id on
 id parentPanel
 id parent_matrix
+id progress
 id progress_circular
 id progress_horizontal
 id radio
+id right
 id right_icon
 id right_side
 id rotate_scroll_wheel
@@ -883,6 +915,7 @@ id split_action_bar
 id src_atop
 id src_in
 id src_over
+id start
 id state_aspect_ratio
 id state_rotate
 id state_scale
@@ -982,6 +1015,7 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_main
 layout custom_dialog
 layout notification_action
 layout notification_action_tombstone
@@ -1011,6 +1045,7 @@ layout ucrop_layout_scale_wheel
 layout ucrop_view
 menu ucrop_menu_activity
 mipmap ic_launcher
+raw warner_tautz_off_broadway
 string abc_action_bar_home_description
 string abc_action_bar_up_description
 string abc_action_menu_overflow_description
@@ -1038,6 +1073,7 @@ string abc_searchview_description_voice
 string abc_shareactionprovider_share_with
 string abc_shareactionprovider_share_with_application
 string abc_toolbar_collapse_description
+string app_name
 string default_notification_channel_name
 string pause_button_content_description
 string play_button_content_description
@@ -1058,6 +1094,7 @@ style AlertDialog_AppCompat_Light
 style Animation_AppCompat_Dialog
 style Animation_AppCompat_DropDownUp
 style Animation_AppCompat_Tooltip
+style AppTheme
 style Base_AlertDialog_AppCompat
 style Base_AlertDialog_AppCompat_Light
 style Base_Animation_AppCompat_Dialog
@@ -1410,6 +1447,7 @@ style Widget_AppCompat_Toolbar
 style Widget_AppCompat_Toolbar_Button_Navigation
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
+style Widget_Support_CoordinatorLayout
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
 style ucrop_TextViewWidget
@@ -1434,6 +1472,8 @@ styleable AppCompatTheme android_windowIsFloating android_windowAnimationStyle a
 styleable ButtonBarLayout allowStacking
 styleable ColorStateListItem android_color android_alpha alpha
 styleable CompoundButton android_button buttonCompat buttonTint buttonTintMode
+styleable CoordinatorLayout keylines statusBarBackground
+styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery fontProviderSystemFontFamily
 styleable FontFamilyFont android_font android_fontWeight android_fontStyle android_ttcIndex android_fontVariationSettings font fontStyle fontVariationSettings fontWeight ttcIndex
@@ -1462,5 +1502,6 @@ styleable ViewBackgroundHelper android_background backgroundTint backgroundTintM
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ucrop_AspectRatioTextView ucrop_artv_ratio_title ucrop_artv_ratio_x ucrop_artv_ratio_y
 styleable ucrop_UCropView ucrop_aspect_ratio_x ucrop_aspect_ratio_y ucrop_circle_dimmed_layer ucrop_dimmed_color ucrop_frame_color ucrop_frame_stroke_size ucrop_grid_color ucrop_grid_column_count ucrop_grid_row_count ucrop_grid_stroke_size ucrop_show_frame ucrop_show_grid ucrop_show_oval_crop_frame
+xml filepaths
 xml flutter_image_picker_file_paths
 xml shared_file_paths

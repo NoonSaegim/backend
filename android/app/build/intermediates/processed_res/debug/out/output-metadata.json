@@ -4,7 +4,7 @@
     "type": "PROCESSED_RES",
     "kind": "Directory"
   },
-  "applicationId": "com.noonsaegim.frontend",
+  "applicationId": "com.noonsaegim.app",
   "variantName": "processDebugResources",
   "elements": [
     {

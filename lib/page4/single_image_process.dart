@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
 import 'package:sizer/sizer.dart';
 import '../vo/word.dart';
-import '../common/popup.dart';
 import '../tts/dynamic_speaker.dart';
+import '../common/dialog.dart';
+import '../common/popup.dart';
 
 class SingleImageProcess extends StatefulWidget {
   const SingleImageProcess({Key? key}) : super(key: key);
@@ -19,19 +19,32 @@ class SingleImageProcess extends StatefulWidget {
 class _SingleImageProcessState extends State<SingleImageProcess> {
 
   final List<String> _columns = ['No', '영어 단어', '의미'];
-  List<Word> _dataList = List.generate(15, (index) =>
-    new Word(seq: index, word: 'embedded', meaning: '내장된', isSelected: false),
+
+  List<Word> a = List.generate(3, (index) =>
+    new Word(seq: index, word: 'apple', meaning: '사과', isSelected: false),
+  );
+  List<Word> b = List.generate(3, (index) =>
+    new Word(seq: index + 3, word: 'stock', meaning: '주식', isSelected: false),
+  );
+  List<Word> c = List.generate(3, (index) =>
+    new Word(seq: index + 6, word: 'reduce', meaning: '줄이다', isSelected: false),
+  );
+  List<Word> d = List.generate(3, (index) =>
+    new Word(seq: index + 9, word: 'multiple', meaning: '다수의', isSelected: false),
+  );
+  List<Word> e = List.generate(3, (index) =>
+    new Word(seq: index + 12, word: 'embedded', meaning: '내장된', isSelected: false),
   );
 
-
+  List<Word> _dataList = [];
   @override
   initState() {
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+    Future.delayed(Duration.zero).then((value) =>
+        setState((){
+          _dataList = [...a,...b, ...c,...d,...e];
+        })
+    );
   }
 
   List<DataColumn> _getColumns() {
@@ -101,7 +114,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
           body: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(height: 10.sp,),
+              SizedBox(height: 8.5.sp,),
               Container(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -112,7 +125,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                     ),
                   ],
                 ),
-                width: MediaQuery.of(context).size.width,
+                //width: MediaQuery.of(context).size.width,
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
                     MediaQuery.of(context).padding.top) * 0.33,
@@ -123,12 +136,12 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
                     MediaQuery.of(context).padding.top) * 0.10,
-                child: Speaker(),
+                child: Speaker(dataList: [..._dataList],),
               ),
               Container(
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
-                    MediaQuery.of(context).padding.top) * 0.42,
+                    MediaQuery.of(context).padding.top) * 0.43,
                 width: MediaQuery.of(context).size.width,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
@@ -156,7 +169,9 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     IconButton(
-                        onPressed: () => print('go back'),
+                        /*-> 뒤로 가기*/
+                        onPressed: () => Navigator.of(context).pop(),
+                        //전 화면이랑 이어지지 않아서 아직 뒤로가기 안됨..!!!
                         tooltip: 'Back',
                         iconSize: 38.sp,
                         icon: Transform(
@@ -171,7 +186,13 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
                         )
                     ),
                     IconButton(
-                        onPressed: () => alert.onInform(context, '나의 단어장에 저장하시겠습니까?', () { }),
+                        onPressed: () {
+                          if(_dataList.where((e) => e.isSelected).toList().isEmpty) {
+                            alert.onWarning(context, '단어를 1개 이상 선택해주세요!', () { });
+                            return;
+                          }
+                          onSaveButtonPressed(context, _dataList);
+                        },
                         tooltip: 'Save',
                         iconSize: 38.sp,
                         icon: SvgPicture.asset(
