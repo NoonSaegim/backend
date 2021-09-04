@@ -20,6 +20,7 @@ import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'dart:io';
 import 'database/dto/voca.dart';
 import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'page9/wav/audio_player.dart';
 
 void main() async{
   //hive database setting
@@ -63,6 +64,7 @@ class FirstRoute extends StatelessWidget {
                 '/settings': (context) => Settings(),
                 '/multi' : (context) => AudioServiceWidget(child: MultiImagesProcess()),
                 '/single': (context) => AudioServiceWidget(child: SingleImageProcess()),
+                '/playlist': (context) => AudioPlayer(),
               },
             );
           }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:async';
@@ -133,6 +135,7 @@ class TextPlayer extends BackgroundAudioTask {
 }
 
 class Tts {
+
   final FlutterTts _flutterTts = new FlutterTts();
   Completer? _speechCompleter;
   bool _interruptRequested = false;
@@ -143,6 +146,14 @@ class Tts {
     _flutterTts.setSpeechRate(0.4);
     _flutterTts.setCompletionHandler(() {
       _speechCompleter?.complete();
+    });
+  }
+
+  Future<void> save(String text, String path) async {
+    File saveFile = new File(path);
+    saveFile.create(recursive: true).then((File wav) async {
+      await _flutterTts.synthesizeToFile(text, wav.path)
+          .then((value) => print('--------save wav success-------'));
     });
   }
 

@@ -1,8 +1,11 @@
 import 'dart:io';
-import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:share/share.dart';
+import 'package:sizer/sizer.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class PlayList extends StatefulWidget {
   final List<String> records;
@@ -18,7 +21,13 @@ class _PlayListState extends State<PlayList> {
   double _percent = 0.0;
   int _selected = -1;
   bool isPlay=false;
+
+  AudioCache audioCache = AudioCache();
   AudioPlayer advancedPlayer = AudioPlayer();
+
+  String _getTitle({required filePath}) {
+    return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('@'));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +40,11 @@ class _PlayListState extends State<PlayList> {
           elevation: 5,
           child: ExpansionTile(
             title: Text(
-              'Records ${widget.records.length - i}',
+              _getTitle(filePath:widget.records.elementAt(i)),
               style: TextStyle(color: Colors.black),
             ),
             subtitle: Text(
-              _getTime(filePath: widget.records.elementAt(i)!),
+              _getTime(filePath: widget.records.elementAt(i)),
               style: TextStyle(color: Colors.black38),
             ),
             onExpansionChanged: ((newState) {
@@ -143,7 +152,7 @@ class _PlayListState extends State<PlayList> {
 
   String _getTime({required String filePath}) {
     String fromPath = filePath.substring(
-        filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('.'));
+        filePath.lastIndexOf('@') + 1).split('.')[0];
     if (fromPath.startsWith("1", 0)) {
       DateTime dateTime =
       DateTime.fromMillisecondsSinceEpoch(int.parse(fromPath));
@@ -168,14 +177,18 @@ class _Presso extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ButtonTheme(
-      minWidth: 48.0,
-      child: RaisedButton(
-          child: Icon(
-            ico,
-            color: Colors.white,
-          ),
-          onPressed: onPressed),
+    return Padding(
+      padding: EdgeInsets.only(top: 2.5.sp),
+      child: ButtonTheme(
+        minWidth: 48.0,
+        child: RaisedButton(
+            color: Colors.cyan ,
+            child: Icon(
+              ico,
+              color: Colors.white,
+            ),
+            onPressed: onPressed),
+      ),
     );
   }
 }

@@ -9,8 +9,10 @@ import '../tts/dynamic_speaker2.dart';
 import 'package:intl/intl.dart';
 import '../database/hive_module.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'wav/open_records.dart';
+import 'wav/converter.dart';
 import '../setting/permission.dart';
+import 'dart:io';
+import 'package:path_provider/path_provider.dart' as provider;
 
 class Accordion extends StatefulWidget {
   final Voca voca;
@@ -30,7 +32,33 @@ class _AccordionState extends State<Accordion> {
 
   _AccordionState(this.voca, this.seq, this.showSeq);
 
+  late Directory appDir;
+  late List<String> records;
   bool _showContent = false;
+
+  Future<List<String>> onInitRecords() async {
+    records = [];
+    await provider.getExternalStorageDirectory().then((value) async {
+      appDir = value!;
+      Directory? appDirec = Directory("${appDir.path}/Vocabulary/");
+      if(await appDirec.exists()) {
+        print('----------appDirec exists----------');
+        appDir = appDirec;
+        appDir.list().listen((onData) {
+          records.add(onData.path);
+        }).onDone(() {
+          records = records.reversed.toList();
+        });
+      } else {
+        appDirec.create(recursive: true)
+            .then((value) {
+              print('--------create directory-------');
+              appDir = appDirec;
+        });
+      }
+    });
+    return records;
+  }
 
   @override
   void initState() {
@@ -38,6 +66,23 @@ class _AccordionState extends State<Accordion> {
     initializeDateFormatting();
     setState(() {
       _showContent = (seq == showSeq); //검색해서 클릭한 인덱스의 글이 열리게
+    });
+    Future.delayed(Duration.zero, () {
+      onInitRecords();
+    });
+  }
+
+  _onFinish() {
+    print('-------------save wav-------------');
+    records.clear();
+    //print(records.length);
+    appDir.list().listen((onData) {
+      print('-------listen to : $onData---------');
+      records.add(onData.path);
+    }).onDone(() {
+      records.sort();
+      records = records.reversed.toList();
+      print('-------------records: ${records.length}--------------');
     });
   }
 
@@ -205,10 +250,10 @@ class _AccordionState extends State<Accordion> {
                                     ),
                                     IconButton(
                                       onPressed: () => alert.onInform(context, 'WAV 파일로 변환하시겠습니까?',
-                                              /// 1. 권한 요청  -> 2. 디렉토리 열기 -> 3. 레코더 오픈
+                                              /// 1. 권한 요청  -> 2. 디렉토리 열기 -> 3. WAV 파일 저장
                                               () => requestPermission(context)
                                                   .then((value) => onInitRecords()
-                                                    .then((value) => showRecorder(context, voca)
+                                                    .then((value) => saveTtsAsWav(context, voca, _onFinish, onInitRecords())
                                                   )
                                                 )
                                               ),

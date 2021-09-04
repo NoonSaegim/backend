@@ -129,6 +129,7 @@ attr contentInsetRight
 attr contentInsetStart
 attr contentInsetStartWithNavigation
 attr controlBackground
+attr coordinatorLayoutStyle
 attr customNavigationLayout
 attr defaultQueryHint
 attr dialogCornerRadius
@@ -184,8 +185,15 @@ attr indeterminateProgressStyle
 attr initialActivityCount
 attr isLightTheme
 attr itemPadding
+attr keylines
 attr lastBaselineToBottomHeight
 attr layout
+attr layout_anchor
+attr layout_anchorGravity
+attr layout_behavior
+attr layout_dodgeInsetEdges
+attr layout_insetEdge
+attr layout_keyline
 attr lineHeight
 attr listChoiceBackgroundIndicator
 attr listChoiceIndicatorMultipleAnimated
@@ -252,6 +260,7 @@ attr spinnerStyle
 attr splitTrack
 attr srcCompat
 attr state_above_anchor
+attr statusBarBackground
 attr subMenuArrow
 attr submitBackground
 attr subtitle
@@ -785,6 +794,7 @@ id actions
 id activity_chooser_view_content
 id add
 id alertTitle
+id all
 id always
 id async
 id beginning
@@ -792,10 +802,14 @@ id blocking
 id bottom
 id buttonPanel
 id cancel_action
+id center
+id center_horizontal
 id center_vertical
 id checkbox
 id checked
 id chronometer
+id clip_horizontal
+id clip_vertical
 id collapseActionView
 id content
 id contentPanel
@@ -812,6 +826,9 @@ id end
 id end_padder
 id expand_activities_button
 id expanded_menu
+id fill
+id fill_horizontal
+id fill_vertical
 id forever
 id fragment_container_view_tag
 id ghost_view
@@ -833,6 +850,7 @@ id italic
 id layout_aspect_ratio
 id layout_rotate_wheel
 id layout_scale_wheel
+id left
 id line1
 id line3
 id listMode
@@ -857,6 +875,7 @@ id parent_matrix
 id progress_circular
 id progress_horizontal
 id radio
+id right
 id right_icon
 id right_side
 id rotate_scroll_wheel
@@ -888,6 +907,7 @@ id split_action_bar
 id src_atop
 id src_in
 id src_over
+id start
 id state_aspect_ratio
 id state_rotate
 id state_scale
@@ -1416,6 +1436,7 @@ style Widget_AppCompat_Toolbar
 style Widget_AppCompat_Toolbar_Button_Navigation
 style Widget_Compat_NotificationActionContainer
 style Widget_Compat_NotificationActionText
+style Widget_Support_CoordinatorLayout
 style ucrop_ImageViewWidgetIcon
 style ucrop_TextViewCropAspectRatio
 style ucrop_TextViewWidget
@@ -1441,6 +1462,8 @@ styleable ButtonBarLayout allowStacking
 styleable Capability queryPatterns shortcutMatchRequired
 styleable ColorStateListItem android_color android_alpha alpha
 styleable CompoundButton android_button buttonCompat buttonTint buttonTintMode
+styleable CoordinatorLayout keylines statusBarBackground
+styleable CoordinatorLayout_Layout android_layout_gravity layout_anchor layout_anchorGravity layout_behavior layout_dodgeInsetEdges layout_insetEdge layout_keyline
 styleable DrawerArrowToggle arrowHeadLength arrowShaftLength barLength color drawableSize gapBetweenBars spinBars thickness
 styleable FontFamily fontProviderAuthority fontProviderCerts fontProviderFetchStrategy fontProviderFetchTimeout fontProviderPackage fontProviderQuery fontProviderSystemFontFamily
 styleable FontFamilyFont android_font android_fontWeight android_fontStyle android_ttcIndex android_fontVariationSettings font fontStyle fontVariationSettings fontWeight ttcIndex
@@ -1469,6 +1492,7 @@ styleable ViewBackgroundHelper android_background backgroundTint backgroundTintM
 styleable ViewStubCompat android_id android_layout android_inflatedId
 styleable ucrop_AspectRatioTextView ucrop_artv_ratio_title ucrop_artv_ratio_x ucrop_artv_ratio_y
 styleable ucrop_UCropView ucrop_aspect_ratio_x ucrop_aspect_ratio_y ucrop_circle_dimmed_layer ucrop_dimmed_color ucrop_frame_color ucrop_frame_stroke_size ucrop_grid_color ucrop_grid_column_count ucrop_grid_row_count ucrop_grid_stroke_size ucrop_show_frame ucrop_show_grid ucrop_show_oval_crop_frame
+xml filepaths
 xml flutter_image_picker_file_paths
 xml flutter_share_file_paths
 xml shared_file_paths
