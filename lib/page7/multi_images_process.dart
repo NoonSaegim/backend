@@ -70,7 +70,7 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
       List<DataCell> cells = [];
       for(var j in _columns) {
         if(j == 'No') {
-          cells.add(DataCell(Text('${value.seq+1}', style: TextStyle(color: Colors.black54,fontSize: 13.sp))));
+          cells.add(DataCell(Text('${value.seq!+1}', style: TextStyle(color: Colors.black54,fontSize: 13.sp))));
         } else if (j == '영어 단어'){
           cells.add(DataCell(
               Text(value.word,
@@ -90,7 +90,7 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
       dataRow.add(
           DataRow(
               key:ValueKey(value.seq),
-              selected: value.isSelected,
+              selected: value.isSelected!,
               onSelectChanged: (bool? selected){
                 if(selected != null) {
                   setState(() {
@@ -190,7 +190,7 @@ class _MultiImagesProcessState extends State<MultiImagesProcess> {
                 ),
                 IconButton(
                     onPressed: () {
-                      if(_dataList.where((e) => e.isSelected).toList().isEmpty) {
+                      if(_dataList.where((e) => e.isSelected!).toList().isEmpty) {
                         alert.onWarning(context, '단어를 1개 이상 선택해주세요!', (){});
                         return;
                       }
