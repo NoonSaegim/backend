@@ -8,17 +8,16 @@ import '../common/noon_appbar.dart';
 import '../common/drawer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:math' as math;
-import '../common/popup.dart';
 import 'package:sizer/sizer.dart';
 import '../ai_api/api_module.dart';
-import 'package:progress_indicators/progress_indicators.dart';
+import '../page1/home.dart';
 
 class SingleCropper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   /* if(ModalRoute.of(context)!.settings.arguments != null) {
-      final args = ModalRoute.of(context)!.settings.arguments as ImageArgument;*/
+    if(ModalRoute.of(context)!.settings.arguments != null) {
+      final args = ModalRoute.of(context)!.settings.arguments as ImageArgument;
 
       return Scaffold(
         drawer: new SideBar(),
@@ -31,20 +30,33 @@ class SingleCropper extends StatelessWidget {
             margin: EdgeInsets.only(top:AppBar().preferredSize.height +  MediaQuery.of(context).padding.top),
           ),
           Center(
-            child: Cropper(/*imagePath: args.imagePath[0]*/),
+            child: Cropper(imagePath: args.imagePath[0]),
           ),
           TransparentAppBar(),
         ]),
       );
-   /* } else {
-      return alert.onError(context, '사진이 찍히지 않았습니다!');
-    }*/
+    } else {
+      return Scaffold(
+        drawer: new SideBar(),
+        body: Stack(
+            children: <Widget>[
+              Center(
+                child: Text('선택된 사진이 없습니다!'),
+              ),
+              TransparentAppBar(),
+            ]
+        ),
+      );
+    }
   }
 }
 
 class Cropper extends StatefulWidget {
-  final String imagePath = 'gallery/pc.jpg';
-  //Cropper({required this.imagePath});
+  final String imagePath;
+
+  ///test code----
+  //final String imagePath = 'gallery/pc.jpg';
+  Cropper({required this.imagePath});
 
   @override
   _CropperState createState() => _CropperState();
@@ -59,7 +71,7 @@ class _CropperState extends State<Cropper> {
   @override
   void initState() {
     super.initState();
-    //print('image path: ${widget.imagePath}');
+    print('image path: ${widget.imagePath}');
     setState(() {
       _loadingImage = true;
       _fileType = _getFileType(widget.imagePath);
@@ -71,6 +83,15 @@ class _CropperState extends State<Cropper> {
       _loadingImage = false;
     });
   }
+
+  @override
+  void dispose() {
+    super.dispose();
+    /// 위젯의 이미지 캐시 삭제
+    PaintingBinding.instance?.imageCache?.clear();
+    PaintingBinding.instance?.imageCache?.clearLiveImages();
+  }
+
   String _getFileType(String filePath) {
     String fileName = filePath.substring(filePath.lastIndexOf('/'));
     return fileName.split('.')[1];
@@ -78,19 +99,20 @@ class _CropperState extends State<Cropper> {
 
   Future<void> _setImagedata() async {
 
-    await _load().then((Uint8List data) {
-      setState(() {
-        _imageData = data;
-      });
-    });
-    // await File(widget.imagePath).readAsBytes()
-    //     .then((List<int> bytes) =>
-    //       setState((){
-    //         _imageData = Uint8List.fromList(bytes);
-    //       })
-    //     );
+    await File(widget.imagePath).readAsBytes()
+        .then((List<int> bytes) =>
+          setState((){
+            _imageData = Uint8List.fromList(bytes);
+          })
+        );
+    ///test code----
+    // await _load().then((Uint8List data) {
+    //   setState(() {
+    //     _imageData = data;
+    //   });
+    // });
   }
-
+  ///test code----
   Future<Uint8List> _load() async {
     final assetData = await rootBundle.load(widget.imagePath);
     return assetData.buffer.asUint8List();
@@ -129,14 +151,14 @@ class _CropperState extends State<Cropper> {
                                     Crop(
                                       controller: _cropController,
                                       image: _imageData!,
-                                      onCropped: (croppedData) async {
+                                      onCropped: (croppedData) {
                                         setState(() {
                                           _croppedData = croppedData;
                                           _isCropping = true;
                                         });
                                         if(_croppedData != null) {
                                           if(_isCropping && _fileType != null) {
-                                            await callApiProcess(context, [_croppedData!], [_fileType]);
+                                            service.callApiProcess(context, [_croppedData!], [_fileType]);
                                           }
                                         }
                                       },
@@ -157,7 +179,7 @@ class _CropperState extends State<Cropper> {
                                           backgroundColor:
                                           _isSumbnail ? Colors.lightBlue.shade50 : Colors.lightBlue,
                                           child: Center(
-                                            child: Icon(Icons.crop_free_rounded, color: Colors.white, size: 20.sp,),
+                                            child: Icon(Icons.crop_free_rounded, color: Colors.white, size: 20.sp),
                                           ),
                                         ),
                                       ),
@@ -223,7 +245,9 @@ class _CropperState extends State<Cropper> {
                                   AppBar().preferredSize.height -
                                   MediaQuery.of(context).padding.top) * 0.15,
                               child: IconButton(
-                                  onPressed: () => print('다시 찍기 to camera'),
+                                  onPressed: () async {
+                                    await openCamera(context);
+                                  },
                                   tooltip: 'retake',
                                   icon: Transform(
                                     alignment: Alignment.center,

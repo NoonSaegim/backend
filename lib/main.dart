@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:noonsaegim/database/dto/voca.dart';
+import 'package:noonsaegim/page4/single_image_process.dart';
+import 'package:noonsaegim/page6/multi_cropper.dart';
 import 'package:noonsaegim/page9/wav/audio_player.dart';
 import 'package:noonsaegim/setting/alert_list.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
@@ -13,22 +14,12 @@ import 'page9/mynote.dart';
 import 'page7/multi_images_process.dart';
 import 'page1/home.dart';
 import 'package:sizer/sizer.dart';
-import 'page4/single_image_process.dart';
 import 'package:audio_service/audio_service.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'dart:io';
-import 'database/dto/voca.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
-import 'page3/single_cropper.dart';
+import 'database/hive_module.dart';
 
-void main() async{
+void main() async {
   //hive database setting
-  WidgetsFlutterBinding.ensureInitialized();
-  Directory directory = await pathProvider.getApplicationDocumentsDirectory();
-  await Hive.initFlutter(directory.path);
-  Hive.registerAdapter(VocabularyAdapter());
+  await initHive();
 
   runApp(
       MultiProvider(
@@ -39,12 +30,6 @@ void main() async{
       child: FirstRoute(),
     )
   );
-
-  //반응형 pref 설정
-  final pref = await StreamingSharedPreferences.instance;
-  pref.setStringList('cacheKeys', []);  //캐시 키 리스트 default
-  pref.setInt('cacheableDays', 1);  //캐시 저장 기간 default
-  pref.setInt('cacheCount', 0); //캐시 개수 default
 }
 
 class FirstRoute extends StatelessWidget {
@@ -55,7 +40,7 @@ class FirstRoute extends StatelessWidget {
     return Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp(
-              initialRoute: '/cropper',
+              initialRoute: '/pick',
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),
@@ -63,9 +48,8 @@ class FirstRoute extends StatelessWidget {
                 '/recently': (context) => Recently(),
                 '/settings': (context) => Settings(),
                 '/multi' : (context) => AudioServiceWidget(child: MultiImagesProcess()),
-                //'/single': (context) => AudioServiceWidget(child: SingleImageProcess()),
+                '/single': (context) => AudioServiceWidget(child: SingleImageProcess()),
                 '/playlist': (context) => AudioPlayer(),
-                '/cropper': (context) => SingleCropper(),
               },
             );
           }

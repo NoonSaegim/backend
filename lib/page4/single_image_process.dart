@@ -20,6 +20,13 @@ class SingleImageProcess extends StatefulWidget {
 class _SingleImageProcessState extends State<SingleImageProcess> {
   final List<String> _columns = ['No', '영어 단어', '의미'];
 
+  @override
+  void dispose() {
+    super.dispose();
+    PaintingBinding.instance?.imageCache?.clear();
+    PaintingBinding.instance?.imageCache?.clearLiveImages();
+  }
+
   List<DataColumn> _getColumns(List<Word> _dataList) {
     List<DataColumn> dataColumn = [];
     if(_dataList != null && _dataList.isNotEmpty) {
@@ -32,8 +39,7 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
               fontSize: 14.0.sp,
             )
             )
-        )
-        );
+        ));
       }
     }
     return dataColumn;
@@ -80,12 +86,6 @@ class _SingleImageProcessState extends State<SingleImageProcess> {
       }
     }
     return dataRow;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
   }
 
   @override
