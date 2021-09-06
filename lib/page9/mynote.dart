@@ -33,8 +33,7 @@ class _MyNoteState extends State<MyNote> {
               if(!snapshot.hasData) return CircularProgressIndicator();
               else if(snapshot.hasError) return alert.onError(context, 'Error: ${snapshot.error}',);
               else {//데이터를 정상적으로 받아왔으면
-                var vocaList = snapshot.data as List<Voca>;
-                vocaList = vocaList.reversed.toList();
+                final vocaList = snapshot.data as List<Voca>;
 
                 return Column(
                   children:
@@ -46,19 +45,24 @@ class _MyNoteState extends State<MyNote> {
                           AppBar().preferredSize.height -
                           MediaQuery.of(context).padding.top) - 8.sp,
                       width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: vocaList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            if(ModalRoute.of(context)!.settings.arguments != null) {
-                              final args = ModalRoute.of(context)!.settings.arguments as NoteArgument;
-                              return Accordion(vocaList[index], index, args.seq);
-                            } else {
-                              return Accordion(vocaList[index], index, _showSeq);
+                      child: Align(
+                        alignment: Alignment.topCenter,
+                        child: ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            reverse: true,
+                            itemCount: vocaList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              if(ModalRoute.of(context)!.settings.arguments != null) {
+                                final args = ModalRoute.of(context)!.settings.arguments as NoteArgument;
+                                return Accordion(vocaList[index], index, args.seq);
+                              } else {
+                                print('seq: $index / data: ${vocaList[index]}');
+                                return Accordion(vocaList[index], index, _showSeq);
+                              }
                             }
-                          }
-                      ),
+                        ),
+                      )
                     )
                   ],
                 );

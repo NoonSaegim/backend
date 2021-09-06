@@ -1,64 +1,96 @@
 import 'dart:async';
-import 'dart:math';
 import 'vo/cache_data.dart';
-import 'package:json_cache/json_cache.dart';
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:streaming_shared_preferences/streaming_shared_preferences.dart';
+import 'package:data_cache_manager/data_cache_manager.dart';
+
+late DataCacheManager _cacheManager;
 
 Future<void> addCacheData(List<Map<String, String>> dataList) async {
-  //json 캐시 설정
   final prefs = await SharedPreferences.getInstance();
-  final JsonCacheMem jsonCache = JsonCacheMem(JsonCachePrefs(prefs));
+  int cacheable = prefs.getInt('cacheableDays')!;
 
-  final streamPref = await StreamingSharedPreferences.instance;
-  int cacheCount = (streamPref.getInt('cacheCount', defaultValue: 0) as int) + 1;
-  List<String> cacheKeys = streamPref.getStringList('cacheKeys', defaultValue: []) as List<String>;
-  String key = 'detected_words_$cacheCount';
-  await jsonCache.refresh(key,CacheData(seq: cacheCount, date: DateTime.now(), wordList: dataList).toJson())
-    .then((value) {
-      print('----------add cache data success---------');
-      streamPref.setInt('cacheCount', cacheCount);
-      cacheKeys.add(key);
-      streamPref.setStringList('cacheKeys', cacheKeys);
-    });
+  //cache manager 설정
+  _cacheManager = DataCacheManager(
+    config: Config(
+      stalePeriod: Duration(days: cacheable),
+    )
+  );
+
+  int cacheCount = prefs.getInt('cacheCount')!;
+  cacheCount++;
+  List<String> cacheKeys = prefs.getStringList('cacheKeys')!;
+
+  final key = 'detected_words_$cacheCount';
+  final Map<String, String> value1 = {
+    'date': DateTime.now().toString(),
+  };
+  final Map<String, int> param1 = {'date':0};
+  final Map<String, List<Map<String, String>>> value2 = {
+    'wordList' : dataList,
+  };
+  final Map<String, int> param2 = {'data':1};
+
+  /// 같은 키에 date, wordList 나눠서 저장
+  await _cacheManager.add(key,value1, queryParams: param1)
+      .then((value) async => await _cacheManager.add(key, value2, queryParams: param2))
+        .then((value) {
+          print('----------add cache data success---------');
+          prefs.setInt('cacheCount', cacheCount);
+          cacheKeys.add(key);
+          prefs.setStringList('cacheKeys', cacheKeys);
+        });
 }
 
-Future<Preference<int>> fetchCacheableDays() async {
-  return await StreamingSharedPreferences.instance
-      .then((StreamingSharedPreferences pref) => pref.getInt('cacheableDays', defaultValue: 1));
+Future<int> fetchCacheableDays() async {
+  final prefs = await SharedPreferences.getInstance();
+  int cacheable = prefs.getInt('cacheableDays')!;
+  return cacheable;
 }
 
-Future<List<CacheData>> getCacheList() async {
-  final streamPref = await StreamingSharedPreferences.instance;
-  List<String> cacheKeys = streamPref.getStringList('cacheKeys', defaultValue: []) as List<String>;
-
-  List<CacheData> cacheDataList = List.generate(cacheKeys.length,
-          (index) => CacheData.fromJson(getCacheData(cacheKeys[index]) as Map<String, dynamic>));
+Future<List<CacheData?>> getCacheList() async {
+  print('getCacheList call');
+  final prefs = await SharedPreferences.getInstance();
+  List<String> cacheKeys = prefs.getStringList('cacheKeys')!;
+  print('caches : ${cacheKeys.length}');
+  List<CacheData?> cacheDataList = [];
+  for(var key in cacheKeys) {
+    cacheDataList.add(CacheData.fromJson(await getCacheData(key) ?? {}));
+  }
   return cacheDataList;
 }
 
-Future<Map<String, dynamic>> getCacheData(String key) async {
+Future<Map<String, dynamic>?> getCacheData(String key) async {
   final prefs = await SharedPreferences.getInstance();
-  final JsonCacheMem jsonCache = JsonCacheMem(JsonCachePrefs(prefs));
-  return await jsonCache.value(key)
-      .then((FutureOr<dynamic> data) => data as Map<String, dynamic>);
-}
+  int cacheable = prefs.getInt('cacheableDays')!;
 
-Future<void> clearExpiredCache() async {
-  final pref = await StreamingSharedPreferences.instance;
-  final int cacheableDays = pref.getInt('cacheableDays', defaultValue: 1) as int;
-  List<CacheData> cacheList = await getCacheList();
-  if(cacheList.isNotEmpty) {
-    List<CacheData> expiredList = cacheList.where((e) => DateTime.now().compareTo(e.date.add(Duration(days: cacheableDays))) == 0).toList();
-    expiredList.forEach((e) {
-      String key = 'detected_words_${e.seq}';
-      removeCache(key);
-    });
+  final dateCache = await _cacheManager.get(key, queryParams: {'date':0});
+  final Map<String, dynamic> date = json.decode(json.encode(dateCache?.value));
+  print('date: $date');
+
+  if(DateTime.now().compareTo(DateTime.parse(date['date']!).add(Duration(days: cacheable))) == 0) {
+
+    await _cacheManager.remove(key).then((value) async {
+     final prefs = await SharedPreferences.getInstance();
+     List<String> cacheKeys = prefs.getStringList('cacheKeys')!;
+     int cacheCount = prefs.getInt('cacheCount')!;
+     cacheKeys.remove(key);
+     cacheCount--;
+     prefs.setStringList('cacheKeys', cacheKeys);
+     prefs.setInt('cacheCount', cacheCount);
+     print('-----delete expired cache----now caches count: $cacheCount');
+   });
+   return null;
+
+  } else {
+
+    Map<String,dynamic> cacheData = new Map();
+    cacheData.addAll(date);
+    final dataCache = await _cacheManager.get(key, queryParams: {'data': 1});
+    print(dataCache);
+    final Map<String, dynamic> dataList = json.decode(json.encode(dataCache?.value));
+    cacheData.addAll(dataList);
+
+    return cacheData;
   }
-}
-
-Future<void> removeCache(String key) async {
-  final prefs = await SharedPreferences.getInstance();
-  final JsonCacheMem jsonCache = JsonCacheMem(JsonCachePrefs(prefs));
-  await jsonCache.remove(key).then((value) => print('--------------remove cache----------key: $key'));
 }

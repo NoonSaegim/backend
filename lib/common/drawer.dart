@@ -18,9 +18,9 @@ class SideBar extends StatelessWidget {
           children: [
             Container(
               height: (MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top) * 0.22,
+                  MediaQuery.of(context).padding.top) * 0.12,
               child: DrawerHeader(
-                padding: EdgeInsets.only(top: 18.5.sp),
+                padding: EdgeInsets.only(top: 20.sp),
                 child: Text(
                   "Menu",
                   style: TextStyle(

@@ -4,12 +4,10 @@ part 'cache_data.g.dart';
 @JsonSerializable()
 class CacheData {
   CacheData({
-    required this.seq,
     required this.date,
     required this.wordList,
   });
 
-  int seq;
   DateTime date;
   List<Map<String, String>> wordList;
 
