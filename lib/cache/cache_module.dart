@@ -8,7 +8,7 @@ late DataCacheManager _cacheManager;
 
 Future<void> addCacheData(List<Map<String, String>> dataList) async {
   final prefs = await SharedPreferences.getInstance();
-  int cacheable = prefs.getInt('cacheableDays')!;
+  int cacheable = prefs.getInt('cacheableDays') ?? 1;
 
   //cache manager 설정
   _cacheManager = DataCacheManager(
@@ -17,11 +17,9 @@ Future<void> addCacheData(List<Map<String, String>> dataList) async {
     )
   );
 
-  int cacheCount = prefs.getInt('cacheCount')!;
-  cacheCount++;
-  List<String> cacheKeys = prefs.getStringList('cacheKeys')!;
+  List<String> cacheKeys = prefs.getStringList('cacheKeys') ?? [];
 
-  final key = 'detected_words_$cacheCount';
+  final key = 'detected_words_${cacheKeys.length}';
   final Map<String, String> value1 = {
     'date': DateTime.now().toString(),
   };
@@ -36,7 +34,7 @@ Future<void> addCacheData(List<Map<String, String>> dataList) async {
       .then((value) async => await _cacheManager.add(key, value2, queryParams: param2))
         .then((value) {
           print('----------add cache data success---------');
-          prefs.setInt('cacheCount', cacheCount);
+          prefs.setInt('cacheCount', cacheKeys.length);
           cacheKeys.add(key);
           prefs.setStringList('cacheKeys', cacheKeys);
         });

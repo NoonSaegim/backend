@@ -44,7 +44,6 @@ class Cropper extends StatefulWidget {
 
 class _CropperState extends State<Cropper> {
   static const _images = const [
-    'imgs/apple-logo.png',
     'imgs/main.jpg',
   ];
 

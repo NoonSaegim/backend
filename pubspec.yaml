@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   dio:
+  cupertino_icons:
   package_info_plus:
   flutter_svg:
   camera:
@@ -53,10 +54,8 @@ dependencies:
   audio_session:
   weekday_selector:
   flutter_email_sender:
-  android_alarm_manager_plus:
-    git:
-      url: https://github.com/jja08111/plus_plugins.git
-      path: packages/android_alarm_manager_plus
+  flutter_local_notifications:
+  workmanager:
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
   hive:
@@ -70,7 +69,8 @@ dependencies:
   pdf:
   open_file:
   ndialog:
-
+  rxdart:
+  uuid:
 
 dev_dependencies:
   flutter_test:

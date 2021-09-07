@@ -2,9 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:noonsaegim/page4/single_image_process.dart';
 import 'package:noonsaegim/page9/wav/audio_player.dart';
-import 'package:noonsaegim/setting/alert_list.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
-import 'setting/alert_list.dart';
+import 'package:noonsaegim/setting/cache.dart';
+import 'package:noonsaegim/setting/notif_on_off.dart';
 import 'package:provider/provider.dart';
 import 'page5/image_picker.dart';
 import 'page8/recently_searched_list.dart';
@@ -15,24 +15,25 @@ import 'page1/home.dart';
 import 'package:sizer/sizer.dart';
 import 'package:audio_service/audio_service.dart';
 import 'database/hive_module.dart';
-import 'setting/preference.dart';
 
 void main() async {
+
   /// hive database setting
   await initHive();
 
   runApp(
       MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) =>  new AlarmList()),
-          ChangeNotifierProvider(create: (_) => new AlarmSetting()),
+          ChangeNotifierProvider(create: (_) => new AlertSetting()),
         ],
       child: FirstRoute(),
     )
   );
-  /// cache 관련 pref 설정
-  await initCachePref();
+
+  CacheablePeriod();
+  SwitchAlert();
 }
+
 
 class FirstRoute extends StatelessWidget {
   const FirstRoute({Key? key}) : super(key: key);
