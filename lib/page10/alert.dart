@@ -274,6 +274,7 @@ class Alert{
                           color: Colors.lightBlue,
                           child: Text('OK', style: TextStyle(color: Colors.white, fontSize: 13.sp)),
                           onPressed: () async {
+                            this._typeAheadController.text = '';
                             var form = Provider.of<AlertSetting>(context, listen: false);
                             if(form.title == '') {
                               alert.onWarning(context, '알림 제목을 작성해주세요', () { }); 
@@ -292,7 +293,7 @@ class Alert{
                               return;
                             }
                             int seq = _vocaList.indexOf(_vocaList.where((e) => e.title == form.noteKey).elementAt(0));
-                            this._typeAheadController.text = '';
+
                             await setNewAlert(seq, form.title, form.noteKey, form.time, form.cycle, form.repeat)
                                 .then((value) {
                                   alert.onSuccess(context, "알림이 등록되었습니다.");

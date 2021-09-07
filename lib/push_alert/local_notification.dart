@@ -34,18 +34,17 @@ Future<void> initWorkManager(String uid, VoidCallback taskExecutor, String taskN
       isInDebugMode: true
   ).then((value) => print('----Workmanager initialize----'));
 
-  final pref = await SharedPreferences.getInstance();
-  List<String> notifList = pref.getStringList('notifList') ?? [];
   if(repeat) {
     await Workmanager().registerPeriodicTask(
       uid,
       taskName,
-      frequency: Duration(minutes: 15),
+      frequency: duration,
       existingWorkPolicy: ExistingWorkPolicy.replace,
       tag: "voca",
     ).then((value) => print('----Workmanager registerOneOffTask----'))
     .then((value) async {
-
+      final pref = await SharedPreferences.getInstance();
+      List<String> notifList = pref.getStringList('notifList') ?? [];
       notifList.add('$taskName:$uid');
       pref.setStringList('notifList', notifList);
       print('-----notifList: $notifList----');
@@ -56,12 +55,7 @@ Future<void> initWorkManager(String uid, VoidCallback taskExecutor, String taskN
       taskName,
       initialDelay: duration,
       tag: "voca"
-    ).then((value) => print('----Workmanager registerOneOffTask----'))
-    .then((value) async {
-      notifList.add('$taskName:$uid');
-      pref.setStringList('notifList', notifList);
-      print('-----notifList: $notifList----');
-    });
+    ).then((value) => print('----Workmanager registerOneOffTask----'));
   }
 }
 
@@ -104,10 +98,10 @@ Future<void> setNewAlert(int seq, String title, String noteKey, String time, Str
 
   } else {
     duration = List<Duration>.generate(days.length, (index) {
-      return _getDurationIfOneDay(days[index], year, month, day, weekday, absoluteHour, absoluteMinute, now);
+       return _getDurationIfOneDay(days[index], year, month, day, weekday, absoluteHour, absoluteMinute, now);
     });
     for(int i =0; i < duration.length; i++) {
-      initWorkManager(Uuid().v4(), callbackDispatcher, '$title@$i', repeat, duration);
+      initWorkManager(Uuid().v4(), callbackDispatcher, '$title@$i', repeat, duration[i]);
     }
   }
 }
