@@ -39,7 +39,8 @@ class _WeekDayPickerState extends State<WeekDayPicker> {
     } else {
       _cycle = '${_selectedDays.map((e) => e).join(', ')}';
     }
-    Provider.of<AlarmSetting>(context, listen: false).setCycle(_cycle);
+    print('selectedDays: $_selectedDays');
+    Provider.of<AlertSetting>(context, listen: false).setCycle(_cycle);
   }
 
   String intDayToEnglish(int day) {
@@ -87,14 +88,17 @@ class _WeekDayPickerState extends State<WeekDayPicker> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Text('반복', style: TextStyle(color: Colors.black54, fontSize: 12.0.sp, fontWeight: FontWeight.w600),),
+                Text('반복', style: TextStyle(color: Colors.black54, fontSize: 12.0.sp, fontWeight: FontWeight.w500),),
                 SizedBox(width: 4.0.sp,),
                 FlutterSwitch(
                   showOnOff: true,
                   activeColor: Colors.lightGreenAccent,
                   inactiveColor: Colors.grey,
                   value: _repeat,
-                  onToggle: (value) => setState(() => _repeat = value),
+                  onToggle: (value) {
+                    setState(() => _repeat = value);
+                    Provider.of<AlertSetting>(context, listen: false).setRepeat(_repeat);
+                  },
                 )
               ],
             ),
@@ -104,3 +108,4 @@ class _WeekDayPickerState extends State<WeekDayPicker> {
     );
   }
 }
+

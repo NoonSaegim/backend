@@ -9,10 +9,10 @@ class Word {
     required this.isSelected,
   });
 
-  int seq;
+  int? seq;
   String word;
   String meaning;
-  bool isSelected;
+  bool? isSelected;
 
   Map<String, String> toSimpleJson() =>
   {
@@ -23,4 +23,8 @@ class Word {
   Map<String,String> toMap() => {
     '$seq': word,
   };
+
+  factory Word.fromJson(Map<String, dynamic> json) {
+    return Word(seq: null, word: json['word'], meaning: json['meaning'], isSelected: null);
+  }
 }

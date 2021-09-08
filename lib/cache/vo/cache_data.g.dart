@@ -8,7 +8,6 @@ part of 'cache_data.dart';
 
 CacheData _$CacheDataFromJson(Map<String, dynamic> json) {
   return CacheData(
-    seq: json['seq'] as int,
     date: DateTime.parse(json['date'] as String),
     wordList: (json['wordList'] as List<dynamic>)
         .map((e) => Map<String, String>.from(e as Map))
@@ -17,7 +16,6 @@ CacheData _$CacheDataFromJson(Map<String, dynamic> json) {
 }
 
 Map<String, dynamic> _$CacheDataToJson(CacheData instance) => <String, dynamic>{
-      'seq': instance.seq,
       'date': instance.date.toIso8601String(),
       'wordList': instance.wordList,
     };

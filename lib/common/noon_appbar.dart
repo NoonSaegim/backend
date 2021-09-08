@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../search/voca_search.dart';
+import 'package:sizer/sizer.dart';
 
 class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   const AppBar1({Key? key}) : super(key: key);
@@ -9,9 +9,9 @@ class AppBar1 extends StatelessWidget with PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
         title: Container(
-          padding: EdgeInsets.only(top: 5.0),
+          padding: EdgeInsets.only(top: 5.0.sp),
           child: Image.asset("imgs/appbar.jpg"),
-          height: AppBar().preferredSize.height * 1.25,
+          height: AppBar().preferredSize.height * 1.285,
         ),
         backgroundColor: Colors.white,
         centerTitle: true,
@@ -43,9 +43,9 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
   Widget build(BuildContext context) {
     return AppBar(
       title: Container(
-        padding: EdgeInsets.only(top: 5.0),
+        padding: EdgeInsets.only(top: 5.0.sp),
         child: Image.asset("imgs/appbar.jpg"),
-        height: AppBar().preferredSize.height * 1.25,
+        height: AppBar().preferredSize.height * 1.285,
       ),
       backgroundColor: Colors.white,
       centerTitle: true,

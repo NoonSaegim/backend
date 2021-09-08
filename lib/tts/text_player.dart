@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:core';
 import 'sleeper.dart';
 import 'package:audio_session/audio_session.dart';
+import 'package:file_picker/file_picker.dart';
 
 class TextPlayer extends BackgroundAudioTask {
   Tts _tts = Tts();
@@ -152,7 +153,8 @@ class Tts {
   Future<void> save(String text, String path) async {
     File saveFile = new File(path);
     saveFile.create(recursive: true).then((File wav) async {
-      await _flutterTts.synthesizeToFile(text, wav.path)
+      _flutterTts.getDefaultEngine.asStream().listen((event) { });
+      await _flutterTts.synthesizeToFile(text,wav.path)
           .then((value) => print('--------save wav success-------'));
     });
   }

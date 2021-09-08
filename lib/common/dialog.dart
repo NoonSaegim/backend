@@ -14,8 +14,8 @@ void onSaveButtonPressed(BuildContext context, List<Word> dataList) {
       alert.onWarning(context, '단어장 제목을 작성해주세요!', (){});
       return;
     }
-    List<Word> selectedList = dataList.where((e) => e.isSelected).toList();
-    selectedList.sort((x,y) => x.seq.compareTo(y.seq));
+    List<Word> selectedList = dataList.where((e) => e.isSelected!).toList();
+    selectedList.sort((x,y) => x.seq!.compareTo(y.seq!));
     List<Map<String,String>> dataToInsert = selectedList.map((e) => e.toSimpleJson()).toList();
     await addVoca(_title, dataToInsert)
         .then((value) => {

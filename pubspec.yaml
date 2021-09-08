@@ -30,9 +30,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  dio:
+  cupertino_icons:
   package_info_plus:
   flutter_svg:
-  http:
   camera:
   image_cropper:
   image_picker:
@@ -53,15 +54,13 @@ dependencies:
   audio_session:
   weekday_selector:
   flutter_email_sender:
-  android_alarm_manager_plus:
-    git:
-      url: https://github.com/jja08111/plus_plugins.git
-      path: packages/android_alarm_manager_plus
+  flutter_local_notifications:
+  workmanager:
   flutter_picker:
     git: git://github.com/yangyxd/flutter_picker.git
   hive:
   hive_flutter:
-  json_cache:
+  data_cache_manager:
   search_page:
   streaming_shared_preferences:
   fluttertoast:
@@ -69,7 +68,10 @@ dependencies:
   audioplayers:
   pdf:
   open_file:
-  flutter_sound:
+  ndialog:
+  rxdart:
+  uuid:
+  file_picker:
 
 dev_dependencies:
   flutter_test:
@@ -79,6 +81,7 @@ dev_dependencies:
   source_gen:
   analyzer:
   json_serializable:
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -101,6 +104,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - imgs/
+    - gallery/
     - font/arial.ttf
     - font/arial-italic.ttf
     - font/arial-bold.ttf

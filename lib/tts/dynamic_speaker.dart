@@ -31,7 +31,7 @@ class Speaker extends StatelessWidget {
   dynamic _listOfObjToMap(List<Word> listObj) {
 
     Map<String, String> merge = new Map();
-    listObj.sort((x,y) => x.seq.compareTo(y.seq)); //map convert 전 sort
+    listObj.sort((x,y) => x.seq!.compareTo(y.seq!)); //map convert 전 sort
     listObj.forEach((e) {
       merge.addAll(e.toMap());
     });
@@ -39,7 +39,7 @@ class Speaker extends StatelessWidget {
   }
 
   Widget _renderSpecker(BuildContext context) {
-    List<Word> listObj = dataList.where((e) => e.isSelected).toList();
+    List<Word> listObj = dataList.where((e) => e.isSelected!).toList();
 
     return IconButton(
       onPressed: () {

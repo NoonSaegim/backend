@@ -7,20 +7,21 @@ import '../page2/open_camera.dart';
 import 'package:camera/camera.dart';
 import 'package:sizer/sizer.dart';
 
+
+Future<void> openCamera(BuildContext context) async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // 디바이스에서 이용가능한 카메라 목록을 받아옵니다.
+  final cameras = await availableCameras();
+  // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
+  final firstCamera = cameras.first;
+
+  Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
+}
+
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
-
-  Future<void> _openCamera(BuildContext context) async {
-
-    WidgetsFlutterBinding.ensureInitialized();
-
-    // 디바이스에서 이용가능한 카메라 목록을 받아옵니다.
-    final cameras = await availableCameras();
-    // 이용가능한 카메라 목록에서 특정 카메라를 얻습니다.
-    final firstCamera = cameras.first;
-
-    Navigator.push(context, MaterialPageRoute(builder: (context) => TakePictureScreen(camera: firstCamera)));
-  }
   
   @override
   Widget build(BuildContext context) {
@@ -188,7 +189,7 @@ class Home extends StatelessWidget {
                   width: MediaQuery.of(context).size.width,
                   //padding: EdgeInsets.only(bottom: ),
                   child: IconButton(
-                    onPressed: () => _openCamera(context),
+                    onPressed: () => openCamera(context),
                     tooltip: 'camera',
                     icon: SvgPicture.asset(
                       'imgs/diaphragm.svg',

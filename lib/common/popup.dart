@@ -27,6 +27,30 @@ class Popup {
     ).show();
   }
 
+  onSuccess2(BuildContext context, String title, String route) {
+    Alert(
+      context: context,
+      type: AlertType.success,
+      title: title,
+      buttons: [
+        DialogButton(
+          color: Colors.cyan,
+          child: Text(
+            "확인",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 15.sp,
+            ),
+          ),
+          onPressed: () => Navigator.popAndPushNamed(context, route),
+          width: MediaQuery.of(context).size.width * 0.3,
+          height: 35.0.sp,
+        )
+      ],
+    ).show();
+  }
+
+
   onError(BuildContext context, String title) {
     Alert(
       context: context,
