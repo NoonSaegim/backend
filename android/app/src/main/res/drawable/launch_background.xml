@@ -7,7 +7,7 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_noonsaegim" />
+            android:src="@mipmap/ic_launcher" />
 
     </item>
     <item>

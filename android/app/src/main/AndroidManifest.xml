@@ -18,9 +18,8 @@
 
     <application
         android:label="NoonSaegim"
-        android:icon="@mipmap/ic_noonsaegim"
+        android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
-        tools:targetApi='q'
         >
 
         <activity
