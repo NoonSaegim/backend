@@ -9,6 +9,8 @@
 
 또한 원하는 리스트의 데이터를 WAV, PDF 형식의 파일로 변환해 다운받거나 공유할 수도 있습니다.
 
+*한국전자통신연구원의 객체검출 오픈 api와 네이버 파파고 번역 오픈 api 를 통해 구현되었습니다.* 
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
