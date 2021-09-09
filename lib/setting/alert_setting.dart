@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:noonsaegim/push_alert/local_notification.dart';
+import 'package:noonsaegim/push_alert/setting_notification.dart';
 import 'package:uuid/uuid.dart';
 import 'package:workmanager/workmanager.dart';
 

@@ -1,11 +1,14 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:noonsaegim/page3/single_cropper.dart';
 import 'package:noonsaegim/page4/single_image_process.dart';
+import 'package:noonsaegim/page6/multi_cropper.dart';
 import 'package:noonsaegim/page9/wav/audio_player.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
 import 'package:noonsaegim/setting/cache.dart';
 import 'package:noonsaegim/setting/notif_on_off.dart';
 import 'package:provider/provider.dart';
+import 'cache/cache_module.dart';
 import 'page5/image_picker.dart';
 import 'page8/recently_searched_list.dart';
 import 'page10/settings.dart';
@@ -20,6 +23,7 @@ void main() async {
 
   /// hive database setting
   await initHive();
+  await initCacheManager();
 
   runApp(
       MultiProvider(
@@ -43,7 +47,7 @@ class FirstRoute extends StatelessWidget {
     return Sizer(
           builder: (context, orientation, deviceType) {
             return MaterialApp(
-              initialRoute: '/pick',
+              initialRoute: '/main',
               routes: {
                 '/main': (context) => Home(),
                 '/pick': (context) => Gallery(),
@@ -53,6 +57,8 @@ class FirstRoute extends StatelessWidget {
                 '/multi' : (context) => AudioServiceWidget(child: MultiImagesProcess()),
                 '/single': (context) => AudioServiceWidget(child: SingleImageProcess()),
                 '/playlist': (context) => AudioPlayer(),
+                '/single-cropper': (context) => SingleCropper(),
+                '/multi-cropper': (context) => MultiCropper(),
               },
             );
           }

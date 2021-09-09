@@ -10,7 +10,10 @@ class AppBar1 extends StatelessWidget with PreferredSizeWidget{
     return AppBar(
         title: Container(
           padding: EdgeInsets.only(top: 5.0.sp),
-          child: Image.asset("imgs/appbar.jpg"),
+          child: InkWell(
+            onTap: () => Navigator.pushNamed(context, '/main'),
+            child: Image.asset("imgs/appbar.jpg"),
+          ),
           height: AppBar().preferredSize.height * 1.285,
         ),
         backgroundColor: Colors.white,
@@ -44,7 +47,10 @@ class AppBar2 extends StatelessWidget with PreferredSizeWidget{
     return AppBar(
       title: Container(
         padding: EdgeInsets.only(top: 5.0.sp),
-        child: Image.asset("imgs/appbar.jpg"),
+        child: InkWell(
+          onTap: () => Navigator.pushNamed(context, '/main'),
+          child: Image.asset("imgs/appbar.jpg"),
+        ),
         height: AppBar().preferredSize.height * 1.285,
       ),
       backgroundColor: Colors.white,

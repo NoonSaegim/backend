@@ -26,8 +26,8 @@ class SingleCropper extends StatelessWidget {
             color: Colors.black12,
             height: (MediaQuery.of(context).size.height -
                 AppBar().preferredSize.height -
-                MediaQuery.of(context).padding.top) * 0.89,// Your screen background color
-            margin: EdgeInsets.only(top:AppBar().preferredSize.height + AppBar().preferredSize.height * 0.1),
+                MediaQuery.of(context).padding.top) * 0.88,// Your screen background color
+            margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           ),
           Center(
             child: Cropper(imagePath: args.imagePath[0]),
@@ -177,7 +177,7 @@ class _CropperState extends State<Cropper> {
                                         onTapUp: (_) => setState(() => _isSumbnail = false),
                                         child: CircleAvatar(
                                           backgroundColor:
-                                          _isSumbnail ? Colors.lightBlue.shade50 : Colors.lightBlue,
+                                          _isSumbnail ? Colors.lightBlueAccent.shade50 : Colors.lightBlueAccent,
                                           child: Center(
                                             child: Icon(Icons.crop_free_rounded, color: Colors.white, size: 20.sp),
                                           ),

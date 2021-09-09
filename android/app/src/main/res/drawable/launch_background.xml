@@ -7,8 +7,8 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@mipmap/ic_launcher" />
-
+            android:src="@mipmap/ic_launcher"
+            android:drawable="@android:color/lightblue"/>
     </item>
     <item>
         <bitmap

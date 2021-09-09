@@ -39,24 +39,25 @@ class _AccordionState extends State<Accordion> {
 
   Future<List<String>> onInitRecords() async {
     records = [];
-    appDir = Directory('/storage/emulated/0/Android/data/com.noonsaegim.app/files');
-    Directory appDirec = Directory("${appDir.path}");
-    if(await appDirec.exists()) {
-      print('----------appDirec exists----------');
-      appDir = appDirec;
-      appDir.list().listen((onData) {
-        if(onData.path.split('.')[1] == 'wav') records.add(onData.path);
-      }).onDone(() {
-        records = records.reversed.toList();
-      });
-    } else {
-      appDirec.create(recursive: true)
-          .then((value) {
-            print('--------create directory-------');
-            appDir = appDirec;
-      });
-    }
-
+    await provider.getExternalStorageDirectory().then((value) async {
+      appDir = value!;
+      Directory? appDirec = Directory("${appDir.path}/Vocabulary/");
+      if(await appDirec.exists()) {
+        print('----------appDirec exists----------');
+        appDir = appDirec;
+        appDir.list().listen((onData) {
+          records.add(onData.path);
+        }).onDone(() {
+          records = records.reversed.toList();
+        });
+      } else {
+        appDirec.create(recursive: true)
+            .then((value) {
+          print('--------create directory-------');
+          appDir = appDirec;
+        });
+      }
+    });
     return records;
   }
 
@@ -73,16 +74,16 @@ class _AccordionState extends State<Accordion> {
   }
 
   _onFinish() {
-    print('-----------onFinish------------');
+    print('-------------save wav-------------');
     records.clear();
     //print(records.length);
     appDir.list().listen((onData) {
       print('-------listen to : $onData---------');
-      if(onData.path.split('.')[1] == 'wav') records.add(onData.path);
+      records.add(onData.path);
     }).onDone(() {
       records.sort();
       records = records.reversed.toList();
-      print('[onDone]-------------records: ${records.length}--------------');
+      print('-------------records: ${records.length}--------------');
     });
   }
 

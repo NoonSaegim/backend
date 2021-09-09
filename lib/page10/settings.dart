@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'package:audioplayers/notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:noonsaegim/push_alert/local_notification.dart';
+import 'package:noonsaegim/page9/mynote.dart';
+import 'package:noonsaegim/push_alert/manage_notification.dart';
+import 'package:noonsaegim/push_alert/setting_notification.dart';
 import 'package:noonsaegim/setting/note_argument.dart';
 import '../../common/drawer.dart';
 import '../../common/noon_appbar.dart';
@@ -41,7 +44,6 @@ class _SettingsState extends State<Settings> {
   }
 
   //멤버 필드 : 알람 여부, 캐시 일수 ..
-
   final List _cacheable = List.generate(5, (index) => '${index+1} 일');
 
   _showCacheablePeriodPicker(BuildContext context) {
@@ -106,9 +108,13 @@ class _SettingsState extends State<Settings> {
     }
   }
 
-  Future<dynamic> _onSelectNotification(String? payload) async {
-    print('payload: $payload');
-    Navigator.pushNamed(context, '/mynote', arguments: NoteArgument(seq: int.parse(payload!)));
+  Future onSelectNotification(String? payload) async {
+    print('[onSelectNotification] payload: $payload');
+    var detail = await flip.getNotificationAppLaunchDetails();
+    if(detail?.didNotificationLaunchApp as bool) {
+       //MaterialPageRoute<void>(builder: (context) => MyNote(), settings: RouteSettings(arguments: NoteArgument(seq: int.parse(detail?.payload ?? payload!))));
+       await Navigator.pushNamed(context, '/mynote', arguments: NoteArgument(seq: int.parse(detail?.payload ?? payload!)));
+    }
   }
 
   _init(Stream<bool> isOn) {
@@ -136,14 +142,14 @@ class _SettingsState extends State<Settings> {
             iOS: initializationSettingsIOS);
 
         await flip.initialize(
-            initializationSettings, onSelectNotification: _onSelectNotification)
+            initializationSettings, onSelectNotification: onSelectNotification)
         .then((value) => print('-----init notification----')).then((value) async {
           await SharedPreferences.getInstance().then((SharedPreferences pref) {
             pref.setBool('notification', true);
           });
         });
       } else if(!value) {
-        isOff();
+        allOff();
       }
     });
   }
@@ -161,9 +167,7 @@ class _SettingsState extends State<Settings> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Container(
-                height: (MediaQuery.of(context).size.height -
-                    AppBar().preferredSize.height -
-                    MediaQuery.of(context).padding.top) * 0.4,
+                height: 200.sp,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
@@ -190,10 +194,11 @@ class _SettingsState extends State<Settings> {
                                 final _isOn = snapshot.data ?? _notif;
 
                                 return Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                   children: <Widget>[
                                     Container(
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.only(left: 18.0, right: 18.0),
+                                      padding: EdgeInsets.only(left: 18.0.sp, right: 16.5.sp, top: 3.5.sp),
                                       height: (MediaQuery.of(context).size.height -
                                           AppBar().preferredSize.height -
                                           MediaQuery.of(context).padding.top) * 0.11,
@@ -223,7 +228,7 @@ class _SettingsState extends State<Settings> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                      padding: EdgeInsets.only(left: 15.0.sp, right:15.0.sp),
                                       height: (MediaQuery.of(context).size.height -
                                           AppBar().preferredSize.height -
                                           MediaQuery.of(context).padding.top) * 0.01,
@@ -231,10 +236,10 @@ class _SettingsState extends State<Settings> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.only(left: 18.0, right: 5.0),
+                                      padding: EdgeInsets.only(left: 18.0.sp, right: 5.0.sp),
                                       height: (MediaQuery.of(context).size.height -
                                           AppBar().preferredSize.height -
-                                          MediaQuery.of(context).padding.top) * 0.11,
+                                          MediaQuery.of(context).padding.top) * 0.1,
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
@@ -252,7 +257,7 @@ class _SettingsState extends State<Settings> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                                      padding: EdgeInsets.only(left: 15.0.sp, right:15.0.sp),
                                       height: (MediaQuery.of(context).size.height -
                                           AppBar().preferredSize.height -
                                           MediaQuery.of(context).padding.top) * 0.01,
@@ -260,7 +265,7 @@ class _SettingsState extends State<Settings> {
                                     ),
                                     Container(
                                       alignment: Alignment.center,
-                                      padding: EdgeInsets.only(left: 18.0, right: 5.0),
+                                      padding: EdgeInsets.only(left: 18.0.sp, right: 5.0.sp, bottom: 3.5.sp),
                                       height: (MediaQuery.of(context).size.height -
                                           AppBar().preferredSize.height -
                                           MediaQuery.of(context).padding.top) * 0.11,
@@ -291,7 +296,7 @@ class _SettingsState extends State<Settings> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16.0,),
+              SizedBox(height: 12.0.sp,),
               Container(
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -
@@ -318,7 +323,7 @@ class _SettingsState extends State<Settings> {
                       Expanded(
                           child: Container(
                             alignment: Alignment.center,
-                            padding: EdgeInsets.only(left: 18.0, right: 5.0),
+                            padding: EdgeInsets.only(left: 15.5.sp, right: 5.0.sp),
                             height: (MediaQuery.of(context).size.height -
                                 AppBar().preferredSize.height -
                                 MediaQuery.of(context).padding.top) * 0.11,
@@ -373,7 +378,7 @@ class _SettingsState extends State<Settings> {
                   ),
                 ),
               ),
-              const SizedBox(height: 16.0,),
+              SizedBox(height: 12.0.sp,),
               Container(
                 height: (MediaQuery.of(context).size.height -
                     AppBar().preferredSize.height -

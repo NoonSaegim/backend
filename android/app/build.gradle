@@ -59,16 +59,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-
-        /*debug {
-            ext.alwaysUpdateBuildId = false
-            signingConfig signingConfigs.debug
-            spllits.abi.enable = false
-            spllits.density.enable = false
-            minifyEnabled true
-            shrinkResources false
-            aaptOptions.cruncherEnabled = false
-        }*/
+//        debug {
+//            ext.alwaysUpdateBuildId = false
+//            signingConfig signingConfigs.debug
+//            spllits.abi.enable = false
+//            spllits.density.enable = false
+//            minifyEnabled true
+//            shrinkResources false
+//            aaptOptions.cruncherEnabled = false
+//        }
     }
 }
 

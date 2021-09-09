@@ -158,7 +158,25 @@ class AsyncService {
 
       if(wordsTranslated.length == detectedWords.length) {
         return List.generate(detectedWords.length, (index) {
-          String translated = wordsTranslated[index]!.replaceAll('.', '').replaceAll('를', '').replaceAll('을', '');
+          String translated = wordsTranslated[index]!.replaceAll('.', '');
+          if(translated.contains('를')) {
+            translated = translated.substring(0, translated.indexOf('를'));
+          }
+          if(translated.contains('을')) {
+            translated = translated.substring(0, translated.indexOf('을'));
+          }
+          if(translated.contains('로')) {
+            translated = translated.substring(0, translated.indexOf('로'));
+          }
+          if(translated.contains('에')) {
+            translated = translated.substring(0, translated.indexOf('에'));
+          }
+          if('의' == translated.characters.last) {
+            translated = translated.substring(0, translated.indexOf('의'));
+          }
+          if(translated.contains(' ')) {
+            translated = translated.substring(0, translated.indexOf(' '));
+          }
           return Word(seq: null, word: detectedWords[index], meaning: translated, isSelected: null);
         });
       } else {

@@ -15,7 +15,7 @@ class FeedBack {
       final Email email = Email(
           body: _body,
           subject: 'Feedback from user $_from',
-          recipients: ['ekdldksp123@sanhait.co.kr'],
+          recipients: ['a75101912@gmail.com'],
       );
 
       String platformResponse;
@@ -29,7 +29,7 @@ class FeedBack {
       }
 
       if (platformResponse == 'success') {
-        alert.onSuccess(context, "성공적으로 전송되었습니다!");
+        alert.onSuccess2(context, '소중한 의견 감사합니다!', '/settings');
       } else {
         alert.onError(context, platformResponse);
       }

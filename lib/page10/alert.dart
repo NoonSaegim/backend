@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:noonsaegim/database/dto/voca.dart';
 import 'package:noonsaegim/database/hive_module.dart';
-import 'package:noonsaegim/push_alert/local_notification.dart';
+import 'package:noonsaegim/push_alert/setting_notification.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:flutter_switch/flutter_switch.dart';
@@ -15,12 +15,13 @@ import 'package:provider/provider.dart';
 import 'package:noonsaegim/setting/alert_setting.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'weekday_picker.dart';
+import '../push_alert/manage_notification.dart';
 
-List<bool> checkList = [];
+var checkList;
+
 class Alert{
 
   final format = DateFormat.jm();
-
   final TextEditingController _typeAheadController = TextEditingController();
   final List<int> hours = List.generate(12, (index) => index + 1);
   final List<int> minutes = List.generate(60, (index) => index);
@@ -102,12 +103,21 @@ class Alert{
   }
 
   manageAlertSettings(BuildContext context) {
+
     Future.delayed(Duration.zero, () async {
       final pref = await SharedPreferences.getInstance();
       List<String> notifList = pref.getStringList('notifList') ?? [];
-      checkList = pref.getStringList('checkList') != null
-      ? pref.getStringList('checkList')!.map((e) => e == 'true').toList()
-          : List<bool>.generate(notifList.length, (index) => true);
+      print('notifList:${notifList.length}개- $notifList');
+
+      checkList = List<bool?>.generate(notifList.length, (index) => true);
+      final preCheckList = pref.getStringList('checkList')?.map((e) => e == 'true').toList();
+      if(preCheckList != null && preCheckList.isNotEmpty) {
+        for (int i = 0; i < preCheckList.length; i++) {
+          checkList[i] = preCheckList[i];
+        }
+      }
+      final checkListCopy = [...checkList];
+      print('checkList: $checkList / copyList: $checkListCopy');
 
       if(notifList.isNotEmpty) {
         showDialog(
@@ -152,9 +162,20 @@ class Alert{
                             child: Text('SAVE', style: TextStyle(color: Colors.white, fontSize: 13.sp)),
                             onPressed: () async {
                               List<String> turnOffList = [];
+                              List<String> turnOnList = [];
                               for(int i =0; i < notifList.length; i++) {
-                                if(!checkList[i]) {
-                                  turnOffList.add(notifList[i].split(':')[3]);
+                                if(checkList[i] == false && checkList[i] != checkListCopy[i]) {
+                                  turnOffList.add(notifList[i].split('#')[3]);
+                                }
+                                if(checkList[i] == true && checkList[i] != checkListCopy[i]) {
+                                  final param = notifList[i].split('#');
+                                  final summary = _getSummary(param[2], context) as List<String>;
+                                  print('summary: $summary');
+                                  /// 'title, seq, summary, uid, noteTitle'
+                                  /// 0: uid, 1: seq, 2: title, 3: noteKey, 4: time, 5: cycle,
+                                  turnOnList.add(
+                                    '${param[3]}#${[param[1]]}#${param[0]}#${param[4]}${summary[0]}#${summary[1]}#true'
+                                  );
                                 }
                               }
                               if(turnOffList.isNotEmpty){
@@ -162,8 +183,14 @@ class Alert{
                                   turnOff(e);
                                 });
                               }
+                              if(turnOnList.isNotEmpty){
+                                turnOffList.forEach((e) async {
+                                  final List<String> param = e.split('#');
+                                  await setAlertByUid(param[0], int.parse(param[1]), param[2], param[3], param[4], param[5], param[6] == 'true');
+                                });
+                              }
                               await SharedPreferences.getInstance().then((SharedPreferences pref){
-                                pref.setStringList('checkList', checkList.map((e) => e == true ? "true" : "false").toList());
+                                pref.setStringList('checkList', checkList.map((e) => e == true ? "true" : "false").cast<String>().toList());
                               });
                               alert.onSuccess2(context, "알림이 저장되었습니다.", '/settings');
                             },
@@ -186,10 +213,23 @@ class Alert{
               );
             }
         );
+      } else {
+        alert.onWarning(context, '반복 설정한 알림이 없습니다!', () { });
       }
     });
-    
   }
+
+  _getSummary(String param, BuildContext context) {
+    if(param.contains('PM')) {
+      return param.replaceAll(' ', '').split('PM').join('PM ').split(' ');
+    } else if(param.contains('AM')) {
+      return param.replaceAll(' ', '').split('AM').join('AM ').split(' ');
+    } else {
+      alert.onError(context, '오류가 발생했습니다. 알림을 설정할 수 없습니다.');
+      return;
+    }
+  }
+
   //form 초기화
   void initializeForm(BuildContext context) {
     Provider.of<AlertSetting>(context, listen: false).setTitle('');
@@ -307,7 +347,7 @@ class Alert{
                             }
                             int seq = _vocaList.indexOf(_vocaList.where((e) => e.title == form.noteKey).elementAt(0));
 
-                            await setNewAlert(seq, form.title, form.noteKey, form.time, form.cycle, form.repeat)
+                            await setAlert(seq, form.title, form.noteKey, form.time, form.cycle, form.repeat)
                                 .then((value) {
                                   alert.onSuccess2(context, "알림이 등록되었습니다.", '/settings');
                                   this._typeAheadController.text = '';
@@ -369,9 +409,9 @@ class _NotifCardState extends State<NotifCard> {
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
-        leading: Icon(Icons.alarm, color: isOn ? Colors.lightBlueAccent : Colors.grey,),
-        title: Text(widget.notifInfo.split(':')[0]),
-        subtitle: Text(widget.notifInfo.split(':')[2]),
+        leading: Icon(Icons.alarm, color: isOn ? Colors.lightBlue : Colors.grey,size: 32.sp,),
+        title: Text(widget.notifInfo.split('#')[0]),
+        subtitle: Text(widget.notifInfo.split('#')[2]),
         trailing: Container(
           width: MediaQuery.of(context).size.width * 0.15,
           child: FlutterSwitch(

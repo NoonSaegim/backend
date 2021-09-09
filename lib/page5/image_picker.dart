@@ -73,28 +73,33 @@ class _ImagePickState extends State<ImagePick> {
 
   /// test variable
   final List<String> imagePaths = [
-    'gallery/party.jpg',
-    'gallery/wheel.jpg',
-    'gallery/library.jpg',
-    'gallery/market.jpg',
-    'gallery/country.jpg',
-    'gallery/pc.jpg',
-    'gallery/room.png',
-    'gallery/coex.jpg',
+    //'gallery/appliances.jpg',
+    'gallery/balloon.jpg',
+    'gallery/icecream.jpg',
+    //'gallery/sky.png',
+    //'gallery/party.jpg',
+    'gallery/hideout.jpg',
+    //'gallery/wheel.jpg',
+    //'gallery/library.jpg',
+     'gallery/market.jpg',
+     //'gallery/country.jpg',
+     'gallery/pc.jpg',
+     //'gallery/room.png',
+     //'gallery/coex.jpg',
   ];
 
-  // @override
-  // void initState() {
-  //   // TODO: test code
-  //   super.initState();
-  //   Future.delayed(Duration.zero, () async {
-  //     await setXFileList().then((List<Uint8List> list) {
-  //       setState(() {
-  //         testList = list;
-  //       });
-  //     });
-  //   });
-  // }
+  @override
+  void initState() {
+    // TODO: test code
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      await setXFileList().then((List<Uint8List> list) {
+        setState(() {
+          testList = list;
+        });
+      });
+    });
+  }
 
   /// test code
   Future<List<Uint8List>> setXFileList() async {
@@ -123,9 +128,9 @@ class _ImagePickState extends State<ImagePick> {
     if (retrieveError != null) {
       return retrieveError;
     }
-    if (_imageFileList != null) {
+    //if (_imageFileList != null) {
     /// test code
-    //if (testList != null) {
+    if (testList != null) {
       return Semantics(
           child: ListView.builder(
             key: UniqueKey(),
@@ -135,15 +140,15 @@ class _ImagePickState extends State<ImagePick> {
               return Semantics(
                 label: 'picked_image',
                 /// test code
-                //child: Image.memory(testList[index]),
-                child: kIsWeb
-                    ? Image.network(_imageFileList![index].path)
-                    : Image.file(File(_imageFileList![index].path)),
+                child: Image.memory(testList[index]),
+                // child: kIsWeb
+                //     ? Image.network(_imageFileList![index].path)
+                //     : Image.file(File(_imageFileList![index].path)),
               );
             },
             /// test code
-            //itemCount: testList.length,
-            itemCount: _imageFileList!.length,
+            itemCount: testList.length,
+            //itemCount: _imageFileList!.length,
           ),
           label: 'picked_images');
     } else if (_pickImageError != null) {
@@ -189,30 +194,30 @@ class _ImagePickState extends State<ImagePick> {
                 case ConnectionState.none:
                 case ConnectionState.waiting:
                   /// test code
-                  //return _handlePreview();
-                  return Text(
-                    '선택한 사진 없음',
-                    style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
-                    textAlign: TextAlign.center,
-                  );
+                  return _handlePreview();
+                  // return Text(
+                  //   '선택한 사진 없음',
+                  //   style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
+                  //   textAlign: TextAlign.center,
+                  // );
                 case ConnectionState.done:
                   return _handlePreview();
                 default:
                   /// test code
-                  //return _handlePreview();
-                  if (snapshot.hasError) {
-                    return Text(
-                      '사진 오류: ${snapshot.error}}',
-                      style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
-                      textAlign: TextAlign.center,
-                    );
-                  } else {
-                    return Text(
-                      '선택한 사진 없음.',
-                      style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
-                      textAlign: TextAlign.center,
-                    );
-                  }
+                  return _handlePreview();
+                  // if (snapshot.hasError) {
+                  //   return Text(
+                  //     '사진 오류: ${snapshot.error}}',
+                  //     style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
+                  //     textAlign: TextAlign.center,
+                  //   );
+                  // } else {
+                  //   return Text(
+                  //     '선택한 사진 없음.',
+                  //     style: TextStyle(fontSize: 15.0.sp, color: Colors.black45),
+                  //     textAlign: TextAlign.center,
+                  //   );
+                  // }
               }
             },
           )
@@ -250,36 +255,24 @@ class _ImagePickState extends State<ImagePick> {
               backgroundColor: Colors.lightBlueAccent,
             ),
           ),
-        if(_imageFileList != null)
+        // if(_imageFileList != null)
+          ///test code
+        if(testList != null)
           Padding(
             padding: EdgeInsets.only(top: 14.5.sp),
             child: FloatingActionButton(
-              onPressed: () async {
+              onPressed: () {
                 ///test code
-                //final List<String> _imagePathList = imagePaths;
-                final List<String> _imagePathList
-                = List.generate(_imageFileList?.length as int,
-                        (index) => _imageFileList![index].path);
+                final List<String> _imagePathList = imagePaths;
+                // final List<String> _imagePathList
+                // = List.generate(_imageFileList?.length as int,
+                //         (index) => _imageFileList![index].path);
 
                 if(_imagePathList.isNotEmpty) {
                   if(_imagePathList.length == 1) {
-                    await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => SingleCropper(),
-                            settings: RouteSettings(
-                              arguments: ImageArgument(imagePath: _imagePathList),
-                            )
-                        )
-                    );
+                    Navigator.pushNamed(context, '/single-cropper', arguments: ImageArgument(imagePath: _imagePathList));
                   } else if(_imagePathList.length >= 2) {
-                    await Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (context) => MultiCropper(),
-                            settings: RouteSettings(
-                              arguments: ImageArgument(imagePath: _imagePathList),
-                            )
-                        )
-                    );
+                    Navigator.pushNamed(context, '/multi-cropper', arguments: ImageArgument(imagePath: _imagePathList));
                   }
                 }
               },

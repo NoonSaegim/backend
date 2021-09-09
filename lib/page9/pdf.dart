@@ -46,7 +46,7 @@ Future<void> createPdf(Voca voca) async {
                   mainAxisAlignment: pw.MainAxisAlignment.center,
                   crossAxisAlignment: pw.CrossAxisAlignment.center,
                   children: <pw.Widget> [
-                    pw.Text(voca.title, textScaleFactor: 5, textAlign: pw.TextAlign.center),
+                    pw.Text(voca.title, textScaleFactor: 5, textAlign: pw.TextAlign.center, style: pw.TextStyle(font: bold)),
                   ]
               )
             )
@@ -64,17 +64,29 @@ Future<void> createPdf(Voca voca) async {
                             mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                             children: [
                               pw.Column(
-                                  crossAxisAlignment: pw.CrossAxisAlignment.center,
-                                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                  mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    pw.Text('단어', style: pw.TextStyle(font: bold, fontSize: 30)),
+                                     pw.Row(
+                                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                                          children: [
+                                            pw.Text('단어', style: pw.TextStyle(font: bold, fontSize: 30)),
+                                          ]
+                                    ),
                                   ]
                               ),
                               pw.Column(
-                                  crossAxisAlignment: pw.CrossAxisAlignment.center,
-                                  mainAxisAlignment: pw.MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                  mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    pw.Text('의미',style: pw.TextStyle(font: bold, fontSize: 30)),
+                                      pw.Row(
+                                          mainAxisAlignment: pw.MainAxisAlignment.start,
+                                          children: [
+                                            pw.Text('의미',style: pw.TextStyle(font: bold, fontSize: 30)),
+                                          ]
+                                      ),
                                   ]
                               ),
                             ]
@@ -92,23 +104,29 @@ Future<void> createPdf(Voca voca) async {
                               mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
                               children: [
                                 pw.Column(
-                                    crossAxisAlignment: pw.CrossAxisAlignment.center,
-                                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                    mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      pw.Text(i['word'].toString(), style: pw.TextStyle(font: meaning, fontSize: 20)),
-                                      //pw.Divider(thickness: 1),
+                                        pw.Row(
+                                              mainAxisAlignment: pw.MainAxisAlignment.start,
+                                            children: [
+                                              pw.Text(i['word'].toString(), style: pw.TextStyle(font: meaning, fontSize: 20)),
+                                            ]
+                                        ),
                                     ]
                                 ),
                                 pw.Column(
-                                    crossAxisAlignment: pw.CrossAxisAlignment.center,
-                                    mainAxisAlignment: pw.MainAxisAlignment.center,
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: pw.CrossAxisAlignment.start,
+                                    mainAxisAlignment: pw.MainAxisAlignment.spaceEvenly,
                                     children: [
-
-                                      pw.Text(
-                                          i['meaning'].toString(),
-                                          style: pw.TextStyle(font: meaning, fontSize: 20)
-                                      ),
-                                      //pw.Divider(thickness: 1),
+                                        pw.Row(
+                                            mainAxisAlignment: pw.MainAxisAlignment.start,
+                                            children: [
+                                              pw.Text(i['meaning'].toString(), style: pw.TextStyle(font: meaning, fontSize: 20)),
+                                            ]
+                                        ),
                                     ]
                                 ),
                               ]

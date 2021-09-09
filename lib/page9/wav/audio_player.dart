@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:noonsaegim/common/drawer.dart';
 import 'package:noonsaegim/page9/wav/wav_list.dart';
 import 'wav_list.dart';
 import '../../common/noon_appbar.dart';
@@ -24,9 +25,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
             if(snapshot.hasData) {
               final records = snapshot.data as List<String>;
               return Scaffold(
+                drawer: SideBar(),
                 backgroundColor: Colors.white,
                 floatingActionButton: FloatingActionButton(
-                  backgroundColor: Colors.lightBlueAccent,
+                  backgroundColor: Colors.lightBlue,
                   onPressed: () {  },
                   child: IconButton(
                     onPressed: () => Navigator.of(context).pushNamed('/mynote'),
@@ -54,9 +56,10 @@ class _AudioPlayerState extends State<AudioPlayer> {
       );
     } else {
       return Scaffold(
+        drawer: SideBar(),
         backgroundColor: Colors.white,
         floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.lightBlueAccent,
+          backgroundColor: Colors.lightBlue,
           onPressed: () {  },
           child: IconButton(
             onPressed: () => Navigator.of(context).pushNamed('/mynote'),

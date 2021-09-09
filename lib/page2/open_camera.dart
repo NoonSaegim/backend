@@ -18,13 +18,17 @@ class TakePictureScreen extends StatefulWidget {
 
 class TakePictureScreenState extends State<TakePictureScreen> {
   late CameraController Camcontroller;
+  var _camera;
   late Future<void> initializeControllerFuture;
 
   @override
   void initState() {
     super.initState();
+    setState(() {
+      _camera = widget.camera;
+    });
     Camcontroller = CameraController(
-      widget.camera,
+      _camera,
       ResolutionPreset.medium,
     );
     initializeControllerFuture = Camcontroller.initialize();
@@ -33,6 +37,9 @@ class TakePictureScreenState extends State<TakePictureScreen> {
   @override
   void dispose() {
     // 위젯의 생명주기 종료시 컨트롤러 역시 해제시켜줍니다.
+    setState(() {
+      _camera = null;
+    });
     Camcontroller.dispose();
     super.dispose();
   }
@@ -64,21 +71,11 @@ class TakePictureScreenState extends State<TakePictureScreen> {
           onPressed: () async {
             //사진찍기
             try {
-              await initializeControllerFuture
-                  .then((value) async =>
+              await initializeControllerFuture;
               await Camcontroller.takePicture()
-                  .then((XFile image) async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => SingleCropper(),
-                          settings: RouteSettings(
-                            arguments: ImageArgument(imagePath: [image.path]),
-                          )
-                      )
-                    );
-                  }
-                )
-              );
+                  .then((XFile image) {
+                     Navigator.pushNamed(context, '/single-cropper', arguments: ImageArgument(imagePath: [image.path]));
+                  });
             } catch (e) {
               print(e);
             }
