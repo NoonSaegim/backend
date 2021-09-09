@@ -1,8 +1,9 @@
 # Noonsaegim
 https://user-images.githubusercontent.com/64599394/132731072-520fa1bc-faf8-4d12-b802-67e29ae17f56.mp4
+![app_icon](https://user-images.githubusercontent.com/64599394/132732824-1d2eebb9-b05c-401f-a663-e5695a4e6a8e.png)
 
 
-사진을 제출하면 객체를 인식하여 영어 단어와 의미를 알려주는 인공지능 앱입니다.
+눈새김은 사진을 제출하면 객체를 인식하여 영어 단어와 의미를 알려주는 인공지능 앱입니다.
 
 영단어가 궁금한 객체를 즉석에서 바로 사진을 찍거나 사진을 첨부하여 쉽게 검색하고 외울 수 있게 하기 위해서 기획하게 되었습니다.
 
