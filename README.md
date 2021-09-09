@@ -1,4 +1,6 @@
 # Noonsaegim
+https://user-images.githubusercontent.com/64599394/132731072-520fa1bc-faf8-4d12-b802-67e29ae17f56.mp4
+
 
 사진을 제출하면 객체를 인식하여 영어 단어와 의미를 알려주는 인공지능 앱입니다.
 
