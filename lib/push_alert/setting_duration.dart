@@ -15,12 +15,16 @@ final Map<String, dynamic> week = {
 class SettingDuration {
 
   List<String> getWeekDays(String summary){
-    if(summary.contains('주말')) {
+    print('getWeekDays: $summary');
+    final param = summary.replaceAll(' ', '');
+    if(param == '주말') {
       return ['토', '일'];
-    } else if(summary.contains('평일')) {
+    } else if(param == '평일') {
       return ['월','화', '수', '목', '금'];
-    } else if(summary.contains('매일')) {
+    } else if(param == '매일') {
       return ['월','화', '수', '목', '금', '토', '일'];
+    } else if(param.contains(',')){
+      return param.split(',');
     } else throw Exception('파라미터 확인하세요.');
   }
 

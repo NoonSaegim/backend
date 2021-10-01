@@ -69,7 +69,7 @@ Future<Map<String, dynamic>?> getCacheData(String key) async {
   final Map<String, dynamic> date = json.decode(json.encode(dateCache?.value));
   print('date: $date');
 
-  if(DateTime.now().compareTo(DateTime.parse(date['date']!).add(Duration(days: cacheable))) == 0) {
+  if(DateTime.now().compareTo(DateTime.parse(date['date']!).add(Duration(days: cacheable))) >= 0) {
 
     await _cacheManager.remove(key).then((value) async {
      final prefs = await SharedPreferences.getInstance();

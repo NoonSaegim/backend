@@ -112,7 +112,6 @@ class _SettingsState extends State<Settings> {
     print('[onSelectNotification] payload: $payload');
     var detail = await flip.getNotificationAppLaunchDetails();
     if(detail?.didNotificationLaunchApp as bool) {
-       //MaterialPageRoute<void>(builder: (context) => MyNote(), settings: RouteSettings(arguments: NoteArgument(seq: int.parse(detail?.payload ?? payload!))));
        await Navigator.pushNamed(context, '/mynote', arguments: NoteArgument(seq: int.parse(detail?.payload ?? payload!)));
     }
   }

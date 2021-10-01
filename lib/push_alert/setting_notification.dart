@@ -98,7 +98,7 @@ Future<void> setAlert(int seq, String title, String noteKey, String time, String
       return diff.getDurationIfOneDay(days[index], year, month, day, weekday, absoluteHour, absoluteMinute, now);
     });
     String summaryPrefix = summary.split('@')[0];
-    List<String> summarySuffix = diff.getWeekDays(summary.split('@')[0]);
+    List<String> summarySuffix = diff.getWeekDays(summary.split('@')[1]);
     print(summarySuffix);
 
     if(duration?.length > 0 && duration?.length == summarySuffix.length){

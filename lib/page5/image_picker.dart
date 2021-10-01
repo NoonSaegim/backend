@@ -74,11 +74,11 @@ class _ImagePickState extends State<ImagePick> {
   /// test variable
   final List<String> imagePaths = [
     //'gallery/appliances.jpg',
-    'gallery/balloon.jpg',
-    'gallery/icecream.jpg',
-    //'gallery/sky.png',
-    //'gallery/party.jpg',
-    'gallery/hideout.jpg',
+    //'gallery/balloon.jpg',
+    //'gallery/icecream.jpg',
+    'gallery/sky.png',
+    'gallery/party.jpg',
+    //'gallery/hideout.jpg',
     //'gallery/wheel.jpg',
     //'gallery/library.jpg',
      'gallery/market.jpg',
