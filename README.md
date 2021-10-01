@@ -16,8 +16,6 @@ https://user-images.githubusercontent.com/64599394/132844018-630ed0bb-5a99-4feb-
 ![app_icon](https://user-images.githubusercontent.com/64599394/132732824-1d2eebb9-b05c-401f-a663-e5695a4e6a8e.png)
 
 
-*한국전자통신연구원의 객체검출 오픈 api와 네이버 파파고 번역 오픈 api 를 통해 구현되었습니다.* 
-
 ## Getting Started
 
 This project is a starting point for a Flutter application.
