@@ -27,6 +27,7 @@ class _PlayListState extends State<PlayList> {
 
   String _getTitle({required filePath}) {
     return filePath.substring(filePath.lastIndexOf('/') + 1, filePath.lastIndexOf('@'));
+    //return filePath;
   }
 
   @override

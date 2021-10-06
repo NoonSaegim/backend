@@ -39,25 +39,23 @@ class _AccordionState extends State<Accordion> {
 
   Future<List<String>> onInitRecords() async {
     records = [];
-    await provider.getExternalStorageDirectory().then((value) async {
-      appDir = value!;
-      Directory? appDirec = Directory("${appDir.path}/Vocabulary/");
-      if(await appDirec.exists()) {
-        print('----------appDirec exists----------');
+
+    Directory? appDirec = Directory("/storage/emulated/0/Android/data/com.noonsaegim.app/files/");
+    if(await appDirec.exists()) {
+      print('----------appDirec exists----------');
+      appDir = appDirec;
+      appDir.list().listen((onData) {
+        records.add(onData.path);
+      }).onDone(() {
+        records = records.reversed.toList();
+      });
+    } else {
+      appDirec.create(recursive: true)
+          .then((value) {
+        print('--------create directory-------');
         appDir = appDirec;
-        appDir.list().listen((onData) {
-          records.add(onData.path);
-        }).onDone(() {
-          records = records.reversed.toList();
-        });
-      } else {
-        appDirec.create(recursive: true)
-            .then((value) {
-          print('--------create directory-------');
-          appDir = appDirec;
-        });
-      }
-    });
+      });
+    }
     return records;
   }
 
