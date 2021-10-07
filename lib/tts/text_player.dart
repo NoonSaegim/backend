@@ -77,7 +77,7 @@ class TextPlayer extends BackgroundAudioTask {
     }
     await AudioServiceBackground.setState(
       controls: [],
-      processingState: AudioProcessingState.stopped,
+      processingState: AudioProcessingState.completed,
       playing: false,
     );
     if (!_finished) {

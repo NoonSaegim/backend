@@ -17,7 +17,7 @@ class Speaker extends StatelessWidget {
   const Speaker({Key? key, required this.dataList}) : super(key: key);
 
   void _callAudioService(Map<String, dynamic> params) {
-    AudioService.connect();
+    //AudioService.connect();
     print('params = $params');
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,

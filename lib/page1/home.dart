@@ -40,26 +40,19 @@ class Home extends StatelessWidget {
                 //color: Colors.black12,
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 10),
-                height: (MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.45,
+                height: 220.0.sp,
                 child: Image.asset('imgs/main.jpg'),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(
-                top:(MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.035,),
+              margin: EdgeInsets.only(top: 15.0.sp),
               alignment: Alignment.center,
               child: GestureDetector(
                 behavior:HitTestBehavior.translucent,
                 onTap: () => Navigator.pushNamed(context, '/pick'),
                 child: Container(
                   width: MediaQuery.of(context).size.width * 0.34,
-                  height: (MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.13,
+                  height: 64.0.sp,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
@@ -93,10 +86,7 @@ class Home extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(right: 6.8.sp, left: 6.8.sp),
-              margin: EdgeInsets.only(
-                top:(MediaQuery.of(context).size.height -
-                    AppBar().preferredSize.height -
-                    MediaQuery.of(context).padding.top) * 0.035,),
+              margin: EdgeInsets.only(top: 20.0.sp),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -105,9 +95,7 @@ class Home extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/recently'),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.34,
-                      height: (MediaQuery.of(context).size.height -
-                          AppBar().preferredSize.height -
-                          MediaQuery.of(context).padding.top) * 0.13,
+                      height: 64.0.sp,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -143,9 +131,7 @@ class Home extends StatelessWidget {
                     onTap: () => Navigator.pushNamed(context, '/mynote'),
                     child: Container(
                       width: MediaQuery.of(context).size.width * 0.34,
-                      height: (MediaQuery.of(context).size.height -
-                          AppBar().preferredSize.height -
-                          MediaQuery.of(context).padding.top) * 0.13,
+                      height: 64.0.sp,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
@@ -183,9 +169,7 @@ class Home extends StatelessWidget {
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Container(
-                  height: (MediaQuery.of(context).size.height -
-                      AppBar().preferredSize.height -
-                      MediaQuery.of(context).padding.top) * 0.16,
+                  height: 83.0.sp,
                   width: MediaQuery.of(context).size.width,
                   //padding: EdgeInsets.only(bottom: ),
                   child: IconButton(

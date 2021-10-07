@@ -15,7 +15,7 @@ class Speaker extends StatelessWidget {
   const Speaker({Key? key, required this.word}) : super(key: key);
 
   void _callAudioService(Map<String, dynamic> params) {
-    AudioService.connect();
+    //AudioService.connect();
     AudioService.start(
       backgroundTaskEntrypoint: _textToSpeechEntrypoint,
       androidNotificationChannelName: 'Voca Audio Service',

@@ -19,8 +19,8 @@ final FlutterLocalNotificationsPlugin flip = FlutterLocalNotificationsPlugin();
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
   'noon_push',
   'Vocabulary Notifications',
-  'This channel is used for important notifications.',
-  importance: Importance.high,
+  // 'This channel is used for important notifications.',
+  // importance: Importance.high,
 );
 
 Future<void> initWorkManager(int seq, String uid, String taskName, String noteTitle, String? summary, bool repeat, Duration duration) async {
@@ -150,7 +150,7 @@ Future<void> showNotificationWithSchedule(flip, String title, String noteKey, in
   var androidPlatformChannelSpecifics = new AndroidNotificationDetails(
     channel.id,
     channel.name,
-    channel.description,
+    channelDescription: channel.description,
     importance: Importance.max,
     priority: Priority.high,
     showWhen: true,
