@@ -21,9 +21,10 @@
         android:icon="@mipmap/ic_launcher"
         android:requestLegacyExternalStorage="true"
         >
-
+        <!--<activity
+            android:name=".MainActivity"-->
         <activity
-            android:name=".MainActivity"
+            android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:launchMode="singleTop"
             android:usesCleartextTraffic="true"
             android:theme="@style/LaunchTheme"
@@ -60,7 +61,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-        <service android:name="com.ryanheise.audioservice.AudioServiceActivity">
+        <!-- AudioService 업데이트 됨. -->
+        <service android:name="com.ryanheise.audioservice.AudioService">
             <intent-filter>
                 <action android:name="android.media.browse.MediaBrowserService" />
             </intent-filter>

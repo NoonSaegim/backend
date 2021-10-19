@@ -35,38 +35,58 @@ class _MyNoteState extends State<MyNote> {
               else {//데이터를 정상적으로 받아왔으면
                 final vocaList = snapshot.data as List<Voca>;
 
-                return Column(
-                  children:
-                  <Widget>[
-                    SizedBox(height: 8.5.sp,),
-                    Container(
-                      color: Colors.white,
-                      height: (MediaQuery.of(context).size.height -
-                          AppBar().preferredSize.height -
-                          MediaQuery.of(context).padding.top) - 8.sp,
-                      width: MediaQuery.of(context).size.width,
-                      child: Align(
-                        alignment: Alignment.topCenter,
-                        child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            reverse: true,
-                            itemCount: vocaList.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              if(ModalRoute.of(context)!.settings.arguments != null) {
-                                final args = ModalRoute.of(context)!.settings.arguments as NoteArgument;
-                                return Accordion(vocaList[index], index, args.seq);
-                              } else {
-                                final _showSeq = vocaList.length-1;
-                                print('seq: $index / data: ${vocaList[index]}');
-                                return Accordion(vocaList[index], index, _showSeq);
-                              }
-                            }
+                if(vocaList.isEmpty) {
+                  return Container(
+                    alignment: Alignment.center,
+                    height: (MediaQuery.of(context).size.height -
+                        AppBar().preferredSize.height -
+                        MediaQuery.of(context).padding.top) - 8.sp,
+                    width: MediaQuery.of(context).size.width,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        '단어장이 비어있어요 :(',
+                        style: TextStyle(
+                          fontSize: 16.0.sp,
+                          color: Colors.black54,
                         ),
-                      )
+                      ),
                     )
-                  ],
-                );
+                  );
+                } else {
+                  return Column(
+                    children:
+                    <Widget>[
+                      SizedBox(height: 8.5.sp,),
+                      Container(
+                          color: Colors.white,
+                          height: (MediaQuery.of(context).size.height -
+                              AppBar().preferredSize.height -
+                              MediaQuery.of(context).padding.top) - 8.sp,
+                          width: MediaQuery.of(context).size.width,
+                          child: Align(
+                            alignment: Alignment.topCenter,
+                            child: ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                reverse: true,
+                                itemCount: vocaList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  if(ModalRoute.of(context)!.settings.arguments != null) {
+                                    final args = ModalRoute.of(context)!.settings.arguments as NoteArgument;
+                                    return Accordion(vocaList[index], index, args.seq);
+                                  } else {
+                                    final _showSeq = vocaList.length-1;
+                                    print('seq: $index / data: ${vocaList[index]}');
+                                    return Accordion(vocaList[index], index, _showSeq);
+                                  }
+                                }
+                            ),
+                          )
+                      )
+                    ],
+                  );
+                }
               }
             },
           )

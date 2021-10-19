@@ -37,15 +37,15 @@ class Home extends StatelessWidget {
             ColorFiltered(
               colorFilter: ColorFilter.mode(Colors.black12, BlendMode.srcOver),
               child: Container(
-                //color: Colors.black12,
+                padding: EdgeInsets.only(top: 8.5.sp),
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 10),
-                height: 220.0.sp,
+                width: MediaQuery.of(context).size.width,
                 child: Image.asset('imgs/main.jpg'),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 15.0.sp),
+              margin: EdgeInsets.only(top: 18.5.sp),
               alignment: Alignment.center,
               child: GestureDetector(
                 behavior:HitTestBehavior.translucent,
@@ -86,7 +86,7 @@ class Home extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(right: 6.8.sp, left: 6.8.sp),
-              margin: EdgeInsets.only(top: 20.0.sp),
+              margin: EdgeInsets.only(top: 17.0.sp),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: <Widget>[
@@ -169,7 +169,7 @@ class Home extends StatelessWidget {
               child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: Container(
-                  height: 83.0.sp,
+                  height: 80.0.sp,
                   width: MediaQuery.of(context).size.width,
                   //padding: EdgeInsets.only(bottom: ),
                   child: IconButton(

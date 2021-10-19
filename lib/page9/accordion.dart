@@ -74,7 +74,6 @@ class _AccordionState extends State<Accordion> {
   _onFinish() {
     print('-------------save wav-------------');
     records.clear();
-    //print(records.length);
     appDir.list().listen((onData) {
       print('-------listen to : $onData---------');
       records.add(onData.path);

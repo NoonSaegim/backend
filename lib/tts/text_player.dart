@@ -151,12 +151,6 @@ class Tts {
   }
 
   Future<void> save(String text, String path) async {
-    // File saveFile = new File(path);
-    // saveFile.create(recursive: true).then((File wav) async {
-    //   _flutterTts.getDefaultEngine.asStream().listen((event) { });
-    //   await _flutterTts.synthesizeToFile(text,wav.path)
-    //       .then((value) => print('--------save wav success-------'));
-    // });
     await _flutterTts.synthesizeToFile(text, path);
     await _flutterTts.awaitSynthCompletion(true);
   }

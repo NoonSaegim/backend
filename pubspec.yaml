@@ -50,6 +50,7 @@ dependencies:
   intl:
   sizer:
   flutter_tts:
+  just_audio:
   audio_service:
   audio_session:
   weekday_selector:

@@ -2,31 +2,15 @@ import 'dart:io' show Platform;
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'text_player.dart';
+import 'package:noonsaegim/tts/audio_handler.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../vo/word.dart';
 import '../common/popup.dart';
 
-void _textToSpeechEntrypoint() async {
-  AudioServiceBackground.run(() => TextPlayer());
-}
-
 class Speaker extends StatelessWidget {
   final List<Word> dataList;
   const Speaker({Key? key, required this.dataList}) : super(key: key);
-
-  void _callAudioService(Map<String, dynamic> params) {
-    //AudioService.connect();
-    print('params = $params');
-    AudioService.start(
-      backgroundTaskEntrypoint: _textToSpeechEntrypoint,
-      androidNotificationChannelName: 'Voca Audio Service',
-      androidNotificationColor: 0xFF2196f3,
-      androidNotificationIcon: 'mipmap/ic_launcher',
-      params: params,
-    );
-  }
 
   dynamic _listOfObjToMap(List<Word> listObj) {
 
@@ -38,17 +22,17 @@ class Speaker extends StatelessWidget {
     return merge;
   }
 
-  Widget _renderSpecker(BuildContext context) {
+  Widget _renderSpeaker(BuildContext context) {
     List<Word> listObj = dataList.where((e) => e.isSelected!).toList();
-
     return IconButton(
-      onPressed: () {
+      onPressed: () async {
         if(listObj.isEmpty) {
           alert.onWarning(context, '단어를 선택하세요!', () { });
           return;
         } else {
           Map<String, dynamic> params = _listOfObjToMap(listObj);
-          _callAudioService(params);
+          await initAudioService(params);
+          await startTts();
         }
       },
       tooltip: 'Audio',
@@ -65,22 +49,19 @@ class Speaker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: StreamBuilder<bool>(
-        stream: AudioService.runningStream,
+      child: StreamBuilder<PlaybackState>(
+        stream: getPlaybackState(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.active) {
-            return CircularProgressIndicator();
-          }
-          final running = snapshot.data ?? false;
+          final running = snapshot.hasData ? snapshot.data!.playing : false;
           return Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (!running) ...[
                 // UI to show when we're not running, i.e. a menu.
-                if (kIsWeb || !Platform.isMacOS) _renderSpecker(context),
+                if (kIsWeb || !Platform.isMacOS) _renderSpeaker(context),
               ] else ...[
                 StreamBuilder<bool>(
-                  stream: AudioService.playbackStateStream
+                  stream: getPlaybackState()!
                       .map((state) => state.playing)
                       .distinct(),
                   builder: (context, snapshot) {
@@ -101,23 +82,26 @@ class Speaker extends StatelessWidget {
       ),
     );
   }
+
 }
 
 
 IconButton playButton() => IconButton(
   icon: Icon(Icons.play_arrow, color: Colors.black45),
   iconSize: 32.sp,
-  onPressed: AudioService.play,
+  onPressed: () async => startTts(),
 );
 
 IconButton pauseButton() => IconButton(
   icon: Icon(Icons.pause, color: Colors.black45),
   iconSize: 32.sp,
-  onPressed: AudioService.pause,
+  onPressed: () async => pauseTts(),
 );
 
 IconButton stopButton() => IconButton(
   icon: Icon(Icons.stop, color: Colors.black45),
   iconSize: 32.sp,
-  onPressed: AudioService.stop,
+  onPressed:  () async => stopTts(),
 );
+
+
